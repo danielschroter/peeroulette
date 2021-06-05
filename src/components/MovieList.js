@@ -13,7 +13,7 @@ export const MovieList = ({data, onDelete}) => (
     <Page>
 
     <Container>
-        <div className="text-center" style={{'marginTop': '200px', 'marginBottom': '200px'}}>
+        <div className="text-center" style={{'marginTop': '150px', 'marginBottom': '150px'}}>
             <p>
                 <h1 className="text-center">Weclome to peeroulette</h1>
             </p>
@@ -21,8 +21,8 @@ export const MovieList = ({data, onDelete}) => (
 
             <div className="btn-toolbar" style={{'justify-content': 'center', 'display': 'flex'}}>
 
-                    <Button className="btn mr-3" variant="outline-primary" href="/#/login">Register</Button>
-                    <Button className="btn mr-3" variant="outline-success" href="/#/register">Sign In</Button>
+                    <Button className="btn mr-3" variant="outline-primary" href="/#/register">Register</Button>
+                    <Button className="btn mr-3" variant="outline-success" href="/#/login">Sign In</Button>
             </div>
         </div>
 

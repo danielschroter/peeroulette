@@ -1,8 +1,10 @@
 "use strict";
 
 import React from 'react';
-import { Card, Button, TextField } from 'react-md';
+//import { Card, Button, TextField } from 'react-md';
 import { withRouter, Link } from 'react-router-dom';
+
+import {Jumbotron, Button, Form, Container} from "react-bootstrap";
 
 import { AlertMessage } from './AlertMessage';
 import Page from './Page';
@@ -49,7 +51,70 @@ class UserLogin extends React.Component {
     render() {
         return (
             <Page>
-                <Card style={style} className="md-block-centered">
+                <Container>
+
+                    <div className="container">
+                        <div className="row justify-content-md-center" style={{"marginTop":"100px", 'marginBottom': "100px"}}>
+                            <div className="col col-lg-5">
+                                <Jumbotron>
+                                    <div className="text-center" style={{'marginBottom': "40px"}}>
+                                    <h3>Log In</h3>
+                                    </div>
+
+                                    <Form onSubmit={this.handleSubmit} onReset={() => this.props.history.goBack()}>
+                                        <Form.Group>
+                                            <Form.Label>Login</Form.Label>
+                                            <Form.Control id="LoginField"
+                                                          type="text"
+                                                          label="Login"
+                                                          className="md-row"
+                                                          required={true}
+                                                          value={this.state.username}
+                                                          onChange={e => {this.handleChangeUsername(e.target.value)}}
+                                                          placeholder="Enter username" />
+                                            <Form.Text className="text-muted">
+                                                We'll never share your email with anyone else.
+                                            </Form.Text>
+                                        </Form.Group>
+
+                                        <Form.Group>
+                                            <Form.Label>Password</Form.Label>
+                                            <Form.Control type="password"
+                                                          label="Password"
+                                                          id="PasswordField"
+                                                          className="md-row"
+                                                          required={true}
+                                                          value={this.state.password}
+                                                          onChange={e => {this.handleChangePassword(e.target.value)}}
+                                                          placeholder=" Enter password" />
+                                        </Form.Group>
+
+                                        <div className="btn-toolbar" style={{'justify-content': 'center', 'display': 'flex'}}>
+
+                                            <Button className="btn mr-3"
+                                                    variant="outline-primary"
+                                                    id="submit"
+                                                    type="submit"
+                                                    onClick={this.handleSubmit}>Login</Button>
+                                            <Button className="btn mr-3" variant="outline-danger" id="reset" type="reset">Dismiss</Button>
+                                        </div>
+                                        <div className="text-center" style={{"marginTop":"20px"}}>
+                                        <Link to={'/register'} className="md-cell text-left">Not registered yet?</Link>
+                                        </div>
+                                        <AlertMessage className="md-row md-full-width" >{this.props.error ? `${this.props.error}` : ''}</AlertMessage>
+                                    </Form>
+                                </Jumbotron>
+                            </div>
+                        </div>
+                    </div>
+                    </Container>
+
+
+
+
+
+
+                {/*<Card style={style} className="md-block-centered">
                     <form className="md-grid" onSubmit={this.handleSubmit} onReset={() => this.props.history.goBack()}>
                         <TextField
                             label="Login"
@@ -77,10 +142,11 @@ class UserLogin extends React.Component {
                         <Link to={'/register'} className="md-cell">Not registered yet?</Link>
                         <AlertMessage className="md-row md-full-width" >{this.props.error ? `${this.props.error}` : ''}</AlertMessage>
                     </form>
-                </Card>
+                </Card>*/}
+
             </Page>
         );
     }
-};
+}
 
 export default withRouter(UserLogin);

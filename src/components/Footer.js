@@ -13,7 +13,7 @@ class PlainFooter extends React.Component {
     render() {
         return (
             <div className={this.props.className}>
-                <p> Hobbitsfüße Footer ©Frodo ... </p>
+                <p> peeroulette comming soon... </p>
             </div>
         );
     }

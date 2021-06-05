@@ -13,7 +13,7 @@ const Styles = styled.div`
     background-color: #222;
   }
   .navbar-brand, .navbar-nav .nav-link {
-    color: #bbb;
+    color: orange;
     
     &:hover {
     color: white;
