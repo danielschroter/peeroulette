@@ -29,13 +29,16 @@ export default class App extends React.Component {
 
     render() {
         return(
-            <div>
-                <Router>
-                    <Switch>
-                        {this.state.routes.map((route, i) => (<Route key={i} {...route}/>) )}
-                    </Switch>
-                </Router>
-            </div>
+            <React.Fragment>
+                <div>
+                    <Router>
+                        <Switch>
+                            {this.state.routes.map((route, i) => (<Route key={i} {...route}/>) )}
+                        </Switch>
+                    </Router>
+                </div>
+            </React.Fragment>
+
         );
     }
 }
