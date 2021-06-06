@@ -1,42 +1,73 @@
-"use strict";
+import React, { useEffect } from "react";
+import { Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import thunkMiddleware from "redux-thunk";
+import {
+    MuiThemeProvider,
+    createMuiTheme,
+    makeStyles,
+} from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import ScrollContainer from "./components/ScrollContainer";
 
-import React from 'react';
-import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import reducers from "./redux/reducers";
+import routes from "./routes";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import AppTheme from "./theming/themetypes";
+import AppThemeOptions from "./theming/themes";
 
-import { MovieListView } from './views/MovieListView';
-import { UserLoginView } from "./views/UserLoginView";
-import { UserSignupView } from "./views/UserSignupView";
+const useStyles = makeStyles((theme) => ({
+    appRoot: {
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+    },
+}));
 
+function App() {
+    const classes = useStyles();
 
-export default class App extends React.Component {
+    // set document title
+    useEffect(() => {
+        document.title = "Movie Database App";
+    }, []);
 
-    constructor(props) {
-        super(props);
+    // create store for redux
+    const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
-        this.state = {
-            title: 'Peroulette',
-            routes: [
-                { component: MovieListView , path: '/', exact: true},
-                { component: UserLoginView, path: '/login'},
-                { component: UserSignupView, path: '/register'}
-            ]
-        };
-    }
+    // theme for app
+    const [theme, setTheme] = React.useState(AppTheme.LIGHT);
 
-    componentDidMount(){
-        document.title = this.state.title;
-    }
+    // toggle theme
+    const toggleTheme = () => {
+        setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
+    };
 
-    render() {
-        return(
-            <div>
-                <Router>
-                    <Switch>
-                        {this.state.routes.map((route, i) => (<Route key={i} {...route}/>) )}
-                    </Switch>
-                </Router>
-            </div>
-        );
-    }
+    return (
+        <div className={classes.appRoot}>
+            <MuiThemeProvider theme={createMuiTheme(AppThemeOptions[theme])}>
+                <Provider store={store}>
+                    <CssBaseline />
+                    <React.Fragment>
+                        <Header
+                            darkmode={theme === AppTheme.DARK}
+                            toggletheme={toggleTheme}
+                        />
+                        <ScrollContainer>
+                            <Switch>
+                                {routes.map((route, i) => (
+                                    <Route key={i} {...route} />
+                                ))}
+                            </Switch>
+                            <Footer />
+                        </ScrollContainer>
+                    </React.Fragment>
+                </Provider>
+            </MuiThemeProvider>
+        </div>
+    );
 }
 
+export default App;

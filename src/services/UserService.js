@@ -1,57 +1,48 @@
-"use strict";
-
-import HttpService from './HttpService';
+import HttpService from "./HttpService";
 
 export default class UserService {
-
-    constructor() {
+    static baseURL() {
+        return "http://localhost:4000/auth";
     }
 
-    static baseURL() {return 'http://localhost:3000/auth'; }
-
-    static register(user, pass) {
+    static register(user, pass, isAdmin) {
         return new Promise((resolve, reject) => {
-            HttpService.post(`${UserService.baseURL()}/register`, {
-                username: user,
-                password: pass
-            }, function(data) {
-                resolve(data);
-            }, function(textStatus) {
-                reject(textStatus);
-            });
+            HttpService.post(
+                `${UserService.baseURL()}/register`,
+                {
+                    username: user,
+                    password: pass,
+                    isAdmin: isAdmin,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
         });
     }
 
     static login(user, pass) {
         return new Promise((resolve, reject) => {
-            HttpService.post(`${UserService.baseURL()}/login`, {
-                username: user,
-                password: pass
-            }, function(data) {
-                resolve(data);
-            }, function(textStatus) {
-                reject(textStatus);
-            });
+            HttpService.post(
+                `${UserService.baseURL()}/login`,
+                {
+                    username: user,
+                    password: pass,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
         });
     }
 
-    static logout(){
-        window.localStorage.removeItem('jwtToken');
-    }
-
-    static getCurrentUser() {
-        let token = window.localStorage['jwtToken'];
-        if (!token) return {};
-
-        let base64Url = token.split('.')[1];
-        let base64 = base64Url.replace('-', '+').replace('_', '/');
-        return {
-            id : JSON.parse(window.atob(base64)).id,
-            username: JSON.parse(window.atob(base64)).username
-        };
-    }
-
-    static isAuthenticated() {
-        return !!window.localStorage['jwtToken'];
+    static logout() {
+        window.localStorage.removeItem("jwtToken");
     }
 }

@@ -1,32 +1,42 @@
-"use strict";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Link, Typography } from "@material-ui/core";
+import CopyrightIcon from "@material-ui/icons/Copyright";
 
-import React from 'react';
-import Styled from 'styled-components';
+const useStyles = makeStyles((theme) => ({
+    footerRoot: {
+        display: "flex",
+        justifyContent: "center",
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    title: {
+        flexGrow: 1,
+        paddingLeft: theme.spacing(1),
+    },
+}));
 
+/**
+ * Footer of the app
+ * @param {props} props
+ */
+function Footer(props) {
+    const classes = useStyles();
 
-class PlainFooter extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className={this.props.className}>
-                <p> Hobbitsfüße Footer ©Frodo ... </p>
-            </div>
-        );
-    }
+    return (
+        <div className={classes.footerRoot}>
+            <CopyrightIcon size="small" />
+            <Typography variant="h6">
+                <Link
+                    href="https://wwwmatthes.in.tum.de/pages/1mqqqoqe7gapz/SEBA-Master-Web-Application-Engineering"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    sebis
+                </Link>
+            </Typography>
+        </div>
+    );
 }
 
-export const Footer = Styled(PlainFooter)`
-    max-height: 35px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    position: fixed;
-    background: orange;
-    > p {
-        text-align: center;
-        margin-top: 4px;
-    }`;
+export default Footer;
