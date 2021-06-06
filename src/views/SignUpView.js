@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
-import LoginComponent from "../components/UserLoginComponent";
 
-import { login } from "../redux/actions";
+import SignUpComponent from "../components/SignUpComponent";
+
+import { register } from "../redux/actions";
 
 /**
- * For user login
+ * For register new users
  * @param {props} props
  */
-function UserLoginView(props) {
+function SignUpView(props) {
     const user = useSelector((state) => state.user);
 
     useEffect(() => {
@@ -18,26 +19,21 @@ function UserLoginView(props) {
         }
     }, [user, props.history]);
 
-    const onLogin = (username, password) => {
-        props.dispatch(login(username, password));
+    const onRegister = (username, password, isAdmin) => {
+        props.dispatch(register(username, password, isAdmin));
     };
 
     const onCancel = () => {
         props.history.push("/");
     };
 
-    const onSignUp = () => {
-        props.history.push("/register");
-    };
-
     return (
-        <LoginComponent
+        <SignUpComponent
             user={user}
+            onRegister={onRegister}
             onCancel={onCancel}
-            onLogin={onLogin}
-            onSignUp={onSignUp}
         />
     );
 }
 
-export default connect()(withRouter(UserLoginView));
+export default connect()(withRouter(SignUpView));

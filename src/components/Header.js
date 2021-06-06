@@ -1,64 +1,77 @@
-"use strict";
+import React from "react";
+import { withRouter } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 
-import React from 'react';
-//import { Toolbar, Button } from 'react-md';
-import { withRouter } from 'react-router-dom';
-import { Nav, Navbar } from 'react-bootstrap'
+import MenuIcon from "@material-ui/icons/Menu";
+import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
+import GitHubIcon from "@material-ui/icons/GitHub";
+import WbSunnyIcon from "@material-ui/icons/WbSunny";
+import Brightness3Icon from "@material-ui/icons/Brightness3";
 
-import styled from "styled-components";
+import KebabMenu from "./KebabMenu";
 
+const useStyles = makeStyles((theme) => ({
+    toolbar: {
+        flexGrow: 1,
+    },
+    title: {
+        flexGrow: 1,
+        paddingLeft: theme.spacing(1),
+    },
+}));
 
-const Styles = styled.div`
-  .navbar {
-    background-color: #222;
-  }
-  .navbar-brand, .navbar-nav .nav-link {
-    color: orange;
-    
-    &:hover {
-    color: white;
-    }
-  }
-`;
+/**
+ * Navigation bar of the app
+ * @param {props} props
+ */
+function Header(props) {
+    const classes = useStyles();
 
+    const [menuAnchor, setMenuAnchor] = React.useState(null);
 
-//import KebabMenu from './KebabMenu';
-
-
-class Header extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-
-    render() {
-        return (
-
-            <Styles>
-                <Navbar expand="lg">
-                    <Navbar.Brand href="/">Peeroulette</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="ml-auto">
-                            <Nav.Item><Nav.Link href="/">Home</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link href="/#/login">Login</Nav.Link></Nav.Item>
-                            <Nav.Item><Nav.Link href="/#/register">Register</Nav.Link></Nav.Item>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-            </Styles>
-
-
-        /*<Toolbar
-                colored
-                nav={<Button onClick={() => this.props.history.push('/')} icon>home</Button>}
-                title={this.props.title}
-                actions={<KebabMenu id="toolbar-colored-kebab-menu" />}>
-            </Toolbar>*/
+    const onClickGithub = (event) => {
+        var win = window.open(
+            "https://github.com/sebischair/seba-master-movie-frontend",
+            "_blank"
         );
-    }
-}
+        win.focus();
+    };
 
+    return (
+        <AppBar position="sticky">
+            <KebabMenu
+                open={Boolean(menuAnchor)}
+                anchor={menuAnchor}
+                onClose={() => setMenuAnchor(null)}
+            />
+            <Toolbar className={classes.toolbar}>
+                <LocalMoviesIcon
+                    fontSize="large"
+                    onClick={() => props.history.push("/")}
+                />
+                <Typography
+                    className={classes.title}
+                    variant="h5"
+                    color="inherit"
+                >
+                    Movie Database App
+                </Typography>
+                <IconButton onClick={onClickGithub} color="inherit">
+                    <GitHubIcon />
+                </IconButton>
+                <IconButton onClick={props.toggletheme} color="inherit">
+                    {props.darkmode ? <WbSunnyIcon /> : <Brightness3Icon />}
+                </IconButton>
+                <IconButton
+                    onClick={(event) => setMenuAnchor(event.currentTarget)}
+                    color="inherit"
+                >
+                    <MenuIcon />
+                </IconButton>
+            </Toolbar>
+        </AppBar>
+    );
+}
 
 export default withRouter(Header);

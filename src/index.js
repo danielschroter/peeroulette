@@ -1,18 +1,11 @@
-"use strict";
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import { BrowserRouter as Router } from "react-router-dom";
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import App from './App';
-import WebFontLoader from 'webfontloader';
-//import 'react-md/dist/react-md.teal-pink.min.css'
-//import 'react-md/dist/react-md.teal-pink-200-dark.min.css"
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-WebFontLoader.load({
-    google: {
-        families: ['Roboto:300,400,500,700', 'Material Icons'],
-    },
-});
-
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>,
+  document.getElementById("root")
+);
