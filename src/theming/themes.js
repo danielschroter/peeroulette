@@ -11,9 +11,9 @@ const appThemeOptions = {
         palette: {
             type: "light",
             primary: {
-                light: "#7986cb",
-                main: "#3f51b5",
-                dark: "#303f9f",
+                light: "#1a6268",
+                main: "rgba(38,82,95,0.77)",
+                dark: "#86217c",
             },
             secondary: {
                 light: "#ff4081",
