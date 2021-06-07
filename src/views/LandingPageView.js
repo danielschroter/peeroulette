@@ -28,7 +28,7 @@ function LandingPageView(props) {
                         Look at some Movies
                     </Button>
                     <Button variant="outlined" color="primary" href="/corporate">
-                        Corporate Sign Up
+                        Corporates
                     </Button>
                 </Grid>
             </Container>
