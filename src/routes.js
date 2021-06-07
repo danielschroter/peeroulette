@@ -3,6 +3,7 @@ import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
+import CorporateSignUpView from "./views/CorporateSignUpView";
 
 // routes within the movie database example app
 // used for routing
@@ -11,6 +12,11 @@ const routes = [
     {
         path: "/",
         component: LandingPageView,
+        exact: true,
+    },
+    {
+        path: "/corporate",
+        component: CorporateSignUpView,
         exact: true,
     },
     {
