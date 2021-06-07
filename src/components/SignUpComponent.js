@@ -47,6 +47,11 @@ function SignUpComponent(props) {
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
     const [isAdmin, setIsAdmin] = React.useState(false);
+    const [isCorporate, setIsCorporate] = React.useState(false);
+
+    // Corporate Data
+    const [compname, setCompname] = React.useState("");
+    const [domains, setDomains] = React.useState("");
 
     const [registerError, setRegisterError] = React.useState("");
 
@@ -60,7 +65,7 @@ function SignUpComponent(props) {
 
     const onRegister = (e) => {
         e.preventDefault();
-        props.onRegister(username, password, isAdmin);
+        props.onRegister(username, password, isAdmin, compname, domains);
     };
 
     const onChangeUsername = (e) => {
@@ -70,6 +75,16 @@ function SignUpComponent(props) {
 
     const onChangePassword = (e) => {
         setPassword(e.target.value);
+        setRegisterError("");
+    };
+
+    const onChangeCompname = (e) => {
+        setCompname(e.target.value);
+        setRegisterError("");
+    };
+
+    const onChangeDomains = (e) => {
+        setDomains(e.target.value);
         setRegisterError("");
     };
 
@@ -137,7 +152,37 @@ function SignUpComponent(props) {
                         }
                         label="Is Admin"
                     />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isCorporate}
+                                onChange={(e) => setIsCorporate(e.target.checked)}
+                                color="primary"
+                            />
+                        }
+                        label="Check if you want a Corporate Account."
+                    />
                 </div>
+                {isCorporate ? (
+                    <div className={classes.signUpRow}>
+                        <div className={classes.signUpRow}>
+                            <TextField
+                                label="Company name"
+                                fullWidth
+                                value={compname}
+                                onChange={onChangeCompname}
+                            />
+                        </div>
+                        <div className={classes.signUpRow}>
+                            <TextField
+                                label="E-mail Domains"
+                                fullWidth
+                                value={domains}
+                                onChange={onChangeDomains}
+                            />
+                        </div>
+                    </div>
+                ) : null}
                 {registerError !== "" ? (
                     <div className={classes.signUpRow}>
                         <Typography color="error">{registerError}</Typography>
