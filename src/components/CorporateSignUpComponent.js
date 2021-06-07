@@ -167,7 +167,7 @@ function CorporateSignUpComponent(props) {
                     <div className={classes.signUpRow}>
                         <div className={classes.signUpRow}>
                             <TextField
-                                label="Compname"
+                                label="Company name"
                                 fullWidth
                                 value={compname}
                                 onChange={onChangeCompname}
@@ -175,7 +175,7 @@ function CorporateSignUpComponent(props) {
                         </div>
                         <div className={classes.signUpRow}>
                             <TextField
-                                label="Domains"
+                                label="E-mail Domains"
                                 fullWidth
                                 value={domains}
                                 onChange={onChangeDomains}
