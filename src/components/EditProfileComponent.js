@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
     signUpButton: {
         marginLeft: theme.spacing(1),
     },
+    editProfileButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"400px"
+    },
 }));
 
 /**
@@ -107,21 +111,36 @@ function EditProfileComponent(props) {
         <div className={classes.usersignUpRoot}>
             <Paper className={classes.signUpPaper} component="form">
                 <div className={classes.signUpRow}>
+                    <Button
+                        className={classes.editProfileButton}
+                        onClick={props.onCancel}
+                    >
+                        Edit
+                    </Button>
                     <Typography variant="h4" align="center">
-                        Welcome to the Movie Database App!
+                        Profile
                     </Typography>
                 </div>
+
                 <div className={classes.signUpRow}>
-                    <TextField
-                        label="Hans"
-                        fullWidth
-                        value={username}
-                        onChange={onChangeUsername}
-                    />
+                    <div className="row justify-content-md-leftside">
+                        <p>Name: </p>
+                    </div>
+                    <div className="row justify-content-md-rightside">
+                        <TextField
+                            label="Username"
+                            fullWidth
+                            value={username}
+                            onChange={onChangeUsername}
+                        />
+                    </div>
                 </div>
                 <div className={classes.signUpRow}>
+                    <div className="row justify-content-md-leftside">
+                        <p>Password: </p>
+                    </div>
                     <TextField
-                        label="Hans"
+                        label="Password"
                         fullWidth
                         value={password}
                         onChange={onChangePassword}
