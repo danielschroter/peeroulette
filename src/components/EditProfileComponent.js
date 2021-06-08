@@ -21,10 +21,10 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
         "&:last-child": {
-            paddingBottom: theme.spacing(0),
+            paddingBottom: theme.spacing(1),
         },
         "&:first-child": {
-            paddingTop: theme.spacing(0),
+            paddingTop: theme.spacing(1),
         },
     },
     signUpButtons: {
@@ -34,9 +34,13 @@ const useStyles = makeStyles((theme) => ({
     signUpButton: {
         marginLeft: theme.spacing(1),
     },
-    editProfileButton: {
+    editNameButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"400px"
+        marginLeft:"372px"
+    },
+    editPasswordButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"350px"
     },
 }));
 
@@ -56,7 +60,6 @@ function EditProfileComponent(props) {
     // Corporate Data
     const [compname, setCompname] = React.useState("");
     const [domains, setDomains] = React.useState("");
-
     const [registerError, setRegisterError] = React.useState("");
 
     useEffect(() => {
@@ -111,33 +114,38 @@ function EditProfileComponent(props) {
         <div className={classes.usersignUpRoot}>
             <Paper className={classes.signUpPaper} component="form">
                 <div className={classes.signUpRow}>
-                    <Button
-                        className={classes.editProfileButton}
-                        onClick={props.onCancel}
-                    >
-                        Edit
-                    </Button>
                     <Typography variant="h4" align="center">
                         Profile
                     </Typography>
                 </div>
 
                 <div className={classes.signUpRow}>
-                    <div className="row justify-content-md-leftside">
-                        <p>Name: </p>
+                    <div style={{"display":"flex"}}>
+                        <p style={{"marginBottom":"0px"}}>Name:</p>
+                        <Button
+                            className={classes.editNameButton}
+                            onClick={props.onCancel}
+                        >
+                            Edit
+                        </Button>
                     </div>
-                    <div className="row justify-content-md-rightside">
+
                         <TextField
                             label="Username"
                             fullWidth
                             value={username}
                             onChange={onChangeUsername}
                         />
-                    </div>
                 </div>
                 <div className={classes.signUpRow}>
-                    <div className="row justify-content-md-leftside">
-                        <p>Password: </p>
+                    <div style={{"display":"flex"}}>
+                        <p style={{"marginBottom":"0px"}}>Password:</p>
+                        <Button
+                            className={classes.editPasswordButton}
+                            onClick={props.onCancel}
+                        >
+                            Edit
+                        </Button>
                     </div>
                     <TextField
                         label="Password"
