@@ -89,6 +89,7 @@ function EditProfileComponent(props) {
 
     const onChangeUsername = (e) => {
         setUsername(e.target.value);
+        console.warn(username);
         setRegisterError("");
     };
 
@@ -167,16 +168,10 @@ function EditProfileComponent(props) {
                                 > Edit
                                 </Button>
                             </div>
-                                <p style={{"marginTop":"20px"}}>Name</p>
+                                <p style={{"marginTop":"20px"}}>{username}</p>
                         </div>
                     )}
 
-                        {/*<TextField
-                            label="Username"
-                            fullWidth
-                            value={username}
-                            onChange={onChangeUsername}
-                        />*/}
                 </div>
                 <div className={classes.signUpRow}>
                     <div style={{"display":"flex"}}>
