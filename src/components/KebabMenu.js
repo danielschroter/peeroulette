@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { logout } from "../redux/actions";
-import { Menu, MenuItem, Avatar, Divider } from "@material-ui/core";
+import { Menu, MenuItem, Avatar, Divider, IconButton } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
@@ -58,7 +58,9 @@ function KebabMenu(props) {
         >
             {user.user
                 ? [
-                      <MenuItem key="user" className={classes.menuitem}>
+                      <MenuItem key="user" className={classes.menuitem}
+                                onClick={(event) => console.warn("YESS")}
+                      >
                           <Avatar className={classes.avatar}>
                               {user.user.username ? user.user.username[0] : ""}
                           </Avatar>

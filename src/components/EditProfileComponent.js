@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         marginLeft:"350px"
     },
+
 }));
 
 /**
@@ -72,6 +73,8 @@ function EditProfileComponent(props) {
 
     // Data from old code, Ben
     const [editName, setEditName] = React.useState(false);
+    const [saveName, setSaveName] = React.useState(false);
+
 
 
     useEffect(() => {
@@ -88,10 +91,10 @@ function EditProfileComponent(props) {
     };
 
     const onChangeUsername = (e) => {
-        setUsername(e.target.value);
-        console.warn(username);
-        setRegisterError("");
+            setUsername(e.target.value);
+            setRegisterError("");
     };
+
 
     const onChangePassword = (e) => {
         setPassword(e.target.value);
@@ -136,10 +139,10 @@ function EditProfileComponent(props) {
                     { editName ? (
                         <div>
                             <div style={{"display":"flex"}}>
-                                <p style={{"marginBottom":"0px"}}>Name:</p>
+                                <p>Name:</p>
                                 <Button
                                     className={classes.cancelNameButton}
-                                    onClick={(e) => setEditName(false)}
+                                    onClick={(e) => setEditName(false) }
                                 > Cancel
                                 </Button>
                                 <Button
@@ -150,7 +153,6 @@ function EditProfileComponent(props) {
                             </div>
                             <div>
                                 <TextField
-                                label="Username"
                                 fullWidth
                                 value={username}
                                 onChange={onChangeUsername}
@@ -161,14 +163,14 @@ function EditProfileComponent(props) {
                     ) : (
                         <div>
                             <div style={{"display":"flex"}}>
-                                <p style={{"marginBottom":"0px"}}>Name:</p>
+                                <p>Name:</p>
                                 <Button
                                     className={classes.editNameButton}
                                     onClick={(e) => setEditName(true)}
                                 > Edit
                                 </Button>
                             </div>
-                                <p style={{"marginTop":"20px"}}>{username}</p>
+                                <p>{username}</p>
                         </div>
                     )}
 
