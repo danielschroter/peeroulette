@@ -38,6 +38,14 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         marginLeft:"372px"
     },
+    cancelNameButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"300px"
+    },
+    saveNameButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"0px"
+    },
     editPasswordButton: {
         marginRight: theme.spacing(1),
         marginLeft:"350px"
@@ -61,6 +69,10 @@ function EditProfileComponent(props) {
     const [compname, setCompname] = React.useState("");
     const [domains, setDomains] = React.useState("");
     const [registerError, setRegisterError] = React.useState("");
+
+    // Data from old code, Ben
+    const [editName, setEditName] = React.useState(false);
+
 
     useEffect(() => {
         if (props.user.error) {
@@ -120,22 +132,51 @@ function EditProfileComponent(props) {
                 </div>
 
                 <div className={classes.signUpRow}>
-                    <div style={{"display":"flex"}}>
-                        <p style={{"marginBottom":"0px"}}>Name:</p>
-                        <Button
-                            className={classes.editNameButton}
-                            onClick={props.onCancel}
-                        >
-                            Edit
-                        </Button>
-                    </div>
+                    { editName ? (
+                        <div>
+                            <div style={{"display":"flex"}}>
+                                <p style={{"marginBottom":"0px"}}>Name:</p>
+                                <Button
+                                    className={classes.cancelNameButton}
+                                    onClick={(e) => setEditName(false)}
+                                > Cancel
+                                </Button>
+                                <Button
+                                    className={classes.saveNameButton}
+                                    onClick={(e) => setEditName(false)}
+                                > Save
+                                </Button>
+                            </div>
+                            <div>
+                                <TextField
+                                label="Username"
+                                fullWidth
+                                value={username}
+                                onChange={onChangeUsername}
+                            />
+                            </div>
+                        </div>
 
-                        <TextField
+                    ) : (
+                        <div>
+                            <div style={{"display":"flex"}}>
+                                <p style={{"marginBottom":"0px"}}>Name:</p>
+                                <Button
+                                    className={classes.editNameButton}
+                                    onClick={(e) => setEditName(true)}
+                                > Edit
+                                </Button>
+                            </div>
+                                <p style={{"marginTop":"20px"}}>Name</p>
+                        </div>
+                    )}
+
+                        {/*<TextField
                             label="Username"
                             fullWidth
                             value={username}
                             onChange={onChangeUsername}
-                        />
+                        />*/}
                 </div>
                 <div className={classes.signUpRow}>
                     <div style={{"display":"flex"}}>
