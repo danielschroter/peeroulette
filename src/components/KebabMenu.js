@@ -45,6 +45,15 @@ function KebabMenu(props) {
         props.history.push("/");
     };
 
+    const onClickEditProfile = () => {
+        // trigger redux logout action
+        props.dispatch(logout());
+        // close this menu
+        props.onClose();
+        // navigate to the home page
+        props.history.push("/edit");
+    };
+
     return (
         <Menu
             open={props.open}
@@ -58,8 +67,9 @@ function KebabMenu(props) {
         >
             {user.user
                 ? [
-                      <MenuItem key="user" className={classes.menuitem}
-                                onClick={(event) => console.warn("YESS")}
+                      <MenuItem key="user"
+                                className={classes.menuitem}
+                                onClick={onClickEditProfile}
                       >
                           <Avatar className={classes.avatar}>
                               {user.user.username ? user.user.username[0] : ""}
