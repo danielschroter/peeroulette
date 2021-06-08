@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
  * For register new users
  * @param {props} props
  */
-function CorporateSignUpComponent(props) {
+function EditProfileComponent(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState("");
@@ -113,7 +113,7 @@ function CorporateSignUpComponent(props) {
                 </div>
                 <div className={classes.signUpRow}>
                     <TextField
-                        label="Username"
+                        label="Hans"
                         fullWidth
                         value={username}
                         onChange={onChangeUsername}
@@ -121,7 +121,7 @@ function CorporateSignUpComponent(props) {
                 </div>
                 <div className={classes.signUpRow}>
                     <TextField
-                        label="Password"
+                        label="Hans"
                         fullWidth
                         value={password}
                         onChange={onChangePassword}
@@ -219,4 +219,4 @@ function CorporateSignUpComponent(props) {
     );
 }
 
-export default CorporateSignUpComponent;
+export default EditProfileComponent;
