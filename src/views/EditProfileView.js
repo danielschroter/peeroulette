@@ -34,8 +34,8 @@ function EditProfileView(props) {
     return (
         <EditProfileComponent
             user={user}
-            onRegister={onRegister}
-            onCancel={onCancel}
+            //onRegister={onRegister}
+            //onCancel={onCancel}
         />
     );
 }

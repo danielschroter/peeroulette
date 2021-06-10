@@ -47,10 +47,10 @@ function KebabMenu(props) {
 
     const onClickEditProfile = () => {
         // trigger redux logout action
-        props.dispatch(logout());
+        // props.dispatch(logout());
         // close this menu
-        props.onClose();
-        // navigate to the home page
+        // props.onClose();
+        // navigate to the edit profile page
         props.history.push("/edit");
     };
 
