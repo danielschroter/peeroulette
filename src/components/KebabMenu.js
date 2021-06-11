@@ -49,7 +49,7 @@ function KebabMenu(props) {
         // trigger redux logout action
         // props.dispatch(logout());
         // close this menu
-        // props.onClose();
+        props.onClose();
         // navigate to the edit profile page
         props.history.push("/edit");
     };
