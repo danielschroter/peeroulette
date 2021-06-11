@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 function EditProfileComponent(props) {
     const classes = useStyles();
 
-    const [username, setUsername] = React.useState("");
+    const [username, setUsername] = React.useState(props.user.user.username);
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
     const [isAdmin, setIsAdmin] = React.useState(false);
@@ -91,8 +91,10 @@ function EditProfileComponent(props) {
     };
 
     const onChangeUsername = (e) => {
-            setUsername(e.target.value);
-            setRegisterError("");
+        //console.warn(props.user.user.username)
+
+        setUsername(e.target.value);
+        setRegisterError("");
     };
 
 
