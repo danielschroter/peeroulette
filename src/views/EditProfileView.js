@@ -18,9 +18,6 @@ function EditProfileView(props) {
     const user = useSelector((state) => state.user);
 
     useEffect(() => {
-        if (user.user) {
-            props.history.push("/");
-        }
     }, [user, props.history]);
 
     const onRegister = (username, password, isAdmin, compname, domains) => {
@@ -33,7 +30,7 @@ function EditProfileView(props) {
 
     return (
         <EditProfileComponent
-            user={user}
+            user={!!user.user}
             //onRegister={onRegister}
             //onCancel={onCancel}
         />
