@@ -7,7 +7,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {register} from "../redux/actions";
+import {login, register} from "../redux/actions";
 import EditProfileComponentOld from "../components/EditProfileComponentOld";
 import EditProfileComponent from "../components/EditProfileComponent";
 
@@ -32,6 +32,7 @@ function EditProfileViewOld(props) {
     return (
         <EditProfileComponentOld
             user={user}
+            onRegister={onRegister}
         />
     );
 }

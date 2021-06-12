@@ -86,16 +86,18 @@ function EditProfileComponentOld(props) {
     }, [props.user]);
 
     const onRegister = (e) => {
+        setEditName(false);
         e.preventDefault();
         props.onRegister(username, password, isAdmin, compname, domains);
     };
 
     const onChangeUsername = (e) => {
-        console.warn(e.target.value)
-
+        //console.warn(userName)
+        // props.onLogout(username, password);
         setUsername(e.target.value);
         setRegisterError("");
     };
+
 
 
     const onChangePassword = (e) => {
@@ -149,7 +151,7 @@ function EditProfileComponentOld(props) {
                                 </Button>
                                 <Button
                                     className={classes.saveNameButton}
-                                    onClick={(e) => setEditName(false)}
+                                    onClick={onRegister}
                                 > Save
                                 </Button>
                             </div>

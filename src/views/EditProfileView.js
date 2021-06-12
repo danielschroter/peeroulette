@@ -41,6 +41,7 @@ function EditProfileView(props) {
       //  props.changeMovie(movie);
     };
 
+
     // for creating a new movie
     const onCreate = (movie) => {
         // trigger redux action add movie
