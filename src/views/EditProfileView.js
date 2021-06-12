@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import {register} from "../redux/actions";
 import EditProfileComponentOld from "../components/EditProfileComponentOld";
+import EditProfileComponent from "../components/EditProfileComponent";
 
 /**
  * For register new users
@@ -29,7 +30,7 @@ function EditProfileView(props) {
     };
 
     return (
-        <EditProfileComponentOld
+        <EditProfileComponent
             user={user}
             //onRegister={onRegister}
             //onCancel={onCancel}

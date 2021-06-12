@@ -36,6 +36,7 @@ const routes = [
     {
         path: "/edit",
         component: EditProfileView,
+        exact: true,
     },
     {
         path: "/movie/:id",
