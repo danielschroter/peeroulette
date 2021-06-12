@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 function EditProfileComponent(props) {
     const classes = useStyles();
 
-    const [movieTitle, setMovieTitle] = React.useState(" ");
+    const [movieTitle, setMovieTitle] = React.useState("Hans");
     const [movieSynopsis, setMovieSynopsis] = React.useState("");
     const [movieCast, setMovieCast] = React.useState([]);
     const [movieAgeRating, setMovieAgeRating] = React.useState("");
@@ -202,14 +202,10 @@ function EditProfileComponent(props) {
     };
 
     // save is called, functionality differs whether it is a new movie or not
-    const onSave = () => {
-        if (props.new) {
-            props.onCreate(packMovie());
-        } else {
-            setEditMode(false);
-            props.onSave(packMovie());
-        }
-    };
+    {/*const onSave = () => {
+        setEditMode(false);
+        props.onSave(packMovie());
+    };*/}
 
     return (
         <div
@@ -235,9 +231,8 @@ function EditProfileComponent(props) {
                     classes.barMinHeight
                 }
             >
-                {/* Checks if the current user is admin. Only an admin can alter movies */}
-                {props.isAdmin ? (
-                    editMode ? (
+                {/* Edit Buttons */}
+                { editMode ? (
                         <React.Fragment>
                             <Button
                                 onClick={onCancel}
@@ -248,13 +243,12 @@ function EditProfileComponent(props) {
                                 Cancel
                             </Button>
                             <Button
-                                onClick={onSave}
+                                //onClick={onSave}
                                 variant="contained"
                                 color="primary"
                                 className={classes.marginSides}
-                                disabled={props.new && movieTitle === ""}
                             >
-                                {props.new ? "Create" : "Save"}
+                                Save
                             </Button>
                         </React.Fragment>
                     ) : (
@@ -263,64 +257,30 @@ function EditProfileComponent(props) {
                             variant="contained"
                             color="primary"
                             className={classes.marginSides}
-                            disabled={!props.isLoggedIn}
                         >
                             Edit
                         </Button>
-                    )
-                ) : null}
+                    ) }
             </div>
 
             {/* Movie Title */}
             <div className={classes.pageArea + " " + classes.title}>
                 <CustomTextField
-                    value={movieTitle}
-                    editMode={editMode}
+                    value={"Your Profile"}
                     furtherProps={{
                         fullWidth: true,
                     }}
                     align="center"
                     variant="h2"
-                    onChange={onChangeTitle}
                 />
             </div>
 
-            {/* Runtime, Year and MPAA as Chips */}
-            <Grid container justify="center" className={classes.pageArea}>
-                <Grid {...girdItemProps}>
-                    <CustomChip
-                        content={movieRuntime}
-                        caption="Runtime"
-                        suffix="Minutes"
-                        editMode={editMode}
-                        onChange={onChangeRuntime}
-                    />
-                </Grid>
-                <Grid {...girdItemProps}>
-                    <CustomChip
-                        content={
-                            movieYear === -1 ? "No Release Year" : movieYear
-                        }
-                        caption="Year"
-                        editMode={false}
-                    />
-                </Grid>
-                <Grid {...girdItemProps}>
-                    <CustomChip
-                        content={movieAgeRating}
-                        caption="MPAA"
-                        editMode={editMode}
-                        onChange={onChangeAgeRating}
-                    />
-                </Grid>
-            </Grid>
-
             {/* More detail data of the movie, grouped in DetailsArea.js for a consistent look */}
             <Grid container>
-                {/* Ratings */}
+                {/* Login Data */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
-                        title="Ratings"
+                        title="Login Data (name, password, email)"
                         content={
                             <Ratings
                                 criticsRating={
@@ -346,10 +306,10 @@ function EditProfileComponent(props) {
                     />
                 </Grid>
 
-                {/* Release Dates */}
+                {/* Password */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
-                        title="Release Dates"
+                        title="Secondary Data (city, organization, unviersity)"
                         content={
                             <ReleaseDates
                                 theaterRelease={theaterRelease}
@@ -366,10 +326,10 @@ function EditProfileComponent(props) {
                     />
                 </Grid>
 
-                {/* Synopsis */}
+                {/* Organizations */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
-                        title="Synopsis"
+                        title="Organizations"
                         content={
                             <Synopsis
                                 editMode={editMode}
@@ -385,7 +345,7 @@ function EditProfileComponent(props) {
                 {/* Cast */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
-                        title="Starring"
+                        title="Interests"
                         content={
                             <MovieCast
                                 movieCast={movieCast}
@@ -405,12 +365,12 @@ function EditProfileComponent(props) {
 }
 
 // attributes of props and their type
-{/*MovieDetailsComponent.propTypes = {
+{   EditProfileComponent.propTypes = {
     movie: PropTypes.object,
     new: PropTypes.bool,
     onCreate: PropTypes.func,
     onSave: PropTypes.func,
-};*/}
+};}
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
 export default EditProfileComponent;
