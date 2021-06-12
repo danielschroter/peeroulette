@@ -30,7 +30,7 @@ function EditProfileViewOld(props) {
     };
 
     return (
-        <EditProfileComponent
+        <EditProfileComponentOld
             user={user}
         />
     );

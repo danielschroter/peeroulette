@@ -4,7 +4,8 @@ import SignUpView from "./views/SignUpView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import CorporateSignUpView from "./views/CorporateSignUpView";
-import EditProfileView from "./views/EditProfileViewOld";
+import EditProfileViewOld from "./views/EditProfileViewOld";
+import EditProfileView from "./views/EditProfileView";
 
 // routes within the movie database example app
 // used for routing
@@ -35,7 +36,7 @@ const routes = [
     },
     {
         path: "/edit",
-        component: EditProfileView,
+        component: EditProfileViewOld,
         exact: true,
     },
     {

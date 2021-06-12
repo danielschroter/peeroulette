@@ -91,7 +91,7 @@ function EditProfileComponentOld(props) {
     };
 
     const onChangeUsername = (e) => {
-        //console.warn(props.user.user.username)
+        console.warn(e.target.value)
 
         setUsername(e.target.value);
         setRegisterError("");

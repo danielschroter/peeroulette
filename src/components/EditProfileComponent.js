@@ -238,16 +238,19 @@ function EditProfileComponent(props) {
     };
 
     // save is called, functionality differs whether it is a new movie or not
-    {/*
     const onSave = () => {
-        if (props.new) {
+        props.onCreate(packMovie());
+        console.warn("created Movie")
+        { /*
+                    if (props.new) {
             props.onCreate(packMovie());
         } else {
             setEditMode(false);
             props.onSave(packMovie());
         }
+        */}
+
     };
-    */}
 
     return (
         <div
@@ -277,7 +280,7 @@ function EditProfileComponent(props) {
                 { editMode ? (
                         <React.Fragment>
                             <Button
-                                onClick={onCancel}
+                                //onClick={onCancel}
                                 variant="contained"
                                 color="primary"
                                 className={classes.marginSides}
@@ -434,4 +437,4 @@ function EditProfileComponent(props) {
 };}
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
-export default EditProfileComponent;
+export default withRouter(EditProfileComponent);
