@@ -72,7 +72,6 @@ const useStyles = makeStyles((theme) => ({
     editNameButton: {
         marginRight: theme.spacing(1),
         marginLeft:"480px",
-        marginTop:"-30px"
     },
     cancelNameButton: {
         marginRight: theme.spacing(1),
@@ -234,14 +233,21 @@ function EditProfileComponent(props) {
     const onChangeMovieTitle = (e) => {
         console.warn(e.target.value)
         setMovieTitle(e.target.value);
+
         //setRegisterError("");
     };
 
     // save is called, functionality differs whether it is a new movie or not
-    {/*const onSave = () => {
-        setEditMode(false);
-        props.onSave(packMovie());
-    };*/}
+    {/*
+    const onSave = () => {
+        if (props.new) {
+            props.onCreate(packMovie());
+        } else {
+            setEditMode(false);
+            props.onSave(packMovie());
+        }
+    };
+    */}
 
     return (
         <div
@@ -425,7 +431,7 @@ function EditProfileComponent(props) {
     new: PropTypes.bool,
     onCreate: PropTypes.func,
     onSave: PropTypes.func,
-};};
+};}
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
 export default EditProfileComponent;

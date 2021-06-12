@@ -1,41 +1,67 @@
 import React, { useEffect } from "react";
-import { withRouter } from "react-router-dom";
-import {connect, useSelector} from "react-redux";
+import { connect, useSelector } from "react-redux";
 
-
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import {register} from "../redux/actions";
-import EditProfileComponentOld from "../components/EditProfileComponentOld";
+import { getMovie, changeMovie, addMovie } from "../redux/actions";
+import MovieDetailsComponent from "../components/MovieDetailsComponent";
+import Loading from "../components/Loading";
+import {withRouter} from "react-router-dom";
 import EditProfileComponent from "../components/EditProfileComponent";
 
 /**
- * For register new users
+ * Manages the process of getting movie details data
  * @param {props} props
  */
 function EditProfileView(props) {
+    // props can be deconstructed into single variables, so you do not need to write "props." all the time
+    let { match, getMovie } = props;
+
+    // from redux store
+    const selectedMovie = useSelector((state) => state.selectedMovie);
     const user = useSelector((state) => state.user);
 
-    useEffect(() => {
-    }, [user, props.history]);
+    // state variable of this functional component
+    const [newMovie, setNewMovie] = React.useState(false);
 
-    const onRegister = (username, password, isAdmin, compname, domains) => {
-        props.dispatch(register(username, password, isAdmin, compname, domains));
+    useEffect(() => {
+        // get id of movie from URL
+        let movieId = match.params.id;
+
+        // check if a new movie is created
+        if (movieId === "new") {
+            // procedd with an empty element
+            setNewMovie(true);
+        } else {
+            // trigger movie load from backend
+            getMovie(movieId);
+        }
+    }, [match.params]);
+
+    // for saving an existing movie
+    const onSave = (movie) => {
+        props.changeMovie(movie);
     };
 
-    const onCancel = () => {
+    // for creating a new movie
+    const onCreate = (movie) => {
+        // trigger redux action add movie
+        props.addMovie(movie);
+        // navigate back to the movie list
         props.history.push("/");
     };
 
     return (
         <EditProfileComponent
-            user={user}
-            //onRegister={onRegister}
-            //onCancel={onCancel}
+            movie={selectedMovie.movie}
+            new={true}
+            onCreate={onCreate}
+            onSave={onSave}
         />
     );
+
 }
 
+// connect() establishes allows the usage of redux functionality
+// here the function getMovie, changeMovie and addMovie are mentionend
+// this is an alternative way of calling connecting them with redux
+// another way is shown in MovieListView.js
 export default connect()(withRouter(EditProfileView));

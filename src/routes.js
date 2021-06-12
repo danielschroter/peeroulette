@@ -4,7 +4,7 @@ import SignUpView from "./views/SignUpView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import CorporateSignUpView from "./views/CorporateSignUpView";
-import EditProfileView from "./views/EditProfileView";
+import EditProfileView from "./views/EditProfileViewOld";
 
 // routes within the movie database example app
 // used for routing
