@@ -175,8 +175,8 @@ function EditProfileComponentOld(props) {
                                 <p>{username}</p>
                         </div>
                     )}
-
                 </div>
+
                 <div className={classes.signUpRow}>
                     <div style={{"display":"flex"}}>
                         <p style={{"marginBottom":"0px"}}>Password:</p>

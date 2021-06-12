@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Grid } from "@material-ui/core";
+import {Button, Grid, TextField} from "@material-ui/core";
 import PropTypes from "prop-types";
 import CustomTextField from "../components/CustomTextField";
 import CustomChip from "../components/CustomChip";
@@ -59,6 +59,33 @@ const useStyles = makeStyles((theme) => ({
         top: theme.spacing(1),
         right: theme.spacing(2),
     },
+    signUpRow: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        "&:last-child": {
+            paddingBottom: theme.spacing(1),
+        },
+        "&:first-child": {
+            paddingTop: theme.spacing(1),
+        },
+    },
+    editNameButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"480px",
+        marginTop:"-30px"
+    },
+    cancelNameButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"420px"
+    },
+    saveNameButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"0px"
+    },
+    editPasswordButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"350px"
+    },
 }));
 
 /**
@@ -79,6 +106,9 @@ function EditProfileComponent(props) {
     const [theaterRelease, setTheaterRelease] = React.useState("");
     const [blurayRelase, setBlurayRelease] = React.useState("");
     const [moviethumbnail, setMovieThumbnail] = React.useState("");
+
+    const [editName, setEditName] = React.useState(false);
+
 
     // for extracting the attributes of the given movie to the approriate state variables
     const extractMovie = () => {
@@ -201,6 +231,12 @@ function EditProfileComponent(props) {
         }
     };
 
+    const onChangeMovieTitle = (e) => {
+        console.warn(e.target.value)
+        setMovieTitle(e.target.value);
+        //setRegisterError("");
+    };
+
     // save is called, functionality differs whether it is a new movie or not
     {/*const onSave = () => {
         setEditMode(false);
@@ -282,26 +318,45 @@ function EditProfileComponent(props) {
                     <DetailsArea
                         title="Login Data (name, password, email)"
                         content={
-                            <Ratings
-                                criticsRating={
-                                    typeof criticsRating === "number"
-                                        ? criticsRating
-                                        : 0
-                                }
-                                avgAudienceRating={
-                                    typeof avgAudienceRating === "number"
-                                        ? avgAudienceRating
-                                        : 0
-                                }
-                                editMode={editMode}
-                                onChangeCriticsRating={(value) =>
-                                    setCriticsRating(value)
-                                }
-                                onChangeOwnRating={(value) =>
-                                    onChangeOwnRating(value)
-                                }
-                                isAdmin={props.isAdmin}
-                            />
+                            <div className={classes.signUpRow}>
+                                { editName ? (
+                                    <div>
+                                        <div style={{"display":"flex"}}>
+                                            <p>Name:</p>
+                                            <Button
+                                                className={classes.cancelNameButton}
+                                                onClick={(e) => setEditName(false) }
+                                            > Cancel
+                                            </Button>
+                                            <Button
+                                                className={classes.saveNameButton}
+                                                onClick={(e) => setEditName(false)}
+                                            > Save
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <TextField
+                                                fullWidth
+                                                value={movieTitle}
+                                                onChange={onChangeMovieTitle}
+                                            />
+                                        </div>
+                                    </div>
+
+                                ) : (
+                                    <div>
+                                        <div style={{"display":"flex"}}>
+                                            <p>Name:</p>
+                                            <Button
+                                                className={classes.editNameButton}
+                                                onClick={(e) => setEditName(true)}
+                                            > Edit
+                                            </Button>
+                                        </div>
+                                        <p>{movieTitle}</p>
+                                    </div>
+                                )}
+                            </div>
                         }
                     />
                 </Grid>
@@ -370,7 +425,7 @@ function EditProfileComponent(props) {
     new: PropTypes.bool,
     onCreate: PropTypes.func,
     onSave: PropTypes.func,
-};}
+};};
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
 export default EditProfileComponent;
