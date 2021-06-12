@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
  * For register new users
  * @param {props} props
  */
-function EditProfileComponent(props) {
+function EditProfileComponentOld(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState(props.user.user.username);
@@ -286,4 +286,4 @@ function EditProfileComponent(props) {
     );
 }
 
-export default EditProfileComponent;
+export default EditProfileComponentOld;
