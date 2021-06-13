@@ -61,10 +61,10 @@ const useStyles = makeStyles((theme) => ({
 function EditProfileComponentOld(props) {
     const classes = useStyles();
 
-    const [username, setUsername] = React.useState(props.user.user.username);
-    const [password, setPassword] = React.useState(props.user.user.password);
-    const [password2, setPassword2] = React.useState(props.user.user.password);
-    const [isAdmin, setIsAdmin] = React.useState(props.user.user.isAdmin);
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [password2, setPassword2] = React.useState("");
+    const [isAdmin, setIsAdmin] = React.useState("");
     const [isCorporate, setIsCorporate] = React.useState(false);
 
     // Corporate Data
@@ -77,6 +77,25 @@ function EditProfileComponentOld(props) {
     const [saveName, setSaveName] = React.useState(false);
 
 
+    // for extracting the attributes of the given movie to the approriate state variables
+    const extractUser = () => {
+        if (!props.user) {
+            return;
+        }
+        //let user = props.onGetUser(props.user.user._id);
+        UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
+            //console.warn(result.username)
+
+            setUsername(result.username);
+            setPassword(result.password);
+
+           // setUsername(props.user.user.username);
+           // setPassword(props.user.user.password);
+        });
+
+
+
+    };
 
     useEffect(() => {
         if (props.user.error) {
@@ -84,7 +103,10 @@ function EditProfileComponentOld(props) {
         } else {
             setRegisterError("");
         }
+        extractUser();
     }, [props.user]);
+
+
 
     // creating a object with all relevant data to update or create a changed movie
     const packUser = () => {
@@ -121,13 +143,14 @@ function EditProfileComponentOld(props) {
         console.warn(props.user.user._id)
 
         //let user = props.onGetUser(props.user.user._id);
-        let user = UserServiceCRUD.getUser(props.user.user._id);
-        console.warn(user.valueOf())
-
+        UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
+            console.warn(result.username)
+        });
 
         //props.onRegister(username, password, isAdmin, compname, domains);
         props.onUpdateUser(packUser());
     };
+
 
     const onGetUser = (e) => {
         setEditName(false);
