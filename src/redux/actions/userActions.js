@@ -1,4 +1,6 @@
 import UserService from "../../services/UserService";
+import UserServiceCRUD from "../../services/UserServiceCRUD";
+
 
 export function login(username, password) {
     function onSuccess(user) {
@@ -37,7 +39,7 @@ export function register(username, password, isAdmin, compname, domains) {
 
     return async (dispatch) => {
         try {
-            let resp = await UserService.register(username, password, isAdmin, compname, domains);
+            let resp = await UserServiceCRUD.register(username, password, isAdmin, compname, domains);
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));
