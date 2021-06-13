@@ -1,6 +1,6 @@
 import HttpService from "./HttpService";
 
-export default class UserService {
+export default class UserServiceCRUD {
     static baseURL() {
         return "http://localhost:4000/user";
     }
@@ -8,7 +8,7 @@ export default class UserService {
     static register(user, pass, isAdmin, compname, domains) {
         return new Promise((resolve, reject) => {
             HttpService.post(
-                `${UserService.baseURL()}/register`,
+                `${UserServiceCRUD.baseURL()}/register`,
                 {
                     username: user,
                     password: pass,
@@ -26,10 +26,28 @@ export default class UserService {
         });
     }
 
+    static deleteUser(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.remove(
+                `${UserServiceCRUD.baseURL()}/${id}`,
+                function (data) {
+                    if (data.message !== undefined) {
+                        resolve(data.message);
+                    } else {
+                        reject("Error while deleting");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static login(user, pass) {
         return new Promise((resolve, reject) => {
             HttpService.post(
-                `${UserService.baseURL()}/login`,
+                `${UserServiceCRUD.baseURL()}/login`,
                 {
                     username: user,
                     password: pass,
