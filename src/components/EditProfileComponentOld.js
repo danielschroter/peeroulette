@@ -88,10 +88,11 @@ function EditProfileComponentOld(props) {
     // creating a object with all relevant data to update or create a changed movie
     const packUser = () => {
         let back = {
-            ...props.user,
+            ...props.user.user,
         };
 
         back.username = username;
+        back.password = "test";
 
         return back;
     };
@@ -99,8 +100,12 @@ function EditProfileComponentOld(props) {
     const onRegister = (e) => {
         setEditName(false);
         e.preventDefault();
-        console.warn(props.user);
+        //console.warn(props.user);
+        console.warn(packUser())
+        console.warn(props.user.user)
+
         //props.onRegister(username, password, isAdmin, compname, domains);
+        props.onRegister(packUser());
     };
 
     const onChangeUsername = (e) => {

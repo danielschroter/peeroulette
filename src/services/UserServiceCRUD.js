@@ -29,16 +29,10 @@ export default class UserServiceCRUD {
 
     static updateUser(user) {
         return new Promise((resolve, reject) => {
-            console.warn(user.username)
-            HttpService.post(
-                `${this.baseURL()}/register`,
-                {
-                    username: user.username,
-                    password: user.password,
-                    isAdmin: user.isAdmin,
-                    compname: user.compname,
-                    domains: user.domains,
-                },
+            console.warn(`${this.baseURL()}/${user._id}`)
+            HttpService.put(
+                `${this.baseURL()}/${user._id}`,
+                user,
                 function (data) {
                     resolve(data);
                 },

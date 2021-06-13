@@ -57,6 +57,7 @@ export default class MovieService {
 
     static updateMovie(movie) {
         return new Promise((resolve, reject) => {
+            console.warn(`${this.baseURL()}/${movie._id}`)
             HttpService.put(
                 `${this.baseURL()}/${movie._id}`,
                 movie,

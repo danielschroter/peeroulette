@@ -22,11 +22,13 @@ function EditProfileViewOld(props) {
     useEffect(() => {
     }, [user, props.history]);
 
-    const onRegister = (user, pass, isAdmin, compname, domains) => {
+    const onRegister = (user) => {
         //props.dispatch(update(user));
         //props.dispatch(register(username,password, isAdmin, compname, domains));
         //UserServiceCRUD.update(user);
-        props.dispatch(register(user, pass, isAdmin, compname, domains));
+       // props.dispatch(register(user, pass, isAdmin, compname, domains));
+        props.dispatch(changeUser(user));
+
     };
 
     const onCancel = () => {
