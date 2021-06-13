@@ -8,6 +8,7 @@ import {
     FormControlLabel,
     Checkbox,
 } from "@material-ui/core";
+import UserServiceCRUD from "../services/UserServiceCRUD";
 
 const useStyles = makeStyles((theme) => ({
     usersignUpRoot: {
@@ -61,9 +62,9 @@ function EditProfileComponentOld(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState(props.user.user.username);
-    const [password, setPassword] = React.useState("");
-    const [password2, setPassword2] = React.useState("");
-    const [isAdmin, setIsAdmin] = React.useState(false);
+    const [password, setPassword] = React.useState(props.user.user.password);
+    const [password2, setPassword2] = React.useState(props.user.user.password);
+    const [isAdmin, setIsAdmin] = React.useState(props.user.user.isAdmin);
     const [isCorporate, setIsCorporate] = React.useState(false);
 
     // Corporate Data
@@ -92,7 +93,7 @@ function EditProfileComponentOld(props) {
         };
 
         back.username = username;
-        back.password = "test";
+        back.password = password;
 
         return back;
     };
@@ -108,9 +109,40 @@ function EditProfileComponentOld(props) {
         props.onRegister(packUser());
     };
 
+    const onUpdateUser = (e) => {
+        setEditName(false);
+        e.preventDefault();
+        //console.warn(props.user);
+        console.warn("user frontend")
+        console.warn(packUser())
+        console.warn(props.user.user)
+
+        console.warn("user backend")
+        console.warn(props.user.user._id)
+
+        //let user = props.onGetUser(props.user.user._id);
+        let user = UserServiceCRUD.getUser(props.user.user._id);
+        console.warn(user.valueOf())
+
+
+        //props.onRegister(username, password, isAdmin, compname, domains);
+        props.onUpdateUser(packUser());
+    };
+
+    const onGetUser = (e) => {
+        setEditName(false);
+        e.preventDefault();
+        //console.warn(props.user);
+        console.warn(packUser())
+        console.warn(props.user.user)
+
+        //props.onRegister(username, password, isAdmin, compname, domains);
+        props.onRegister(packUser());
+    };
+
     const onChangeUsername = (e) => {
         props.user.user.username = e.target.value;
-        //console.warn(props.user.user)
+        console.warn(props.user.user)
         // props.onLogout(username, password);
         setUsername(e.target.value);
         setRegisterError("");
@@ -167,7 +199,7 @@ function EditProfileComponentOld(props) {
                                 </Button>
                                 <Button
                                     className={classes.saveNameButton}
-                                    onClick={onRegister}
+                                    onClick={onUpdateUser}
                                 > Save
                                 </Button>
                             </div>

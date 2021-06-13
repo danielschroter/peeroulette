@@ -26,6 +26,24 @@ export default class UserServiceCRUD {
         });
     }
 
+    static getUser(id) {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                `${UserServiceCRUD.baseURL()}/${id}`,
+                function (data) {
+                    if (data !== undefined || Object.keys(data).length !== 0) {
+                        resolve(data);
+                    } else {
+                        reject("Error while retrieving user");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
 
     static updateUser(user) {
         return new Promise((resolve, reject) => {

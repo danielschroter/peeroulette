@@ -67,3 +67,21 @@ export function changeUser(changedUser) {
         }
     };
 }
+
+export const getUser = (id) => {
+    function onSuccess(user) {
+        return { type: "GETUSER_SUCCESS", user: user };
+    }
+    function onFailure(error) {
+        console.log("failed to load a user", error);
+    }
+
+    return async (dispatch, getState) => {
+        try {
+            let user = await UserServiceCRUD.getUser(id);
+            dispatch(onSuccess(user));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};
