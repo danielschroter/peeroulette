@@ -1,5 +1,6 @@
 import UserService from "../../services/UserService";
 import UserServiceCRUD from "../../services/UserServiceCRUD";
+import MovieService from "../../services/MovieService";
 
 
 export function login(username, password) {
@@ -43,6 +44,26 @@ export function register(username, password, isAdmin, compname, domains) {
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));
+        }
+    };
+}
+
+export function changeUser(changedUser) {
+
+    function onSuccess(user) {
+        return { type: "UPDATEMOVIE_SUCCESS", user: user };
+    }
+
+    function onFailure(error) {
+        console.log("change movie failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            let user = await UserServiceCRUD.updateUser(changedUser);
+            dispatch(onSuccess(user));
+        } catch (e) {
+            onFailure(e);
         }
     };
 }

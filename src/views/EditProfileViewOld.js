@@ -7,9 +7,10 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {login, register} from "../redux/actions";
+import {login, register, changeUser} from "../redux/actions";
 import EditProfileComponentOld from "../components/EditProfileComponentOld";
 import EditProfileComponent from "../components/EditProfileComponent";
+import UserServiceCRUD from "../services/UserServiceCRUD";
 
 /**
  * For register new users
@@ -21,8 +22,11 @@ function EditProfileViewOld(props) {
     useEffect(() => {
     }, [user, props.history]);
 
-    const onRegister = (username, password, isAdmin, compname, domains) => {
-        props.dispatch(register(username, password, isAdmin, compname, domains));
+    const onRegister = (user, pass, isAdmin, compname, domains) => {
+        //props.dispatch(update(user));
+        //props.dispatch(register(username,password, isAdmin, compname, domains));
+        //UserServiceCRUD.update(user);
+        props.dispatch(register(user, pass, isAdmin, compname, domains));
     };
 
     const onCancel = () => {

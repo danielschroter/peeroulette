@@ -26,16 +26,21 @@ export default class UserServiceCRUD {
         });
     }
 
-    static deleteUser(id) {
+
+    static updateUser(user) {
         return new Promise((resolve, reject) => {
-            HttpService.remove(
-                `${UserServiceCRUD.baseURL()}/${id}`,
+            console.warn(user.username)
+            HttpService.post(
+                `${this.baseURL()}/register`,
+                {
+                    username: user.username,
+                    password: user.password,
+                    isAdmin: user.isAdmin,
+                    compname: user.compname,
+                    domains: user.domains,
+                },
                 function (data) {
-                    if (data.message !== undefined) {
-                        resolve(data.message);
-                    } else {
-                        reject("Error while deleting");
-                    }
+                    resolve(data);
                 },
                 function (textStatus) {
                     reject(textStatus);

@@ -85,20 +85,31 @@ function EditProfileComponentOld(props) {
         }
     }, [props.user]);
 
+    // creating a object with all relevant data to update or create a changed movie
+    const packUser = () => {
+        let back = {
+            ...props.user,
+        };
+
+        back.username = username;
+
+        return back;
+    };
+
     const onRegister = (e) => {
         setEditName(false);
         e.preventDefault();
-        props.onRegister(username, password, isAdmin, compname, domains);
+        console.warn(props.user);
+        //props.onRegister(username, password, isAdmin, compname, domains);
     };
 
     const onChangeUsername = (e) => {
-        //console.warn(userName)
+        props.user.user.username = e.target.value;
+        //console.warn(props.user.user)
         // props.onLogout(username, password);
         setUsername(e.target.value);
         setRegisterError("");
     };
-
-
 
     const onChangePassword = (e) => {
         setPassword(e.target.value);
