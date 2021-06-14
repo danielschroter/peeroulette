@@ -1,7 +1,4 @@
 import UserService from "../../services/UserService";
-import UserServiceCRUD from "../../services/UserServiceCRUD";
-import MovieService from "../../services/MovieService";
-
 
 export function login(username, password) {
     function onSuccess(user) {
@@ -40,7 +37,7 @@ export function register(username, password, isAdmin, compname, domains) {
 
     return async (dispatch) => {
         try {
-            let resp = await UserServiceCRUD.register(username, password, isAdmin, compname, domains);
+            let resp = await UserService.register(username, password, isAdmin, compname, domains);
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));
@@ -60,7 +57,7 @@ export function changeUser(changedUser) {
 
     return async (dispatch) => {
         try {
-            let user = await UserServiceCRUD.updateUser(changedUser);
+            let user = await UserService.updateUser(changedUser);
             dispatch(onSuccess(user));
         } catch (e) {
             onFailure(e);
@@ -78,7 +75,7 @@ export const getUser = (id) => {
 
     return async (dispatch, getState) => {
         try {
-            let user = await UserServiceCRUD.getUser(id);
+            let user = await UserService.getUser(id);
             dispatch(onSuccess(user));
         } catch (e) {
             onFailure(e);

@@ -7,7 +7,7 @@ import { Menu, MenuItem, Avatar, Divider, IconButton } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import UserServiceCRUD from "../services/UserServiceCRUD";
+import UserService from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
     menuitem: {
@@ -30,7 +30,7 @@ function KebabMenu(props) {
         // check that user is not undefined to avoid error
 
         if (state.user.user != undefined && state.user.user._id != undefined) {
-            UserServiceCRUD.getUser(state.user.user._id).then(function(result) {
+            UserService.getUser(state.user.user._id).then(function(result) {
                 state.user.user.username = result.username;
             } );
         }
