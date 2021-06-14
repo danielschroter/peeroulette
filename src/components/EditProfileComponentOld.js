@@ -88,8 +88,10 @@ function EditProfileComponentOld(props) {
 
             setUsername(result.username);
             setPassword(result.password);
+            setPassword2(result.password);
 
-           // setUsername(props.user.user.username);
+
+            // setUsername(props.user.user.username);
            // setPassword(props.user.user.password);
         });
 
