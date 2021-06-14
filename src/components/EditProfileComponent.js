@@ -203,6 +203,15 @@ function EditProfileComponent(props) {
         setUsername(e.target.value);
         setRegisterError("");
     };
+    const onCancelUserName = (e) => {
+        setEditName(false);
+
+        //let user = props.onGetUser(props.user.user._id);
+        UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
+            setUsername(result.username)
+        });
+        setRegisterError("");
+    };
 
     const onChangePassword = (e) => {
         setPassword(e.target.value);
@@ -294,7 +303,7 @@ function EditProfileComponent(props) {
             {/* User Title */}
             <div className={classes.pageArea + " " + classes.title}>
                 <CustomTextField
-                    value={username + "'s Profile"}
+                    value={"Edit Your Profile"}
                     furtherProps={{
                         fullWidth: true,
                     }}
@@ -317,7 +326,7 @@ function EditProfileComponent(props) {
                                             <p className={classes.userDataFont}>Name:</p>
                                             <Button
                                                 className={classes.cancelNameButton}
-                                                onClick={(e) => setEditName(false)}
+                                                onClick={onCancelUserName}
                                             > Cancel
                                             </Button>
                                             <Button
