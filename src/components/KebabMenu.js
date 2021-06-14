@@ -7,6 +7,7 @@ import { Menu, MenuItem, Avatar, Divider, IconButton } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
+import UserServiceCRUD from "../services/UserServiceCRUD";
 
 const useStyles = makeStyles((theme) => ({
     menuitem: {
@@ -53,6 +54,12 @@ function KebabMenu(props) {
         // navigate to the edit profile page
         props.history.push("/edit");
     };
+
+    const UpdateUserName = () => {
+        UserServiceCRUD.getUser(user.user._id).then(function(result) {
+        user.user.username = result.username;
+        });
+    }
 
     return (
         <Menu

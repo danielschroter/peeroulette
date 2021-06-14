@@ -82,17 +82,12 @@ function EditProfileComponentOld(props) {
         if (!props.user) {
             return;
         }
-        //let user = props.onGetUser(props.user.user._id);
         UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
-            //console.warn(result.username)
 
             setUsername(result.username);
             setPassword(result.password);
             setPassword2(result.password);
 
-
-            // setUsername(props.user.user.username);
-           // setPassword(props.user.user.password);
         });
 
 
