@@ -138,11 +138,9 @@ function EditProfileComponent(props) {
             return;
         }
         UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
-
             setUsername(result.username);
             setPassword(result.password);
             setPassword2(result.password);
-
         });
     };
 
@@ -176,24 +174,12 @@ function EditProfileComponent(props) {
     const onRegister = (e) => {
         setEditName(false);
         e.preventDefault();
-        //console.warn(props.user);
-        console.warn(packUser())
-        console.warn(props.user.user)
-
-        //props.onRegister(username, password, isAdmin, compname, domains);
         props.onRegister(packUser());
     };
 
     const onUpdateUser = (e) => {
         setEditName(false);
         e.preventDefault();
-        //console.warn(props.user);
-        console.warn("user frontend")
-        console.warn(packUser())
-        console.warn(props.user.user)
-
-        console.warn("user backend")
-        console.warn(props.user.user._id)
 
         //let user = props.onGetUser(props.user.user._id);
         UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
@@ -209,15 +195,11 @@ function EditProfileComponent(props) {
         setDeleteProfile(false);
         UserService.logout();
         let id = props.user.user._id;
-        console.warn(id);
         UserServiceCRUD.deleteUser(id);
-
     };
 
     const onChangeUsername = (e) => {
         props.user.user.username = e.target.value;
-        console.warn(props.user.user)
-        // props.onLogout(username, password);
         setUsername(e.target.value);
         setRegisterError("");
     };

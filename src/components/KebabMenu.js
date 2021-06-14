@@ -26,7 +26,16 @@ function KebabMenu(props) {
     const classes = useStyles();
 
     const user = useSelector((state) => {
-        // return the currnetly logged in user from redux store
+        // update new user data in case that userdata changed in the backend
+        console.warn(state.user.user)
+        console.warn(state.user.user != undefined)
+        {/*}
+        if (state.user.user != undefined) {
+            console.warn(state.user.user._id)
+            UserServiceCRUD.getUser(state.user.user._id).then(function(result) {
+                state.user.user.username = result.username;
+            } );
+        } */}
         return state.user;
     });
 
@@ -54,12 +63,6 @@ function KebabMenu(props) {
         // navigate to the edit profile page
         props.history.push("/edit");
     };
-
-    const UpdateUserName = () => {
-        UserServiceCRUD.getUser(user.user._id).then(function(result) {
-        user.user.username = result.username;
-        });
-    }
 
     return (
         <Menu
