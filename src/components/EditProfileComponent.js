@@ -288,7 +288,7 @@ function EditProfileComponent(props) {
                             color="primary"
                             className={classes.deleteProfileButton}
                         >
-                            Cancel
+                            No
                         </Button>
                         <Button
                             onClick={(e) => setDeleteProfile(false)}
@@ -296,7 +296,7 @@ function EditProfileComponent(props) {
                             color="primary"
                             className={classes.deleteProfileButton}
                         >
-                            Save
+                            Yes
                         </Button>
                     </React.Fragment>
                 ) : (

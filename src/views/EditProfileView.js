@@ -9,7 +9,6 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import {login, register, changeUser, getUser} from "../redux/actions";
 import EditProfileComponent from "../components/EditProfileComponent";
-import EditProfileComponent from "../components/EditProfileComponent";
 import UserServiceCRUD from "../services/UserServiceCRUD";
 
 /**
