@@ -208,6 +208,10 @@ function EditProfileComponent(props) {
     const onDeleteProfile = (e) => {
         setDeleteProfile(false);
         UserService.logout();
+        let id = props.user.user._id;
+        console.warn(id);
+        UserServiceCRUD.deleteUser(id);
+
     };
 
     const onChangeUsername = (e) => {

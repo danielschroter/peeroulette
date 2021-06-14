@@ -44,10 +44,27 @@ export default class UserServiceCRUD {
         });
     }
 
+    static deleteUser(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.remove(
+                `${UserServiceCRUD.baseURL()}/${id}`,
+                function (data) {
+                    if (data.message !== undefined) {
+                        resolve(data.message);
+                    } else {
+                        reject("Error while deleting");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
 
     static updateUser(user) {
         return new Promise((resolve, reject) => {
-            console.warn(`${this.baseURL()}/${user._id}`)
             HttpService.put(
                 `${this.baseURL()}/${user._id}`,
                 user,
