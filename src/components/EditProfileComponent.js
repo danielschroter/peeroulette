@@ -1,16 +1,19 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {Button, Grid, TextField} from "@material-ui/core";
-import PropTypes from "prop-types";
-import CustomTextField from "../components/CustomTextField";
-import CustomChip from "../components/CustomChip";
-import DetailsArea from "../components/DetailsArea";
-import MovieCast from "./MovieCast";
-import { withRouter } from "react-router-dom";
-import MovieService from "../services/MovieService";
+import {
+    Paper,
+    Button,
+    TextField,
+    Typography,
+    FormControlLabel,
+    Checkbox, Grid,
+} from "@material-ui/core";
+import UserServiceCRUD from "../services/UserServiceCRUD";
+import CustomTextField from "./CustomTextField";
+import DetailsArea from "./DetailsArea";
 import ReleaseDates from "./ReleaseDates";
-import Ratings from "./Ratings";
 import Synopsis from "./Synopsis";
+import MovieCast from "./MovieCast";
 
 const useStyles = makeStyles((theme) => ({
     flexCol: {
@@ -69,102 +72,89 @@ const useStyles = makeStyles((theme) => ({
             paddingTop: theme.spacing(1),
         },
     },
+    userDataFont: {
+        color: "black",
+        fontWeight: "bold",
+    },
+    deleteProfileButton: {
+        marginRight: theme.spacing(1),
+        backgroundColor:"#cc0000",
+        marginTop:"12px",
+    },
     editNameButton: {
         marginRight: theme.spacing(1),
         marginLeft:"480px",
     },
     cancelNameButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"420px"
+        marginLeft:"410px"
     },
     saveNameButton: {
         marginRight: theme.spacing(1),
         marginLeft:"0px"
     },
+    cancelPasswordButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"370px"
+    },
+    savePasswordButton: {
+        marginRight: theme.spacing(1),
+        marginLeft:"0px"
+    },
     editPasswordButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"350px"
+        marginLeft:"455px"
     },
 }));
 
 /**
- * For presenting and changing movie details
+ * For register new users
  * @param {props} props
  */
 function EditProfileComponent(props) {
     const classes = useStyles();
 
-    const [movieTitle, setMovieTitle] = React.useState("Hans");
-    const [movieSynopsis, setMovieSynopsis] = React.useState("");
-    const [movieCast, setMovieCast] = React.useState([]);
-    const [movieAgeRating, setMovieAgeRating] = React.useState("");
-    const [movieRuntime, setMovieRuntime] = React.useState("");
-    const [movieYear, setMovieYear] = React.useState("");
-    const [criticsRating, setCriticsRating] = React.useState("");
-    const [avgAudienceRating, setAvgAudienceRating] = React.useState("");
-    const [theaterRelease, setTheaterRelease] = React.useState("");
-    const [blurayRelase, setBlurayRelease] = React.useState("");
-    const [moviethumbnail, setMovieThumbnail] = React.useState("");
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [password2, setPassword2] = React.useState("");
+    const [isAdmin, setIsAdmin] = React.useState("");
+    const [isCorporate, setIsCorporate] = React.useState(false);
+
+    // Corporate Data
+    const [compname, setCompname] = React.useState("");
+    const [domains, setDomains] = React.useState("");
+    const [registerError, setRegisterError] = React.useState("");
+
+    // Data from old code, Ben
+    const [deleteProfile, setDeleteProfile] = React.useState(false);
 
     const [editName, setEditName] = React.useState(false);
+    const [editPassword, setEditPassword] = React.useState(false);
+    const [saveName, setSaveName] = React.useState(false);
 
 
     // for extracting the attributes of the given movie to the approriate state variables
-    const extractMovie = () => {
-        if (!props.movie) {
+    const extractUser = () => {
+        if (!props.user) {
             return;
         }
+        UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
 
-        setMovieTitle(props.movie.title);
-        setMovieSynopsis(props.movie.synopsis);
-        setMovieAgeRating(props.movie.mpaa_rating);
-        setMovieRuntime(props.movie.runtime);
+            setUsername(result.username);
+            setPassword(result.password);
+            setPassword2(result.password);
 
-        setMovieCast(JSON.parse(JSON.stringify(props.movie.actors)));
-        setCriticsRating(props.movie.criticsRating);
-        setAvgAudienceRating(props.movie.avgAudienceRating);
-        setTheaterRelease(props.movie.theaterRelease);
-        setBlurayRelease(props.movie.blurayRelease);
-        setMovieYear(props.movie.year);
-        setMovieThumbnail(props.movie.thumbnail);
+        });
     };
 
-    // creating a object with all relevant data to update or create a changed movie
-    const packMovie = () => {
-        let back = {
-            ...props.movie,
-        };
-
-        back.title = movieTitle;
-        back.synopsis = movieSynopsis;
-        back.runtime = movieRuntime;
-        back.mpaa_rating = movieAgeRating;
-
-        back.theaterRelease = theaterRelease;
-        back.blurayRelease = blurayRelase;
-        back.criticsRating = criticsRating;
-        back.actors = movieCast;
-        back.thumbnail = moviethumbnail;
-
-        return back;
-    };
-
-    // triggers when a new movie is given to this component or the new parameter is changed
     useEffect(() => {
-        if (!props.new) {
-            extractMovie();
+        if (props.user.error) {
+            setRegisterError(props.user.error);
+        } else {
+            setRegisterError("");
         }
-    }, [props.movie, props.new]);
-
-    // triggers when the new parameter is changed and setts the edit mode to true
-    useEffect(() => {
-        if (props.new) {
-            setEditMode(true);
-        }
-    }, [props.new]);
-
-    // indicates whether the movie can be changed
-    const [editMode, setEditMode] = React.useState(null);
+        extractUser();
+    }, [props.user]);
 
     // props for all grid items used below in the JSX
     const girdItemProps = {
@@ -172,84 +162,97 @@ function EditProfileComponent(props) {
         className: classes.padding,
     };
 
-    // ----------------------------------------------------------------------------------------------------
-    // on change functions
+    // creating a object with all relevant data to update or create a changed movie
+    const packUser = () => {
+        let back = {
+            ...props.user.user,
+        };
 
-    const onChangeTitle = (value) => {
-        setMovieTitle(value);
+        back.username = username;
+        back.password = password;
+
+        return back;
     };
 
-    const onChangeSynopsis = (value) => {
-        setMovieSynopsis(value);
+    const onRegister = (e) => {
+        setEditName(false);
+        e.preventDefault();
+        //console.warn(props.user);
+        console.warn(packUser())
+        console.warn(props.user.user)
+
+        //props.onRegister(username, password, isAdmin, compname, domains);
+        props.onRegister(packUser());
     };
 
-    const onChangeRuntime = (value) => {
-        setMovieRuntime(value);
+    const onUpdateUser = (e) => {
+        setEditName(false);
+        e.preventDefault();
+        //console.warn(props.user);
+        console.warn("user frontend")
+        console.warn(packUser())
+        console.warn(props.user.user)
+
+        console.warn("user backend")
+        console.warn(props.user.user._id)
+
+        //let user = props.onGetUser(props.user.user._id);
+        UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
+            console.warn(result.username)
+        });
+
+        //props.onRegister(username, password, isAdmin, compname, domains);
+        props.onUpdateUser(packUser());
     };
 
-    const onChangeAgeRating = (value) => {
-        setMovieAgeRating(value);
+
+    const onGetUser = (e) => {
+        setEditName(false);
+        e.preventDefault();
+        //console.warn(props.user);
+        console.warn(packUser())
+        console.warn(props.user.user)
+
+        //props.onRegister(username, password, isAdmin, compname, domains);
+        props.onRegister(packUser());
     };
 
-    const onChangeThumbnail = (value) => {
-        setMovieThumbnail(value);
+    const onChangeUsername = (e) => {
+        props.user.user.username = e.target.value;
+        console.warn(props.user.user)
+        // props.onLogout(username, password);
+        setUsername(e.target.value);
+        setRegisterError("");
     };
 
-    const onChangeOwnRating = async (value) => {
-        await MovieService.rateMovie(props.movie._id, value);
-        let newAvgAudienceRating = await MovieService.getRating(
-            props.movie._id
-        );
-        setAvgAudienceRating(newAvgAudienceRating.rating);
+    const onChangePassword = (e) => {
+        setPassword(e.target.value);
+        setRegisterError("");
     };
 
-    const toggleEditMode = () => {
-        setEditMode(!editMode);
-    };
-    // ----------------------------------------------------------------------------------------------------
-
-    // for cast
-    const onAddCastMember = (castMember) => {
-        movieCast.push(castMember);
-        setMovieCast([...movieCast]);
+    const onChangeCompname = (e) => {
+        setCompname(e.target.value);
+        setRegisterError("");
     };
 
-    // for cast
-    const onRemoveCastMember = (index) => {
-        movieCast.splice(index, 1);
-        setMovieCast([...movieCast]);
+    const onChangeDomains = (e) => {
+        setDomains(e.target.value);
+        setRegisterError("");
     };
 
-    // cancel is called, functionality differs whether it is a new movie or not
-    const onCancel = () => {
-        if (props.new) {
-            props.history.push("/");
-        } else {
-            setEditMode(false);
-            extractMovie();
+    const onChangePassword2 = (e) => {
+        setPassword2(e.target.value);
+        setRegisterError("");
+    };
+
+    const onBlurPassword = (e) => {
+        if (password !== "" && password2 !== "") {
+            if (password !== password2) {
+                setRegisterError("Passwords do not match.");
+            } else {
+                setRegisterError("");
+            }
         }
-    };
-
-    const onChangeMovieTitle = (e) => {
-        console.warn(e.target.value)
-        setMovieTitle(e.target.value);
-
-        //setRegisterError("");
-    };
-
-    // save is called, functionality differs whether it is a new movie or not
-    const onSave = () => {
-        props.onCreate(packMovie());
-        console.warn("created Movie")
-        { /*
-                    if (props.new) {
-            props.onCreate(packMovie());
-        } else {
-            setEditMode(false);
-            props.onSave(packMovie());
-        }
-        */}
-
     };
 
     return (
@@ -276,42 +279,42 @@ function EditProfileComponent(props) {
                     classes.barMinHeight
                 }
             >
-                {/* Edit Buttons */}
-                { editMode ? (
-                        <React.Fragment>
-                            <Button
-                                //onClick={onCancel}
-                                variant="contained"
-                                color="primary"
-                                className={classes.marginSides}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                //onClick={onSave}
-                                variant="contained"
-                                color="primary"
-                                className={classes.marginSides}
-                            >
-                                Save
-                            </Button>
-                        </React.Fragment>
-                    ) : (
+                {/* Delete Buttons */}
+                { deleteProfile ? (
+                    <React.Fragment>
                         <Button
-                            onClick={(e) => setEditMode(true)}
+                            onClick={(e) => setDeleteProfile(false)}
                             variant="contained"
                             color="primary"
-                            className={classes.marginSides}
+                            className={classes.deleteProfileButton}
                         >
-                            Edit
+                            Cancel
                         </Button>
-                    ) }
+                        <Button
+                            onClick={(e) => setDeleteProfile(false)}
+                            variant="contained"
+                            color="primary"
+                            className={classes.deleteProfileButton}
+                        >
+                            Save
+                        </Button>
+                    </React.Fragment>
+                ) : (
+                    <Button
+                        onClick={(e) => setDeleteProfile(true)}
+                        variant="contained"
+                        color="primary"
+                        className={classes.deleteProfileButton}
+                    >
+                        Delete Profile
+                    </Button>
+                ) }
             </div>
 
-            {/* Movie Title */}
+            {/* User Title */}
             <div className={classes.pageArea + " " + classes.title}>
                 <CustomTextField
-                    value={"Your Profile"}
+                    value={username + "'s Profile"}
                     furtherProps={{
                         fullWidth: true,
                     }}
@@ -322,86 +325,94 @@ function EditProfileComponent(props) {
 
             {/* More detail data of the movie, grouped in DetailsArea.js for a consistent look */}
             <Grid container>
-                {/* Login Data */}
+                {/* Name & Email Address */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
-                        title="Login Data (name, password, email)"
+                        title="Name & Password"
                         content={
                             <div className={classes.signUpRow}>
                                 { editName ? (
                                     <div>
                                         <div style={{"display":"flex"}}>
-                                            <p>Name:</p>
+                                            <p className={classes.userDataFont}>Name:</p>
                                             <Button
                                                 className={classes.cancelNameButton}
-                                                onClick={(e) => setEditName(false) }
+                                                onClick={(e) => setEditName(false)}
                                             > Cancel
                                             </Button>
                                             <Button
                                                 className={classes.saveNameButton}
-                                                onClick={(e) => setEditName(false)}
+                                                onClick={onUpdateUser}
                                             > Save
                                             </Button>
                                         </div>
                                         <div>
                                             <TextField
                                                 fullWidth
-                                                value={movieTitle}
-                                                onChange={onChangeMovieTitle}
+                                                value={username}
+                                                onChange={onChangeUsername}
                                             />
                                         </div>
                                     </div>
-
                                 ) : (
                                     <div>
                                         <div style={{"display":"flex"}}>
-                                            <p>Name:</p>
+                                            <p className={classes.userDataFont}>Name:</p>
                                             <Button
                                                 className={classes.editNameButton}
                                                 onClick={(e) => setEditName(true)}
                                             > Edit
                                             </Button>
                                         </div>
-                                        <p>{movieTitle}</p>
+                                        <p>{username}</p>
                                     </div>
                                 )}
+                                <div>
+                                    <div style={{"display":"flex"}}>
+                                        <p className={classes.userDataFont}>Password:</p>
+                                        <Button
+                                            className={classes.editPasswordButton}
+                                            //onClick={(e) => setEditName(true)}
+                                        > Edit
+                                        </Button>
+                                    </div>
+                                    <p>**********</p>
+                                    <p>**********</p>
+                                </div>
+                            </div>
+
+                        }
+                    />
+                </Grid>
+
+                {/* City, Organization, University */}
+                <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
+                    <DetailsArea
+                        title="City, Organization & University"
+                        content={
+                            <div>
+                                <p className={classes.userDataFont}>City:</p>
+                                <p>München</p>
+                                <p className={classes.userDataFont}>University:</p>
+                                <p>TU München</p>
+                                <p className={classes.userDataFont}>Organization:</p>
+                                <p>TUM Matching School</p>
                             </div>
                         }
                     />
                 </Grid>
 
-                {/* Password */}
+                {/* Premium Accounts */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
-                        title="Secondary Data (city, organization, unviersity)"
+                        title="Premium Accounts"
                         content={
-                            <ReleaseDates
-                                theaterRelease={theaterRelease}
-                                blurayRelase={blurayRelase}
-                                editMode={editMode}
-                                onChangeTheaterRelease={(value) =>
-                                    setTheaterRelease(value)
-                                }
-                                onChangeBlurayRelease={(value) =>
-                                    setBlurayRelease(value)
-                                }
-                            />
-                        }
-                    />
-                </Grid>
-
-                {/* Organizations */}
-                <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-                    <DetailsArea
-                        title="Organizations"
-                        content={
-                            <Synopsis
-                                editMode={editMode}
-                                movieSynopsis={movieSynopsis}
-                                moviethumbnail={moviethumbnail}
-                                onChangeThumbnail={onChangeThumbnail}
-                                onChangeSynopsis={onChangeSynopsis}
-                            />
+                            <div>
+                                <p className={classes.userDataFont}>Email:</p>
+                                <p>user@gmail.com</p>
+                                <p className={classes.userDataFont}>Role:</p>
+                                <p>Admin</p>
+                            </div>
                         }
                     />
                 </Grid>
@@ -411,30 +422,173 @@ function EditProfileComponent(props) {
                     <DetailsArea
                         title="Interests"
                         content={
-                            <MovieCast
-                                movieCast={movieCast}
-                                editMode={editMode}
-                                toggleEditMode={toggleEditMode}
-                                onAddCastMember={onAddCastMember}
-                                onRemoveCastMember={onRemoveCastMember}
-                                isLoggedIn={props.isLoggedIn}
-                                isAdmin={props.isAdmin}
-                            />
+                            <div>
+                                <p className={classes.userDataFont}>Interests:</p>
+                                <p>Chilln</p>
+                            </div>
                         }
                     />
                 </Grid>
             </Grid>
         </div>
     );
+
+    {/*return (
+        <div className={classes.usersignUpRoot}>
+            <Paper className={classes.signUpPaper} component="form">
+                <div className={classes.signUpRow}>
+                    <Typography variant="h4" align="center">
+                        Profile
+                    </Typography>
+                </div>
+
+                <div className={classes.signUpRow}>
+                    { editName ? (
+                        <div>
+                            <div style={{"display":"flex"}}>
+                                <p>Name:</p>
+                                <Button
+                                    className={classes.cancelNameButton}
+                                    onClick={(e) => setEditName(false) }
+                                > Cancel
+                                </Button>
+                                <Button
+                                    className={classes.saveNameButton}
+                                    onClick={onUpdateUser}
+                                > Save
+                                </Button>
+                            </div>
+                            <div>
+                                <TextField
+                                fullWidth
+                                value={username}
+                                onChange={onChangeUsername}
+                            />
+                            </div>
+                        </div>
+
+                    ) : (
+                        <div>
+                            <div style={{"display":"flex"}}>
+                                <p>Name:</p>
+                                <Button
+                                    className={classes.editNameButton}
+                                    onClick={(e) => setEditName(true)}
+                                > Edit
+                                </Button>
+                            </div>
+                                <p>{username}</p>
+                        </div>
+                    )}
+                </div>
+
+                <div className={classes.signUpRow}>
+                    <div style={{"display":"flex"}}>
+                        <p style={{"marginBottom":"0px"}}>Password:</p>
+                        <Button
+                            className={classes.editPasswordButton}
+                            onClick={props.onCancel}
+                        >
+                            Edit
+                        </Button>
+                    </div>
+                    <TextField
+                        label="Password"
+                        fullWidth
+                        value={password}
+                        onChange={onChangePassword}
+                        error={registerError !== ""}
+                        onBlur={onBlurPassword}
+                        type="password"
+                    />
+                </div>
+                <div className={classes.signUpRow}>
+                    <TextField
+                        label="Repeat Password"
+                        fullWidth
+                        value={password2}
+                        onChange={onChangePassword2}
+                        error={registerError !== ""}
+                        onBlur={onBlurPassword}
+                        type="password"
+                    />
+                </div>
+                <div className={classes.signUpRow}>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isAdmin}
+                                onChange={(e) => setIsAdmin(e.target.checked)}
+                                color="primary"
+                            />
+                        }
+                        label="Is Admin"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isCorporate}
+                                onChange={(e) => setIsCorporate(e.target.checked)}
+                                color="primary"
+                            />
+                        }
+                        label="Check if you want a Corporate Account."
+                    />
+                </div>
+                {isCorporate ? (
+                    <div className={classes.signUpRow}>
+                        <div className={classes.signUpRow}>
+                            <TextField
+                                label="compname"
+                                fullWidth
+                                value={compname}
+                                onChange={onChangeCompname}
+                            />
+                        </div>
+                        <div className={classes.signUpRow}>
+                            <TextField
+                                label="domains"
+                                fullWidth
+                                value={domains}
+                                onChange={onChangeDomains}
+                            />
+                        </div>
+                    </div>
+                ) : null}
+                {registerError !== "" ? (
+                    <div className={classes.signUpRow}>
+                        <Typography color="error">{registerError}</Typography>
+                    </div>
+                ) : null}
+                <div
+                    className={classes.signUpRow + " " + classes.signUpButtons}
+                >
+                    <Button
+                        className={classes.signUpButton}
+                        onClick={props.onCancel}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        className={classes.signUpButton}
+                        variant="contained"
+                        color="primary"
+                        onClick={onRegister}
+                        disabled={
+                            username === "" ||
+                            password === "" ||
+                            password2 === "" ||
+                            registerError !== "" ||
+                            password !== password2
+                        }
+                        type="submit"
+                    >
+                        Register
+                    </Button>
+                </div>
+            </Paper>
+        </div>
+    ); */}
 }
 
-// attributes of props and their type
-{   EditProfileComponent.propTypes = {
-    movie: PropTypes.object,
-    new: PropTypes.bool,
-    onCreate: PropTypes.func,
-    onSave: PropTypes.func,
-};}
-
-// withRouter() allows accsing the necessary functionality to navigate from this component
-export default withRouter(EditProfileComponent);
+export default EditProfileComponent;
