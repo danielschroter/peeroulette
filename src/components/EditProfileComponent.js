@@ -1,19 +1,13 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-    Paper,
     Button,
     TextField,
-    Typography,
-    FormControlLabel,
-    Checkbox, Grid,
+    Grid,
 } from "@material-ui/core";
-import UserServiceCRUD from "../services/UserServiceCRUD";
 import CustomTextField from "./CustomTextField";
 import DetailsArea from "./DetailsArea";
-import ReleaseDates from "./ReleaseDates";
-import Synopsis from "./Synopsis";
-import MovieCast from "./MovieCast";
+
 import UserService from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
@@ -137,7 +131,7 @@ function EditProfileComponent(props) {
         if (!props.user) {
             return;
         }
-        UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
+        UserService.getUser(props.user.user._id).then(function(result) {
             setUsername(result.username);
             setPassword(result.password);
             setPassword2(result.password);
@@ -182,7 +176,7 @@ function EditProfileComponent(props) {
         e.preventDefault();
 
         //let user = props.onGetUser(props.user.user._id);
-        UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
+        UserService.getUser(props.user.user._id).then(function(result) {
            // console.warn(result.username)
         });
 
@@ -195,7 +189,7 @@ function EditProfileComponent(props) {
         setDeleteProfile(false);
         UserService.logout();
         let id = props.user.user._id;
-        UserServiceCRUD.deleteUser(id);
+        UserService.deleteUser(id);
     };
 
     const onChangeUsername = (e) => {
@@ -207,7 +201,7 @@ function EditProfileComponent(props) {
         setEditName(false);
 
         //let user = props.onGetUser(props.user.user._id);
-        UserServiceCRUD.getUser(props.user.user._id).then(function(result) {
+        UserService.getUser(props.user.user._id).then(function(result) {
             setUsername(result.username)
         });
         setRegisterError("");
