@@ -27,11 +27,9 @@ function KebabMenu(props) {
 
     const user = useSelector((state) => {
         // update new user data in case that userdata changed in the backend
-        console.warn("state: " +state.user.user)
-        console.warn(state.user.user != undefined)
+        // check that user is not undefined to avoid error
 
         if (state.user.user != undefined && state.user.user._id != undefined) {
-            console.warn("id: " +state.user.user._id)
             UserServiceCRUD.getUser(state.user.user._id).then(function(result) {
                 state.user.user.username = result.username;
             } );

@@ -52,7 +52,6 @@ function LoginComponent(props) {
     const onLogin = (e) => {
         e.preventDefault();
         props.onLogin(username, password);
-        console.warn("do login")
     };
 
     const onChangeUsername = (e) => {
