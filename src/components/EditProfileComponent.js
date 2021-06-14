@@ -14,6 +14,7 @@ import DetailsArea from "./DetailsArea";
 import ReleaseDates from "./ReleaseDates";
 import Synopsis from "./Synopsis";
 import MovieCast from "./MovieCast";
+import UserService from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
     flexCol: {
@@ -204,15 +205,9 @@ function EditProfileComponent(props) {
     };
 
 
-    const onGetUser = (e) => {
-        setEditName(false);
-        e.preventDefault();
-        //console.warn(props.user);
-        console.warn(packUser())
-        console.warn(props.user.user)
-
-        //props.onRegister(username, password, isAdmin, compname, domains);
-        props.onRegister(packUser());
+    const onDeleteProfile = (e) => {
+        setDeleteProfile(false);
+        UserService.logout();
     };
 
     const onChangeUsername = (e) => {
@@ -289,10 +284,11 @@ function EditProfileComponent(props) {
                             No
                         </Button>
                         <Button
-                            onClick={(e) => setDeleteProfile(false)}
+                            onClick={onDeleteProfile}
                             variant="contained"
                             color="primary"
                             className={classes.deleteProfileButton}
+                            href="/"
                         >
                             Yes
                         </Button>
