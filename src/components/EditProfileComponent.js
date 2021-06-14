@@ -83,27 +83,25 @@ const useStyles = makeStyles((theme) => ({
     },
     editNameButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"480px",
+        marginLeft: theme.spacing(1),
     },
     cancelNameButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"410px"
+        marginLeft: theme.spacing(1),
     },
     saveNameButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"0px"
     },
     cancelPasswordButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"370px"
+        marginLeft:theme.spacing(1),
     },
     savePasswordButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"0px"
     },
     editPasswordButton: {
         marginRight: theme.spacing(1),
-        marginLeft:"455px"
+        marginLeft: theme.spacing(1),
     },
 }));
 
