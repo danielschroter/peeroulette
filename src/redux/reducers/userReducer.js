@@ -15,6 +15,7 @@ const getUser = () => {
                 _id: userJson._id,
                 username: userJson.username,
                 role: userJson.role,
+                account_owner_of_organization: userJson.account_owner_of_organization,
             },
         };
     }
@@ -35,3 +36,5 @@ export default function user(state = getUser(), action) {
             return state;
     }
 }
+
+

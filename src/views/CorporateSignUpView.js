@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React  from "react";
 import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import {connect, useSelector} from "react-redux";
 
 
 import Container from "@material-ui/core/Container";
@@ -8,11 +8,23 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 
+import CorporateFilterEmployeeComponent from "../components/CorporateFilterEmployeeComponent";
+import {switchEmployeeFilter} from "../redux/actions";
+
 /**
  * For register new users
  * @param {props} props
  */
+
+
+
+
 function CorporateSignUpView(props) {
+    // const user = useSelector((state) => state.user);
+
+    const onSwitchEmployeeFilter = () => {
+        props.dispatch(switchEmployeeFilter());
+    };
 
     return (
         // if no movies are loaded, the above useEffect should be triggered
@@ -32,6 +44,10 @@ function CorporateSignUpView(props) {
                         Sign Up
                     </Button>
                 </Grid>
+                <Grid container justify="center" style={{'marginTop':'20px'}}>
+                    <CorporateFilterEmployeeComponent onSwitchEmployeeFilter={onSwitchEmployeeFilter}/>
+                </Grid>
+
             </Container>
         </div>
     );

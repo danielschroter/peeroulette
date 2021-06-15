@@ -17,6 +17,11 @@ export function login(username, password) {
         }
     };
 }
+export function switchEmployeeFilter(){
+    return{
+        type: "switchEmployeeFilter"
+    };
+}
 
 export function logout() {
     UserService.logout();
@@ -82,3 +87,9 @@ export const getUser = (id) => {
         }
     };
 };
+
+export const filterEmployee = () => {
+    return{
+        type: "switchEmployeeFilter"
+    }
+}
