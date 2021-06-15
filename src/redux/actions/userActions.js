@@ -44,3 +44,41 @@ export function register(username, password, isAdmin, compname, domains) {
         }
     };
 }
+
+export function changeUser(changedUser) {
+
+    function onSuccess(user) {
+        return { type: "UPDATEMOVIE_SUCCESS", user: user };
+    }
+
+    function onFailure(error) {
+        console.log("change movie failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            let user = await UserService.updateUser(changedUser);
+            dispatch(onSuccess(user));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}
+
+export const getUser = (id) => {
+    function onSuccess(user) {
+        return { type: "GETUSER_SUCCESS", user: user };
+    }
+    function onFailure(error) {
+        console.log("failed to load a user", error);
+    }
+
+    return async (dispatch, getState) => {
+        try {
+            let user = await UserService.getUser(id);
+            dispatch(onSuccess(user));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};

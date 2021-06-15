@@ -1,0 +1,44 @@
+import React, { useEffect } from "react";
+import { withRouter } from "react-router-dom";
+import {connect, useSelector} from "react-redux";
+
+import {login, register, changeUser, getUser} from "../redux/actions";
+import EditProfileComponent from "../components/EditProfileComponent";
+
+/**
+ * For register new users
+ * @param {props} props
+ */
+function EditProfileView(props) {
+    const user = useSelector((state) => state.user);
+
+    useEffect(() => {
+    }, [user, props.history]);
+
+    const onRegister = (user) => {
+        props.dispatch(changeUser(user));
+    };
+
+    const onUpdateUser = (user) => {
+        props.dispatch(changeUser(user));
+    };
+
+    const onGetUser = (id) => {
+        props.dispatch(getUser(id));
+    };
+
+    const onCancel = () => {
+        props.history.push("/");
+    };
+
+    return (
+        <EditProfileComponent
+            user={user}
+            onRegister={onRegister}
+            onUpdateUser={onUpdateUser}
+            onGetUser={onGetUser}
+        />
+    );
+}
+
+export default connect()(withRouter(EditProfileView));

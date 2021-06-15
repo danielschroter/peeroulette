@@ -36,6 +36,7 @@ function MovieDetailsView(props) {
 
     // for saving an existing movie
     const onSave = (movie) => {
+        console.warn(movie)
         props.changeMovie(movie);
     };
 

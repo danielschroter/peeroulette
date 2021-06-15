@@ -3,10 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { logout } from "../redux/actions";
-import { Menu, MenuItem, Avatar, Divider } from "@material-ui/core";
+import { Menu, MenuItem, Avatar, Divider, IconButton } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
+import UserService from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
     menuitem: {
@@ -25,7 +26,14 @@ function KebabMenu(props) {
     const classes = useStyles();
 
     const user = useSelector((state) => {
-        // return the currnetly logged in user from redux store
+        // update new user data in case that userdata changed in the backend
+        // check that user is not undefined to avoid error
+
+        if (state.user.user != undefined && state.user.user._id != undefined) {
+            UserService.getUser(state.user.user._id).then(function(result) {
+                state.user.user.username = result.username;
+            } );
+        }
         return state.user;
     });
 
@@ -45,6 +53,15 @@ function KebabMenu(props) {
         props.history.push("/");
     };
 
+    const onClickEditProfile = () => {
+        // trigger redux logout action
+        // props.dispatch(logout());
+        // close this menu
+        props.onClose();
+        // navigate to the edit profile page
+        props.history.push("/edit");
+    };
+
     return (
         <Menu
             open={props.open}
@@ -58,7 +75,10 @@ function KebabMenu(props) {
         >
             {user.user
                 ? [
-                      <MenuItem key="user" className={classes.menuitem}>
+                      <MenuItem key="user"
+                                className={classes.menuitem}
+                                onClick={onClickEditProfile}
+                      >
                           <Avatar className={classes.avatar}>
                               {user.user.username ? user.user.username[0] : ""}
                           </Avatar>
