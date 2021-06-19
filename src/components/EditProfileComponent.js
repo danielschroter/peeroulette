@@ -120,6 +120,7 @@ function EditProfileComponent(props) {
     // Corporate Data
     const [compname, setCompname] = React.useState("");
     const [editCompname, setEditCompname] = React.useState(false);
+    const [editDomains, setEditDomains] = React.useState(false);
 
     const [domains, setDomains] = React.useState("");
 
@@ -141,6 +142,9 @@ function EditProfileComponent(props) {
             setUsername(userBackend.username);
             setPassword(userBackend.password);
             setPassword2(userBackend.password);
+
+            console.warn("check: " + userBackend.account_owner_of_organization !== undefined)
+
             if (userBackend.account_owner_of_organization !== undefined) {
                 setIsCorporate(true);
                 UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
@@ -197,6 +201,8 @@ function EditProfileComponent(props) {
             setEditName(false);
         } else if (editCompname) {
             setEditCompname(false);
+        } else if (editDomains) {
+            setEditDomains(false);
         }
         e.preventDefault();
 
@@ -245,6 +251,13 @@ function EditProfileComponent(props) {
         setEditCompname(false);
         UserService.getOrganization(corporate_id).then(function(organizationBackend) {
             setCompname(organizationBackend.company_name)
+        });
+    };
+
+    const onCancelDomains = (e) => {
+        setEditDomains(false);
+        UserService.getOrganization(corporate_id).then(function(organizationBackend) {
+            setDomains(organizationBackend.domains)
         });
     };
 
@@ -471,16 +484,42 @@ function EditProfileComponent(props) {
                                             </div>
                                         )}
                                         <div>
-                                            <div style={{"display":"flex"}}>
-                                                <p className={classes.userDataFont}>Domains:</p>
-                                                <Button
-                                                    className={classes.editPasswordButton}
-                                                    //onClick={(e) => setEditName(true)}
-                                                > Edit
-                                                </Button>
-                                            </div>
-                                            <p>**********</p>
-                                            <p>**********</p>
+                                            { editDomains ? (
+                                                <div>
+                                                    <div style={{"display":"flex"}}>
+                                                        <p className={classes.userDataFont}>Domains:</p>
+                                                        <Button
+                                                            className={classes.cancelNameButton}
+                                                            onClick={onCancelDomains}
+                                                        > Cancel
+                                                        </Button>
+                                                        <Button
+                                                            className={classes.saveNameButton}
+                                                            onClick={onUpdateUser}
+                                                        > Save
+                                                        </Button>
+                                                    </div>
+                                                    <div>
+                                                        <TextField
+                                                            fullWidth
+                                                            value={domains}
+                                                            onChange={onChangeDomains}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <div style={{"display":"flex"}}>
+                                                        <p className={classes.userDataFont}>Domains:</p>
+                                                        <Button
+                                                            className={classes.editNameButton}
+                                                            onClick={(e) => setEditDomains(true)}
+                                                        > Edit
+                                                        </Button>
+                                                    </div>
+                                                    <p>{domains}</p>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 ) }
