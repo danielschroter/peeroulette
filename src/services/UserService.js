@@ -110,6 +110,21 @@ export default class UserService {
         });
     }
 
+    static updateOrganization(organization) {
+        return new Promise((resolve, reject) => {
+            HttpService.put(
+                `${UserService.baseURL_organization()}/${organization._id}`,
+                organization,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static deleteOrganization(id) {
         return new Promise((resolve, reject) => {
             HttpService.remove(

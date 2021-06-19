@@ -109,19 +109,18 @@ function EditProfileComponent(props) {
 
     const [username, setUsername] = React.useState("");
 
-    const [accountOwnerOfOrganizationID, setAccountOwnerOfOrganizationID] = React.useState("");
-    const [hasCorporateAccount, setHasCorporateAccount] = React.useState(false);
-    const [organization, setOrganization] = React.useState(null);
-
+    const [corporate_id, setCorporate_id] = React.useState("");
+    const [isCorporate, setIsCorporate] = React.useState(false);
 
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
     const [isAdmin, setIsAdmin] = React.useState("");
-    const [isCorporate, setIsCorporate] = React.useState(false);
     const [registerError, setRegisterError] = React.useState("");
 
     // Corporate Data
     const [compname, setCompname] = React.useState("");
+    const [editCompname, setEditCompname] = React.useState(false);
+
     const [domains, setDomains] = React.useState("");
 
     // Data from old code, Ben
@@ -143,14 +142,19 @@ function EditProfileComponent(props) {
             setPassword(userBackend.password);
             setPassword2(userBackend.password);
             if (userBackend.account_owner_of_organization !== undefined) {
-                setHasCorporateAccount(true);
-                setAccountOwnerOfOrganizationID(userBackend.account_owner_of_organization);
-                //props.user.accountOwnerOfOrganizationID = userBackend.account_owner_of_organization;
-                //UserService.getOrganization(accountOwnerOfOrganizationID){
+                setIsCorporate(true);
+                UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
+                    setCompname(organizationBackend.company_name);
+                    setDomains(organizationBackend.domains);
+                    setCorporate_id(organizationBackend._id);
 
-                //}
+                    console.warn("check compname: " + compname);
+                    console.warn("check domains: " + domains);
+                    console.warn("check id: " + corporate_id);
+
+                });
             } else {
-                setHasCorporateAccount(false);
+                setIsCorporate(false);
             }
         });
     };
@@ -159,6 +163,7 @@ function EditProfileComponent(props) {
         if (props.user == undefined) {
             setRegisterError("");
         } else
+            console.warn("RELOAD");
         extractUser();
     }, [props.user]);
 
@@ -180,6 +185,7 @@ function EditProfileComponent(props) {
         return back;
     };
 
+
     const onRegister = (e) => {
         setEditName(false);
         e.preventDefault();
@@ -187,12 +193,21 @@ function EditProfileComponent(props) {
     };
 
     const onUpdateUser = (e) => {
-        setEditName(false);
+        if(editName) {
+            setEditName(false);
+        } else if (editCompname) {
+            setEditCompname(false);
+        }
         e.preventDefault();
 
-        //let user = props.onGetUser(props.user._id);
-        //UserService.getUser(props.user._id).then(function(result) {
-        // });
+        if(isCorporate) {
+            let organization = Object();
+            organization._id = corporate_id;
+            organization.company_name = compname;
+            organization.account_owner = props.user._id;
+            organization.domains = domains;
+            props.onUpdateOrganization(organization);
+        }
 
         props.onUpdateUser(packUser());
     };
@@ -205,8 +220,8 @@ function EditProfileComponent(props) {
         //UserService.deleteUser(id);
         props.onDeleteUser(id);
 
-        if (hasCorporateAccount) {
-            props.onDeleteOrganization(accountOwnerOfOrganizationID);
+        if (isCorporate) {
+            props.onDeleteOrganization(corporate_id);
         }
     };
 
@@ -214,13 +229,23 @@ function EditProfileComponent(props) {
         props.user.username = e.target.value;
         setUsername(e.target.value);
     };
+
     const onCancelUserName = (e) => {
         setEditName(false);
         UserService.getUser(props.user._id).then(function(result) {
             setUsername(result.username)
         });
+    };
 
+    const onChangeCompname = (e) => {
+        setCompname(e.target.value);
+    };
 
+    const onCancelCompname = (e) => {
+        setEditCompname(false);
+        UserService.getOrganization(corporate_id).then(function(organizationBackend) {
+            setCompname(organizationBackend.company_name)
+        });
     };
 
     const onChangePassword = (e) => {
@@ -228,10 +253,6 @@ function EditProfileComponent(props) {
         setRegisterError("");
     };
 
-    const onChangeCompname = (e) => {
-        setCompname(e.target.value);
-        setRegisterError("");
-    };
 
     const onChangeDomains = (e) => {
         setDomains(e.target.value);
@@ -406,17 +427,61 @@ function EditProfileComponent(props) {
                         title="Corporate Account"
                         content={
                             <div>
-                                { !hasCorporateAccount ? (
+                                { !isCorporate ? (
                                     <div>
                                         <p className={classes.userDataFont}>Sign up for a corporate Account!</p>
                                         <Button>Register Corporate Account</Button>
                                     </div>
                                 ) : (
-                                    <div>
-                                        <p className={classes.userDataFont}>Company Name:</p>
-                                        <p>domo</p>
-                                        <p className={classes.userDataFont}>Domain</p>
-                                        <p>domo@gmail.com</p>
+                                    <div className={classes.signUpRow}>
+                                        { editCompname ? (
+                                            <div>
+                                                <div style={{"display":"flex"}}>
+                                                    <p className={classes.userDataFont}>Company Name:</p>
+                                                    <Button
+                                                        className={classes.cancelNameButton}
+                                                        onClick={onCancelCompname}
+                                                    > Cancel
+                                                    </Button>
+                                                    <Button
+                                                        className={classes.saveNameButton}
+                                                        onClick={onUpdateUser}
+                                                    > Save
+                                                    </Button>
+                                                </div>
+                                                <div>
+                                                    <TextField
+                                                        fullWidth
+                                                        value={compname}
+                                                        onChange={onChangeCompname}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <div style={{"display":"flex"}}>
+                                                    <p className={classes.userDataFont}>Company Name:</p>
+                                                    <Button
+                                                        className={classes.editNameButton}
+                                                        onClick={(e) => setEditCompname(true)}
+                                                    > Edit
+                                                    </Button>
+                                                </div>
+                                                <p>{compname}</p>
+                                            </div>
+                                        )}
+                                        <div>
+                                            <div style={{"display":"flex"}}>
+                                                <p className={classes.userDataFont}>Domains:</p>
+                                                <Button
+                                                    className={classes.editPasswordButton}
+                                                    //onClick={(e) => setEditName(true)}
+                                                > Edit
+                                                </Button>
+                                            </div>
+                                            <p>**********</p>
+                                            <p>**********</p>
+                                        </div>
                                     </div>
                                 ) }
                             </div>
@@ -446,6 +511,7 @@ EditProfileComponent.propTypes = {
     user: PropTypes.object,
     onGetUser: PropTypes.func,
     onUpdateUser: PropTypes.func,
+    onUpdateOrganization: PropTypes.func,
     onDeleteUser: PropTypes.func,
     onDeleteOrganization: PropTypes,
 };

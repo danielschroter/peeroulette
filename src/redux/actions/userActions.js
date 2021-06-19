@@ -118,3 +118,23 @@ export function deleteOrganization(id) {
         }
     };
 }
+
+export function changeOrganization(changedOrganization) {
+
+    function onSuccess(organization) {
+        return { type: "UPDATEMOVIE_SUCCESS", organization: organization };
+    }
+
+    function onFailure(error) {
+        console.log("change movie failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            let organization = await UserService.updateOrganization(changedOrganization);
+            dispatch(onSuccess(organization));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}
