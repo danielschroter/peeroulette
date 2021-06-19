@@ -108,18 +108,21 @@ function EditProfileComponent(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState("");
+
     const [accountOwnerOfOrganizationID, setAccountOwnerOfOrganizationID] = React.useState("");
     const [hasCorporateAccount, setHasCorporateAccount] = React.useState(false);
+    const [organization, setOrganization] = React.useState(null);
+
 
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
     const [isAdmin, setIsAdmin] = React.useState("");
     const [isCorporate, setIsCorporate] = React.useState(false);
+    const [registerError, setRegisterError] = React.useState("");
 
     // Corporate Data
     const [compname, setCompname] = React.useState("");
     const [domains, setDomains] = React.useState("");
-    const [registerError, setRegisterError] = React.useState("");
 
     // Data from old code, Ben
     const [deleteProfile, setDeleteProfile] = React.useState(false);
@@ -135,13 +138,17 @@ function EditProfileComponent(props) {
             return;
         }
 
-        UserService.getUser(props.user._id).then(function(result) {
-            setUsername(result.username);
-            setPassword(result.password);
-            setPassword2(result.password);
-            if (result.account_owner_of_organization !== undefined) {
+        UserService.getUser(props.user._id).then(function(userBackend) {
+            setUsername(userBackend.username);
+            setPassword(userBackend.password);
+            setPassword2(userBackend.password);
+            if (userBackend.account_owner_of_organization !== undefined) {
                 setHasCorporateAccount(true);
-                props.user.accountOwnerOfOrganizationID = result.account_owner_of_organization;
+                setAccountOwnerOfOrganizationID(userBackend.account_owner_of_organization);
+                //props.user.accountOwnerOfOrganizationID = userBackend.account_owner_of_organization;
+                //UserService.getOrganization(accountOwnerOfOrganizationID){
+
+                //}
             } else {
                 setHasCorporateAccount(false);
             }
@@ -199,7 +206,7 @@ function EditProfileComponent(props) {
         props.onDeleteUser(id);
 
         if (hasCorporateAccount) {
-            props.onDeleteOrganization(props.user.accountOwnerOfOrganizationID);
+            props.onDeleteOrganization(accountOwnerOfOrganizationID);
         }
     };
 
@@ -212,6 +219,8 @@ function EditProfileComponent(props) {
         UserService.getUser(props.user._id).then(function(result) {
             setUsername(result.username)
         });
+
+
     };
 
     const onChangePassword = (e) => {
@@ -370,7 +379,6 @@ function EditProfileComponent(props) {
                                     <p>**********</p>
                                 </div>
                             </div>
-
                         }
                     />
                 </Grid>
@@ -392,16 +400,25 @@ function EditProfileComponent(props) {
                     />
                 </Grid>
 
-                {/* Premium Accounts */}
+                {/* Corporate Accounts */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
-                        title="Premium Accounts"
+                        title="Corporate Account"
                         content={
                             <div>
-                                <p className={classes.userDataFont}>Company Name:</p>
-                                <p>domo</p>
-                                <p className={classes.userDataFont}>Domain</p>
-                                <p>domo@gmail.com</p>
+                                { !hasCorporateAccount ? (
+                                    <div>
+                                        <p className={classes.userDataFont}>Sign up for a corporate Account!</p>
+                                        <Button>Register Corporate Account</Button>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <p className={classes.userDataFont}>Company Name:</p>
+                                        <p>domo</p>
+                                        <p className={classes.userDataFont}>Domain</p>
+                                        <p>domo@gmail.com</p>
+                                    </div>
+                                ) }
                             </div>
                         }
                     />
