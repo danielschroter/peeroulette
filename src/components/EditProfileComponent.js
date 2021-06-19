@@ -176,11 +176,9 @@ function EditProfileComponent(props) {
         e.preventDefault();
 
         //let user = props.onGetUser(props.user.user._id);
-        UserService.getUser(props.user.user._id).then(function(result) {
-           // console.warn(result.username)
-        });
+        //UserService.getUser(props.user.user._id).then(function(result) {
+        // });
 
-        //props.onRegister(username, password, isAdmin, compname, domains);
         props.onUpdateUser(packUser());
     };
 
