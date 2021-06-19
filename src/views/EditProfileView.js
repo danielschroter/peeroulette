@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import {connect, useSelector} from "react-redux";
 
-import {login, register, changeUser, getUser} from "../redux/actions";
+import {login, register, changeUser, getUser, deleteUser} from "../redux/actions";
 import EditProfileComponent from "../components/EditProfileComponent";
 
 /**
@@ -27,6 +27,10 @@ function EditProfileView(props) {
         props.dispatch(getUser(id));
     };
 
+    const onDeleteUser = (id) => {
+        props.dispatch(deleteUser(id));
+    };
+
     const onCancel = () => {
         props.history.push("/");
     };
@@ -37,6 +41,7 @@ function EditProfileView(props) {
             onRegister={onRegister}
             onUpdateUser={onUpdateUser}
             onGetUser={onGetUser}
+            onDeleteUser={onDeleteUser}
         />
     );
 }

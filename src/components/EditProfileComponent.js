@@ -187,7 +187,8 @@ function EditProfileComponent(props) {
         setDeleteProfile(false);
         UserService.logout();
         let id = props.user.user._id;
-        UserService.deleteUser(id);
+        //UserService.deleteUser(id);
+        props.onDeleteUser(id);
     };
 
     const onChangeUsername = (e) => {
@@ -202,7 +203,12 @@ function EditProfileComponent(props) {
         UserService.getUser(props.user.user._id).then(function(result) {
             setUsername(result.username)
         });
-        setRegisterError("");
+        {/*
+          console.warn(props.user.user._id)
+        let user = props.onGetUser(props.user.user._id);
+        console.warn(user)
+        */}
+
     };
 
     const onChangePassword = (e) => {

@@ -65,6 +65,24 @@ export function changeUser(changedUser) {
     };
 }
 
+export function deleteUser(id) {
+    function onSuccess() {
+        return { type: "DELETEUSER_SUCCESS"};
+    }
+    function onFailure(error) {
+        console.log("delete user failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            await UserService.deleteUser(id);
+            dispatch(onSuccess());
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}
+
 export const getUser = (id) => {
     function onSuccess(user) {
         return { type: "GETUSER_SUCCESS", user: user };
