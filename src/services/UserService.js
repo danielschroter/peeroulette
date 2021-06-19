@@ -9,6 +9,12 @@ export default class UserService {
         return "http://localhost:4000/user";
     }
 
+    static baseURL_organization() {
+        return "http://localhost:4000/organization";
+    }
+
+
+
     static register(user, pass, isAdmin, compname, domains) {
         return new Promise((resolve, reject) => {
             HttpService.post(
@@ -104,4 +110,21 @@ export default class UserService {
         });
     }
 
+    static deleteOrganization(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.remove(
+                `${UserService.baseURL_organization()}/${id}`,
+                function (data) {
+                    if (data.message !== undefined) {
+                        resolve(data.message);
+                    } else {
+                        reject("Error while deleting");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
 }

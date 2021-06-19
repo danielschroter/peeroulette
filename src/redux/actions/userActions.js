@@ -99,4 +99,22 @@ export const getUser = (id) => {
             onFailure(e);
         }
     };
-};
+}
+
+export function deleteOrganization(id) {
+    function onSuccess() {
+        return { type: "DELETORGANIZATION_SUCCESS"};
+    }
+    function onFailure(error) {
+        console.log("delete organization failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            await UserService.deleteOrganization(id);
+            dispatch(onSuccess());
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}

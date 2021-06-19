@@ -108,6 +108,9 @@ function EditProfileComponent(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState("");
+    const [accountOwnerOfOrganizationID, setAccountOwnerOfOrganizationID] = React.useState("");
+    const [hasCorporateAccount, setHasCorporateAccount] = React.useState(false);
+
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
     const [isAdmin, setIsAdmin] = React.useState("");
@@ -136,15 +139,19 @@ function EditProfileComponent(props) {
             setUsername(result.username);
             setPassword(result.password);
             setPassword2(result.password);
+            if (result.account_owner_of_organization !== undefined) {
+                setHasCorporateAccount(true);
+                props.user.accountOwnerOfOrganizationID = result.account_owner_of_organization;
+            } else {
+                setHasCorporateAccount(false);
+            }
         });
     };
 
     useEffect(() => {
-        if (props.user.error) {
-            setRegisterError(props.user.error);
-        } else {
+        if (props.user == undefined) {
             setRegisterError("");
-        }
+        } else
         extractUser();
     }, [props.user]);
 
@@ -190,6 +197,10 @@ function EditProfileComponent(props) {
         let id = props.user._id;
         //UserService.deleteUser(id);
         props.onDeleteUser(id);
+
+        if (hasCorporateAccount) {
+            props.onDeleteOrganization(props.user.accountOwnerOfOrganizationID);
+        }
     };
 
     const onChangeUsername = (e) => {
@@ -201,10 +212,6 @@ function EditProfileComponent(props) {
         UserService.getUser(props.user._id).then(function(result) {
             setUsername(result.username)
         });
-        console.warn("GET THE USER")
-        console.warn(props.user._id)
-        //let user = props.onGetUser(props.user._id);
-        //console.warn(user)
     };
 
     const onChangePassword = (e) => {
@@ -391,10 +398,10 @@ function EditProfileComponent(props) {
                         title="Premium Accounts"
                         content={
                             <div>
-                                <p className={classes.userDataFont}>Email:</p>
-                                <p>user@gmail.com</p>
-                                <p className={classes.userDataFont}>Role:</p>
-                                <p>Admin</p>
+                                <p className={classes.userDataFont}>Company Name:</p>
+                                <p>domo</p>
+                                <p className={classes.userDataFont}>Domain</p>
+                                <p>domo@gmail.com</p>
                             </div>
                         }
                     />
@@ -423,6 +430,7 @@ EditProfileComponent.propTypes = {
     onGetUser: PropTypes.func,
     onUpdateUser: PropTypes.func,
     onDeleteUser: PropTypes.func,
+    onDeleteOrganization: PropTypes,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
