@@ -10,14 +10,10 @@ import EditProfileComponent from "../components/EditProfileComponent";
  * @param {props} props
  */
 function EditProfileView(props) {
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user.user);
 
     useEffect(() => {
     }, [user, props.history]);
-
-    const onRegister = (user) => {
-        props.dispatch(changeUser(user));
-    };
 
     const onUpdateUser = (user) => {
         props.dispatch(changeUser(user));
@@ -38,7 +34,6 @@ function EditProfileView(props) {
     return (
         <EditProfileComponent
             user={user}
-            onRegister={onRegister}
             onUpdateUser={onUpdateUser}
             onGetUser={onGetUser}
             onDeleteUser={onDeleteUser}

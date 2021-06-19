@@ -131,7 +131,8 @@ function EditProfileComponent(props) {
         if (!props.user) {
             return;
         }
-        UserService.getUser(props.user.user._id).then(function(result) {
+
+        UserService.getUser(props.user._id).then(function(result) {
             setUsername(result.username);
             setPassword(result.password);
             setPassword2(result.password);
@@ -156,7 +157,7 @@ function EditProfileComponent(props) {
     // creating a object with all relevant data to update or create a changed movie
     const packUser = () => {
         let back = {
-            ...props.user.user,
+            ...props.user,
         };
 
         back.username = username;
@@ -175,8 +176,8 @@ function EditProfileComponent(props) {
         setEditName(false);
         e.preventDefault();
 
-        //let user = props.onGetUser(props.user.user._id);
-        //UserService.getUser(props.user.user._id).then(function(result) {
+        //let user = props.onGetUser(props.user._id);
+        //UserService.getUser(props.user._id).then(function(result) {
         // });
 
         props.onUpdateUser(packUser());
@@ -186,26 +187,26 @@ function EditProfileComponent(props) {
     const onDeleteProfile = (e) => {
         setDeleteProfile(false);
         UserService.logout();
-        let id = props.user.user._id;
+        let id = props.user._id;
         //UserService.deleteUser(id);
         props.onDeleteUser(id);
     };
 
     const onChangeUsername = (e) => {
-        props.user.user.username = e.target.value;
+        props.user.username = e.target.value;
         setUsername(e.target.value);
         setRegisterError("");
     };
     const onCancelUserName = (e) => {
         setEditName(false);
 
-        //let user = props.onGetUser(props.user.user._id);
-        UserService.getUser(props.user.user._id).then(function(result) {
+        //let user = props.onGetUser(props.user._id);
+        UserService.getUser(props.user._id).then(function(result) {
             setUsername(result.username)
         });
         {/*
-          console.warn(props.user.user._id)
-        let user = props.onGetUser(props.user.user._id);
+          console.warn(props.user._id)
+        let user = props.onGetUser(props.user._id);
         console.warn(user)
         */}
 
