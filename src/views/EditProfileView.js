@@ -15,12 +15,12 @@ function EditProfileView(props) {
     useEffect(() => {
     }, [user, props.history]);
 
-    const onUpdateUser = (user) => {
-        props.dispatch(changeUser(user));
-    };
-
     const onGetUser = (id) => {
         props.dispatch(getUser(id));
+    };
+
+    const onUpdateUser = (user) => {
+        props.dispatch(changeUser(user));
     };
 
     const onDeleteUser = (id) => {
@@ -34,8 +34,8 @@ function EditProfileView(props) {
     return (
         <EditProfileComponent
             user={user}
-            onUpdateUser={onUpdateUser}
             onGetUser={onGetUser}
+            onUpdateUser={onUpdateUser}
             onDeleteUser={onDeleteUser}
         />
     );

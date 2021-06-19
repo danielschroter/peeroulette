@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import CustomTextField from "./CustomTextField";
 import DetailsArea from "./DetailsArea";
-
+import PropTypes from "prop-types";
 import UserService from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
@@ -422,4 +422,13 @@ function EditProfileComponent(props) {
     );
 }
 
+// attributes of props and their type
+EditProfileComponent.propTypes = {
+    user: PropTypes.object,
+    onGetUser: PropTypes.func,
+    onUpdateUser: PropTypes.func,
+    onDeleteUser: PropTypes.func,
+};
+
+// withRouter() allows accsing the necessary functionality to navigate from this component
 export default EditProfileComponent;
