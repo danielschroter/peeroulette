@@ -195,21 +195,16 @@ function EditProfileComponent(props) {
     const onChangeUsername = (e) => {
         props.user.username = e.target.value;
         setUsername(e.target.value);
-        setRegisterError("");
     };
     const onCancelUserName = (e) => {
         setEditName(false);
-
-        //let user = props.onGetUser(props.user._id);
         UserService.getUser(props.user._id).then(function(result) {
             setUsername(result.username)
         });
-        {/*
-          console.warn(props.user._id)
-        let user = props.onGetUser(props.user._id);
-        console.warn(user)
-        */}
-
+        console.warn("GET THE USER")
+        console.warn(props.user._id)
+        //let user = props.onGetUser(props.user._id);
+        //console.warn(user)
     };
 
     const onChangePassword = (e) => {
