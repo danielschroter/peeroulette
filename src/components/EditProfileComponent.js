@@ -313,6 +313,8 @@ function EditProfileComponent(props) {
 
     const onCancelInterests = (e) => {
         setEditInterests(false);
+        setAddInterests(false);
+        setDeleteInterests(false);
     };
 
     const onChangePassword = (e) => {
@@ -383,7 +385,7 @@ function EditProfileComponent(props) {
 
     const onRegisterSignUp = (e) => {
         e.preventDefault();
-        props.onRegister(username, password, isAdmin, compname, domains);
+        //props.onRegister(username, password, isAdmin, compname, domains);
     };
 
     return (
