@@ -677,9 +677,11 @@ function EditProfileComponent(props) {
                                                         for (i; i < allInterests.length; i++) {
                                                             if (allInterests[i].toLowerCase().includes(search.toLowerCase())) {
                                                                 interestsWithAdd.push(<button className={classes.deleteInterestsIcon}>{allInterests[i]}</button>);
-                                                                interestsWithAdd.push(<button className={classes.addInterestsIcon} onClick={console.warn("jo")}>Add</button>);
+                                                                interestsWithAdd.push(<button className={classes.addInterestsIcon} value={allInterests[i]} onClick={(e) => {
+                                                                    userInterests.push(e.target.value)
+                                                                    setAddInterests(false); }}>Add</button>);
+                                                                }
                                                             }
-                                                        }
                                                         return interestsWithAdd;
                                                     }
                                                 })()}
