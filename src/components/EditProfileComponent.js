@@ -98,6 +98,35 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         marginLeft: theme.spacing(1),
     },
+    interestsButton: {
+        marginTop: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        fontSize: "15px",
+        pointerEvents: "none",
+    },
+    deleteInterestsIcon: {
+        marginTop: theme.spacing(1),
+        fontSize: "15px",
+        pointerEvents: "none",
+    },
+    deleteInterestsCross: {
+        marginTop: theme.spacing(1),
+        fontSize: "15px",
+        marginRight: theme.spacing(1),
+        color:"#cc0000",
+    },
+    addInterestsButton: {
+        marginTop: theme.spacing(2),
+        marginRight: theme.spacing(1),
+        backgroundColor:"green",
+
+    },
+    deleteInterestsButton: {
+        marginTop: theme.spacing(2),
+        marginRight: theme.spacing(1),
+        backgroundColor:"#cc0000",
+    },
+
 }));
 
 /**
@@ -108,6 +137,10 @@ function EditProfileComponent(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState("");
+    const [interests, setInterests] = React.useState(["chillen", "gaming", "MERN"]);
+    const [editInterests, setEditInterests] = React.useState(false);
+    const [deleteInterests, setDeleteInterests] = React.useState(false);
+    const [addInterests, setAddInterests] = React.useState(false);
 
     const [corporate_id, setCorporate_id] = React.useState("");
     const [isCorporate, setIsCorporate] = React.useState(false);
@@ -203,6 +236,8 @@ function EditProfileComponent(props) {
             setEditCompname(false);
         } else if (editDomains) {
             setEditDomains(false);
+        } else if (editInterests) {
+            setEditInterests(false);
         }
         e.preventDefault();
 
@@ -261,6 +296,10 @@ function EditProfileComponent(props) {
         });
     };
 
+    const onCancelInterests = (e) => {
+        setEditInterests(false);
+    };
+
     const onChangePassword = (e) => {
         setPassword(e.target.value);
         setRegisterError("");
@@ -285,6 +324,14 @@ function EditProfileComponent(props) {
                 setRegisterError("");
             }
         }
+    };
+
+    const changeDeleteInterests = (e) => {
+     if (deleteInterests) {
+         setDeleteInterests(false);
+     } else {
+         setDeleteInterests(true);
+     }
     };
 
     return (
@@ -534,8 +581,65 @@ function EditProfileComponent(props) {
                         title="Interests"
                         content={
                             <div>
-                                <p className={classes.userDataFont}>Interests:</p>
-                                <p>Chilln</p>
+                                { editInterests ? (
+                                    <div style={{"display":"flex"}}>
+                                        <p className={classes.userDataFont}>Interests:</p>
+                                        <Button
+                                            className={classes.cancelNameButton}
+                                            onClick={onCancelInterests}
+                                        > Cancel
+                                        </Button>
+                                        <Button
+                                            className={classes.saveNameButton}
+                                            onClick={onUpdateUser}
+                                        > Save
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div style={{"display":"flex"}}>
+                                        <p className={classes.userDataFont}>Interests:</p>
+                                        <Button
+                                            className={classes.editNameButton}
+                                            onClick={(e) => setEditInterests(true)}
+                                        > Edit
+                                        </Button>
+                                    </div>
+                                )}
+                                <div className="center">
+                                    {(() => {
+                                        let interestsWithDelete = [];
+                                        let interestsWithoutDelete = [];
+                                        let i = 0;
+                                        for (i; i < interests.length; i++) {
+                                            interestsWithoutDelete.push(<button className={classes.interestsButton}>{interests[i]}</button>);
+                                            interestsWithDelete.push(<button className={classes.deleteInterestsIcon}>{interests[i]}</button>);
+                                            interestsWithDelete.push(<button className={classes.deleteInterestsCross}
+                                            >X</button>);
+                                        }
+                                        if(deleteInterests) {
+                                            return interestsWithDelete;
+                                        } else {
+                                            return interestsWithoutDelete;
+                                        }
+                                    })()}
+                                </div>
+                                <div>
+                                    { editInterests ? (
+                                        <div>
+                                            <Button
+                                                className={classes.addInterestsButton}
+                                                onClick={changeDeleteInterests}
+                                            > Add Interest
+                                            </Button>
+                                            <Button
+                                                className={classes.deleteInterestsButton}
+                                                onClick={changeDeleteInterests}
+                                            > Delete Interest
+                                            </Button>
+                                        </div>
+                                    ) : (<div></div>)
+                                    }
+                                </div>
                             </div>
                         }
                     />
