@@ -115,6 +115,12 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         color:"#cc0000",
     },
+    addInterestsIcon: {
+        marginTop: theme.spacing(1),
+        fontSize: "15px",
+        marginRight: theme.spacing(1),
+        color:"green",
+    },
     addInterestsButton: {
         marginTop: theme.spacing(2),
         marginRight: theme.spacing(1),
@@ -137,10 +143,13 @@ function EditProfileComponent(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState("");
-    const [interests, setInterests] = React.useState(["chillen", "gaming", "MERN"]);
+    const [userInterests, setUserInterests] = React.useState(["chillen", "gaming", "MERN"]);
+    const [allInterests, setAllInterests] = React.useState(["chillen", "gaming", "MERN", "Bern", "Stern",]);
+
     const [editInterests, setEditInterests] = React.useState(false);
     const [deleteInterests, setDeleteInterests] = React.useState(false);
     const [addInterests, setAddInterests] = React.useState(false);
+    const [search, setSearch] = React.useState("");
 
     const [corporate_id, setCorporate_id] = React.useState("");
     const [isCorporate, setIsCorporate] = React.useState(false);
@@ -332,6 +341,24 @@ function EditProfileComponent(props) {
      } else {
          setDeleteInterests(true);
      }
+    };
+
+    const changeAddInterests = (e) => {
+        if (addInterests) {
+            setAddInterests(false);
+        } else {
+            setAddInterests(true);
+        }
+    };
+
+    const deleteInterest = (e) => {
+        console.warn(e.target.value)
+        console.warn("before userInterests: "+ userInterests)
+        console.warn("hans" === "hans")
+        let index = e.target.value;
+        userInterests.splice(index, 1)
+
+        console.warn("after userInterests: " + userInterests)
     };
 
     return (
@@ -590,6 +617,16 @@ function EditProfileComponent(props) {
                                         > Cancel
                                         </Button>
                                         <Button
+                                            className={classes.cancelNameButton}
+                                            onClick={changeAddInterests}
+                                        > Add
+                                        </Button>
+                                        <Button
+                                            className={classes.cancelNameButton}
+                                            onClick={changeDeleteInterests}
+                                        > Delete
+                                        </Button>
+                                        <Button
                                             className={classes.saveNameButton}
                                             onClick={onUpdateUser}
                                         > Save
@@ -610,11 +647,13 @@ function EditProfileComponent(props) {
                                         let interestsWithDelete = [];
                                         let interestsWithoutDelete = [];
                                         let i = 0;
-                                        for (i; i < interests.length; i++) {
-                                            interestsWithoutDelete.push(<button className={classes.interestsButton}>{interests[i]}</button>);
-                                            interestsWithDelete.push(<button className={classes.deleteInterestsIcon}>{interests[i]}</button>);
-                                            interestsWithDelete.push(<button className={classes.deleteInterestsCross}
-                                            >X</button>);
+                                        for (i; i < userInterests.length; i++) {
+                                            interestsWithoutDelete.push(<button className={classes.interestsButton}>{userInterests[i]}</button>);
+                                            interestsWithDelete.push(<button className={classes.deleteInterestsIcon}>{userInterests[i]}</button>);
+                                            interestsWithDelete.push(<button className={classes.deleteInterestsCross} value={i} onClick={(e) => {
+                                                userInterests.splice(e.target.value, 1);
+                                                setDeleteInterests(false);
+                                            }}>Delete</button>);
                                         }
                                         if(deleteInterests) {
                                             return interestsWithDelete;
@@ -624,20 +663,29 @@ function EditProfileComponent(props) {
                                     })()}
                                 </div>
                                 <div>
-                                    { editInterests ? (
+                                    { addInterests ? (
                                         <div>
-                                            <Button
-                                                className={classes.addInterestsButton}
-                                                onClick={changeDeleteInterests}
-                                            > Add Interest
-                                            </Button>
-                                            <Button
-                                                className={classes.deleteInterestsButton}
-                                                onClick={changeDeleteInterests}
-                                            > Delete Interest
-                                            </Button>
+                                            <div>
+                                                <p className={classes.userDataFont}> Search for your interest:</p>
+                                                <input type="text" placeholder="Search" onChange={ e => setSearch(e.target.value)}/>
+                                            </div>
+                                            <div>
+                                                {(() => {
+                                                    if(search.length > 0) {
+                                                        let i = 0;
+                                                        let interestsWithAdd = [];
+                                                        for (i; i < allInterests.length; i++) {
+                                                            if (allInterests[i].toLowerCase().includes(search.toLowerCase())) {
+                                                                interestsWithAdd.push(<button className={classes.deleteInterestsIcon}>{allInterests[i]}</button>);
+                                                                interestsWithAdd.push(<button className={classes.addInterestsIcon} onClick={console.warn("jo")}>Add</button>);
+                                                            }
+                                                        }
+                                                        return interestsWithAdd;
+                                                    }
+                                                })()}
+                                            </div>
                                         </div>
-                                    ) : (<div></div>)
+                                        ) : (<div></div>)
                                     }
                                 </div>
                             </div>
