@@ -39,6 +39,9 @@ function EditProfileView(props) {
         props.dispatch(changeOrganization(organization));
     };
 
+    const onRegister = (username, password, isAdmin, compname, domains) => {
+        props.dispatch(register(username, password, isAdmin, compname, domains));
+    };
 
     return (
         <EditProfileComponent
@@ -47,6 +50,7 @@ function EditProfileView(props) {
             onUpdateUser={onUpdateUser}
             onUpdateOrganization={onUpdateOrganization}
             onDeleteUser={onDeleteUser}
+            onRegister={onRegister}
             onDeleteOrganization={onDeleteOrganization}
         />
     );

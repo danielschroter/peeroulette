@@ -4,6 +4,7 @@ import {
     Button,
     TextField,
     Grid,
+    Typography,
 } from "@material-ui/core";
 import CustomTextField from "./CustomTextField";
 import DetailsArea from "./DetailsArea";
@@ -171,7 +172,6 @@ function EditProfileComponent(props) {
     const [compname, setCompname] = React.useState("");
     const [editCompname, setEditCompname] = React.useState(false);
     const [editDomains, setEditDomains] = React.useState(false);
-
     const [domains, setDomains] = React.useState("");
 
     // Data from old code, Ben
@@ -367,6 +367,25 @@ function EditProfileComponent(props) {
         console.warn("after userInterests: " + userInterests)
     };
 
+    const onChangeCompnameSignUp = (e) => {
+        setCompname(e.target.value);
+        setRegisterError("");
+    };
+
+    const onChangeDomainsSignUp = (e) => {
+        setDomains(e.target.value);
+        setRegisterError("");
+    };
+
+    const onCancelSignUp = (e) => {
+        setRegisterError("");
+    };
+
+    const onRegisterSignUp = (e) => {
+        e.preventDefault();
+        props.onRegister(username, password, isAdmin, compname, domains);
+    };
+
     return (
         <div
             className={
@@ -524,9 +543,47 @@ function EditProfileComponent(props) {
                         content={
                             <div>
                                 { !isCorporate ? (
-                                    <div>
+                                    <div className={classes.signUpRow}>
                                         <p className={classes.userDataFont}>Sign up for a corporate Account!</p>
-                                        <Button>Register Corporate Account</Button>
+                                        <div className={classes.signUpRow}>
+                                            <TextField
+                                                label="compname"
+                                                fullWidth
+                                                value={compname}
+                                                onChange={onChangeCompnameSignUp}
+                                            />
+                                        </div>
+                                        <div className={classes.signUpRow}>
+                                            <TextField
+                                                label="domains"
+                                                fullWidth
+                                                value={domains}
+                                                onChange={onChangeDomainsSignUp}
+                                            />
+                                        </div>
+                                        {registerError !== "" ? (
+                                            <div className={classes.signUpRow}>
+                                                <Typography color="error">{registerError}</Typography>
+                                            </div>
+                                        ) : null}
+                                        <div
+                                            className={classes.signUpRow + " " + classes.signUpButtons}
+                                        >
+                                            <Button
+                                                className={classes.signUpButton}
+                                                onClick={onCancelSignUp}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                className={classes.signUpButton}
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={onRegisterSignUp}
+                                            >
+                                                Register
+                                            </Button>
+                                        </div>
                                     </div>
                                 ) : (
                                     <div className={classes.signUpRow}>
@@ -715,6 +772,7 @@ EditProfileComponent.propTypes = {
     onUpdateUser: PropTypes.func,
     onUpdateOrganization: PropTypes.func,
     onDeleteUser: PropTypes.func,
+    onRegister: PropTypes.func,
     onDeleteOrganization: PropTypes,
 };
 
