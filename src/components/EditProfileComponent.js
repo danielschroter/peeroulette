@@ -10,6 +10,12 @@ import DetailsArea from "./DetailsArea";
 import PropTypes from "prop-types";
 import UserService from "../services/UserService";
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 const useStyles = makeStyles((theme) => ({
     flexCol: {
         display: "flex",
@@ -142,6 +148,8 @@ const useStyles = makeStyles((theme) => ({
 function EditProfileComponent(props) {
     const classes = useStyles();
 
+    const [alertDeleteProfileOpen, setAltertDeleteProfileOpen] = React.useState(false);
+
     const [username, setUsername] = React.useState("");
     const [userInterests, setUserInterests] = React.useState(["chillen", "gaming", "MERN"]);
     const [allInterests, setAllInterests] = React.useState(["chillen", "gaming", "MERN", "Bern", "Stern",]);
@@ -167,7 +175,6 @@ function EditProfileComponent(props) {
     const [domains, setDomains] = React.useState("");
 
     // Data from old code, Ben
-    const [deleteProfile, setDeleteProfile] = React.useState(false);
 
     const [editName, setEditName] = React.useState(false);
     const [editPassword, setEditPassword] = React.useState(false);
@@ -264,14 +271,13 @@ function EditProfileComponent(props) {
 
 
     const onDeleteProfile = (e) => {
-        setDeleteProfile(false);
         UserService.logout();
         let id = props.user._id;
         //UserService.deleteUser(id);
         props.onDeleteUser(id);
 
         if (isCorporate) {
-            props.onDeleteOrganization(corporate_id);
+                props.onDeleteOrganization(corporate_id);
         }
     };
 
@@ -386,36 +392,39 @@ function EditProfileComponent(props) {
                 }
             >
                 {/* Delete Buttons */}
-                { deleteProfile ? (
                     <React.Fragment>
                         <Button
-                            onClick={(e) => setDeleteProfile(false)}
+                            onClick={(e) => setAltertDeleteProfileOpen(true)}
                             variant="contained"
                             color="primary"
                             className={classes.deleteProfileButton}
                         >
-                            No
+                            Delete Profile
                         </Button>
-                        <Button
-                            onClick={onDeleteProfile}
-                            variant="contained"
-                            color="primary"
-                            className={classes.deleteProfileButton}
-                            href="/"
+                        <Dialog
+                            open={alertDeleteProfileOpen}
+                            close={(e) => setAltertDeleteProfileOpen(false)}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
                         >
-                            Yes
-                        </Button>
+                        <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete your profile?"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Deleting your profile will permanently remove it.
+                                If you have a corporate account, this will also be permanently removed.
+                                After succesful deletion you will be redirected to the Peeroulette-Landing-Page.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={(e) => setAltertDeleteProfileOpen(false)} color="primary">
+                                No
+                            </Button>
+                            <Button onClick={onDeleteProfile} color="primary" autoFocus href="/">
+                                Yes
+                            </Button>
+                        </DialogActions>
+                        </Dialog>
                     </React.Fragment>
-                ) : (
-                    <Button
-                        onClick={(e) => setDeleteProfile(true)}
-                        variant="contained"
-                        color="primary"
-                        className={classes.deleteProfileButton}
-                    >
-                        Delete Profile
-                    </Button>
-                ) }
             </div>
 
             {/* User Title */}
