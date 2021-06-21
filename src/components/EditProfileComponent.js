@@ -153,7 +153,7 @@ function EditProfileComponent(props) {
 
     const [username, setUsername] = React.useState("");
     const [interests, setInterests] = React.useState(["chillen", "gaming", "MERN"]);
-    const [allInterests, setAllInterests] = React.useState(["chillen", "gaming", "MERN", "Bern", "Stern",]);
+    const [allInterests, setAllInterests] = React.useState(["chillen", "gaming", "MERN", "Reading", "Sports",]);
 
     const [editInterests, setEditInterests] = React.useState(false);
     const [deleteInterests, setDeleteInterests] = React.useState(false);
@@ -177,6 +177,13 @@ function EditProfileComponent(props) {
     // Data from old code, Ben
 
     const [editName, setEditName] = React.useState(false);
+    const [editCity, setEditCity] = React.useState(false);
+    const [city, setCity] = React.useState("");
+    const [editUniversity, setEditUniversity] = React.useState(false);
+    const [university, setUniversity] = React.useState("");
+    const [editOrganization, setEditOrganization] = React.useState(false);
+    const [organization, setOrganization] = React.useState("");
+
     const [editPassword, setEditPassword] = React.useState(false);
     const [saveName, setSaveName] = React.useState(false);
 
@@ -191,8 +198,10 @@ function EditProfileComponent(props) {
             setUsername(userBackend.username);
             setPassword(userBackend.password);
             setPassword2(userBackend.password);
-
-            console.warn("check: " + userBackend.account_owner_of_organization !== undefined)
+            setCity(userBackend.city);
+            setInterests(userBackend.interests);
+            setUniversity(userBackend.university);
+            setOrganization(userBackend.organization);
 
             if (userBackend.account_owner_of_organization !== undefined) {
                 setIsCorporate(true);
@@ -200,11 +209,6 @@ function EditProfileComponent(props) {
                     setCompname(organizationBackend.company_name);
                     setDomains(organizationBackend.domains);
                     setCorporate_id(organizationBackend._id);
-
-                    console.warn("check compname: " + compname);
-                    console.warn("check domains: " + domains);
-                    console.warn("check id: " + corporate_id);
-
                 });
             } else {
                 setIsCorporate(false);
@@ -216,7 +220,6 @@ function EditProfileComponent(props) {
         if (props.user == undefined) {
             setRegisterError("");
         } else
-            console.warn("RELOAD");
         extractUser();
     }, [props.user]);
 
@@ -235,6 +238,9 @@ function EditProfileComponent(props) {
         back.username = username;
         back.password = password;
         back.interests = interests;
+        back.city = city;
+        back.university = university;
+        back.organization = organization;
 
         return back;
     };
@@ -255,6 +261,12 @@ function EditProfileComponent(props) {
             setEditDomains(false);
         } else if (editInterests) {
             setEditInterests(false);
+        } else if (editCity) {
+            setEditCity(false);
+        } else if (editUniversity) {
+            setEditUniversity(false);
+        } else if (editOrganization) {
+            setEditOrganization(false);
         }
         e.preventDefault();
 
@@ -266,7 +278,6 @@ function EditProfileComponent(props) {
             organization.domains = domains;
             props.onUpdateOrganization(organization);
         }
-
         props.onUpdateUser(packUser());
     };
 
@@ -285,6 +296,21 @@ function EditProfileComponent(props) {
     const onChangeUsername = (e) => {
         props.user.username = e.target.value;
         setUsername(e.target.value);
+    };
+
+    const onChangeCity = (e) => {
+        props.user.city = e.target.value;
+        setCity(e.target.value);
+    };
+
+    const onChangeUniversity = (e) => {
+        props.user.university = e.target.value;
+        setUniversity(e.target.value);
+    };
+
+    const onChangeOrganization = (e) => {
+        props.user.organization = e.target.value;
+        setOrganization(e.target.value);
     };
 
     const onCancelUserName = (e) => {
@@ -318,6 +344,27 @@ function EditProfileComponent(props) {
         setDeleteInterests(false);
         UserService.getUser(props.user._id).then(function(userBackend) {
             setInterests(userBackend.interests);
+        });
+    };
+
+    const onCancelCity = (e) => {
+        setEditCity(false);
+        UserService.getUser(props.user._id).then(function(userBackend) {
+            setCity(userBackend.city);
+        });
+    };
+
+    const onCancelUniversity = (e) => {
+        setEditUniversity(false);
+        UserService.getUser(props.user._id).then(function(userBackend) {
+            setUniversity(userBackend.university);
+        });
+    };
+
+    const onCancelOrganization = (e) => {
+        setEditOrganization(false);
+        UserService.getUser(props.user._id).then(function(userBackend) {
+            setOrganization(userBackend.organization);
         });
     };
 
@@ -517,27 +564,135 @@ function EditProfileComponent(props) {
                                         > Edit
                                         </Button>
                                     </div>
-                                    <p>**********</p>
-                                    <p>**********</p>
+                                    <p style={{"fontStyle":"italic"}}>Password top secret</p>
+                                    <p style={{"fontStyle":"italic","marginTop": "20px"}}>Password top secret</p>
                                 </div>
                             </div>
                         }
                     />
                 </Grid>
 
-                {/* City, Organization, University */}
+                {/* City, University, Organization */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
                         title="City, Organization & University"
                         content={
                             <div>
-                                <p className={classes.userDataFont}>City:</p>
-                                <p>München</p>
-                                <p className={classes.userDataFont}>University:</p>
-                                <p>TU München</p>
-                                <p className={classes.userDataFont}>Organization:</p>
-                                <p>TUM Matching School</p>
+                                <div>
+                                { editCity ? (
+                                    <div>
+                                        <div style={{"display":"flex"}}>
+                                            <p className={classes.userDataFont}>City:</p>
+                                            <Button
+                                                className={classes.cancelNameButton}
+                                                onClick={onCancelCity}
+                                            > Cancel
+                                            </Button>
+                                            <Button
+                                                className={classes.saveNameButton}
+                                                onClick={onUpdateUser}
+                                            > Save
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <TextField
+                                                fullWidth
+                                                value={city}
+                                                onChange={onChangeCity}
+                                            />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div style={{"display":"flex"}}>
+                                            <p className={classes.userDataFont}>City:</p>
+                                            <Button
+                                                className={classes.editNameButton}
+                                                onClick={(e) => setEditCity(true)}
+                                            > Edit
+                                            </Button>
+                                        </div>
+                                        <p>{city}</p>
+                                    </div>
+                                )}
                             </div>
+                            <div>
+                                { editUniversity ? (
+                                <div>
+                                    <div style={{"display":"flex"}}>
+                                        <p className={classes.userDataFont}>University:</p>
+                                        <Button
+                                            className={classes.cancelNameButton}
+                                            onClick={onCancelUniversity}
+                                            > Cancel
+                                        </Button>
+                                        <Button
+                                            className={classes.saveNameButton}
+                                            onClick={onUpdateUser}
+                                            > Save
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <TextField
+                                            fullWidth
+                                            value={university}
+                                            onChange={onChangeUniversity}
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <div style={{"display":"flex"}}>
+                                        <p className={classes.userDataFont}>University:</p>
+                                        <Button
+                                            className={classes.editNameButton}
+                                            onClick={(e) => setEditUniversity(true)}
+                                        > Edit
+                                        </Button>
+                                    </div>
+                                    <p>{university}</p>
+                                </div>
+                            )}
+                            </div>
+                                <div>
+                                    { editOrganization ? (
+                                        <div>
+                                            <div style={{"display":"flex"}}>
+                                                <p className={classes.userDataFont}>Organization:</p>
+                                                <Button
+                                                    className={classes.cancelNameButton}
+                                                    onClick={onCancelOrganization}
+                                                > Cancel
+                                                </Button>
+                                                <Button
+                                                    className={classes.saveNameButton}
+                                                    onClick={onUpdateUser}
+                                                > Save
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <TextField
+                                                    fullWidth
+                                                    value={organization}
+                                                    onChange={onChangeOrganization}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <div style={{"display":"flex"}}>
+                                                <p className={classes.userDataFont}>Organization:</p>
+                                                <Button
+                                                    className={classes.editNameButton}
+                                                    onClick={(e) => setEditOrganization(true)}
+                                                > Edit
+                                                </Button>
+                                            </div>
+                                            <p>{organization}</p>
+                                        </div>
+                                    )}
+                                </div>
+                        </div>
                         }
                     />
                 </Grid>
@@ -674,7 +829,7 @@ function EditProfileComponent(props) {
                     />
                 </Grid>
 
-                {/* Cast */}
+                {/* Interests */}
                 <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
                     <DetailsArea
                         title="Interests"
