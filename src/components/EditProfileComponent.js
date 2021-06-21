@@ -174,6 +174,9 @@ function EditProfileComponent(props) {
     const [editDomains, setEditDomains] = React.useState(false);
     const [domains, setDomains] = React.useState("");
 
+    const [editPassword, setEditPassword] = React.useState(false);
+
+
     // Data from old code, Ben
 
     const [editName, setEditName] = React.useState(false);
@@ -183,8 +186,6 @@ function EditProfileComponent(props) {
     const [university, setUniversity] = React.useState("");
     const [editOrganization, setEditOrganization] = React.useState(false);
     const [organization, setOrganization] = React.useState("");
-
-    const [editPassword, setEditPassword] = React.useState(false);
     const [saveName, setSaveName] = React.useState(false);
 
 
@@ -267,6 +268,8 @@ function EditProfileComponent(props) {
             setEditUniversity(false);
         } else if (editOrganization) {
             setEditOrganization(false);
+        } else if (editPassword && registerError === "") {
+            setEditPassword(false);
         }
         e.preventDefault();
 
@@ -366,6 +369,15 @@ function EditProfileComponent(props) {
         UserService.getUser(props.user._id).then(function(userBackend) {
             setOrganization(userBackend.organization);
         });
+    };
+
+    const onCancelPassword = (e) => {
+            setRegisterError("");
+            setEditPassword(false);
+            UserService.getUser(props.user._id).then(function(userBackend) {
+                setPassword(userBackend.password);
+                setPassword2(userBackend.password);
+            });
     };
 
     const onChangePassword = (e) => {
@@ -556,16 +568,59 @@ function EditProfileComponent(props) {
                                     </div>
                                 )}
                                 <div>
-                                    <div style={{"display":"flex"}}>
-                                        <p className={classes.userDataFont}>Password:</p>
-                                        <Button
-                                            className={classes.editPasswordButton}
-                                            //onClick={(e) => setEditName(true)}
-                                        > Edit
-                                        </Button>
-                                    </div>
-                                    <p style={{"fontStyle":"italic"}}>Password top secret</p>
-                                    <p style={{"fontStyle":"italic","marginTop": "20px"}}>Password top secret</p>
+                                    { editPassword ? (
+                                        <div>
+                                            <div style={{"display":"flex"}}>
+                                                <p className={classes.userDataFont}>Password:</p>
+                                                <Button
+                                                    className={classes.cancelNameButton}
+                                                    onClick={onCancelPassword}
+                                                > Cancel
+                                                </Button>
+                                                <Button
+                                                    className={classes.saveNameButton}
+                                                    onClick={onUpdateUser}
+                                                > Save
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <TextField
+                                                    fullWidth
+                                                    label="Password"
+                                                    value={password}
+                                                    error={registerError !== ""}
+                                                    onBlur={onBlurPassword}
+                                                    onChange={onChangePassword}
+                                                />
+                                                <TextField
+                                                    fullWidth
+                                                    label="Repeat Password"
+                                                    value={password2}
+                                                    error={registerError !== ""}
+                                                    onBlur={onBlurPassword}
+                                                    onChange={onChangePassword2}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <div style={{"display":"flex"}}>
+                                                <p className={classes.userDataFont}>Password:</p>
+                                                <Button
+                                                    className={classes.editNameButton}
+                                                    onClick={(e) => setEditPassword(true)}
+                                                > Edit
+                                                </Button>
+                                            </div>
+                                            <p>{password}</p>
+                                            <p>{password2}</p>
+                                        </div>
+                                    )}
+                                    {registerError !== "" ? (
+                                        <div className={classes.signUpRow}>
+                                            <Typography color="error">{registerError}</Typography>
+                                        </div>
+                                    ) : null}
                                 </div>
                             </div>
                         }
