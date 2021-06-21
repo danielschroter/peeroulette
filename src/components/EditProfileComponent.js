@@ -235,8 +235,6 @@ function EditProfileComponent(props) {
         back.username = username;
         back.password = password;
         back.interests = interests;
-        console.warn("save interests")
-        console.warn(back.interests)
 
         return back;
     };
@@ -291,8 +289,8 @@ function EditProfileComponent(props) {
 
     const onCancelUserName = (e) => {
         setEditName(false);
-        UserService.getUser(props.user._id).then(function(result) {
-            setUsername(result.username)
+        UserService.getUser(props.user._id).then(function(userBackend) {
+            setUsername(userBackend.username)
         });
     };
 
@@ -318,6 +316,9 @@ function EditProfileComponent(props) {
         setEditInterests(false);
         setAddInterests(false);
         setDeleteInterests(false);
+        UserService.getUser(props.user._id).then(function(userBackend) {
+            setInterests(userBackend.interests);
+        });
     };
 
     const onChangePassword = (e) => {
