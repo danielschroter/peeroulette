@@ -152,7 +152,7 @@ function EditProfileComponent(props) {
     const [alertDeleteProfileOpen, setAltertDeleteProfileOpen] = React.useState(false);
 
     const [username, setUsername] = React.useState("");
-    const [userInterests, setUserInterests] = React.useState(["chillen", "gaming", "MERN"]);
+    const [interests, setInterests] = React.useState(["chillen", "gaming", "MERN"]);
     const [allInterests, setAllInterests] = React.useState(["chillen", "gaming", "MERN", "Bern", "Stern",]);
 
     const [editInterests, setEditInterests] = React.useState(false);
@@ -234,6 +234,9 @@ function EditProfileComponent(props) {
 
         back.username = username;
         back.password = password;
+        back.interests = interests;
+        console.warn("save interests")
+        console.warn(back.interests)
 
         return back;
     };
@@ -361,12 +364,12 @@ function EditProfileComponent(props) {
 
     const deleteInterest = (e) => {
         console.warn(e.target.value)
-        console.warn("before userInterests: "+ userInterests)
+        console.warn("before userInterests: "+ interests)
         console.warn("hans" === "hans")
         let index = e.target.value;
-        userInterests.splice(index, 1)
+        interests.splice(index, 1)
 
-        console.warn("after userInterests: " + userInterests)
+        console.warn("after userInterests: " + interests)
     };
 
     const onChangeCompnameSignUp = (e) => {
@@ -715,11 +718,11 @@ function EditProfileComponent(props) {
                                         let interestsWithDelete = [];
                                         let interestsWithoutDelete = [];
                                         let i = 0;
-                                        for (i; i < userInterests.length; i++) {
-                                            interestsWithoutDelete.push(<button className={classes.interestsButton}>{userInterests[i]}</button>);
-                                            interestsWithDelete.push(<button className={classes.deleteInterestsIcon}>{userInterests[i]}</button>);
+                                        for (i; i < interests.length; i++) {
+                                            interestsWithoutDelete.push(<button className={classes.interestsButton}>{interests[i]}</button>);
+                                            interestsWithDelete.push(<button className={classes.deleteInterestsIcon}>{interests[i]}</button>);
                                             interestsWithDelete.push(<button className={classes.deleteInterestsCross} value={i} onClick={(e) => {
-                                                userInterests.splice(e.target.value, 1);
+                                                interests.splice(e.target.value, 1);
                                                 setDeleteInterests(false);
                                             }}>Delete</button>);
                                         }
@@ -746,7 +749,7 @@ function EditProfileComponent(props) {
                                                             if (allInterests[i].toLowerCase().includes(search.toLowerCase())) {
                                                                 interestsWithAdd.push(<button className={classes.deleteInterestsIcon}>{allInterests[i]}</button>);
                                                                 interestsWithAdd.push(<button className={classes.addInterestsIcon} value={allInterests[i]} onClick={(e) => {
-                                                                    userInterests.push(e.target.value)
+                                                                    interests.push(e.target.value)
                                                                     setAddInterests(false); }}>Add</button>);
                                                                 }
                                                             }
