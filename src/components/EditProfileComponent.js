@@ -189,6 +189,9 @@ function EditProfileComponent(props) {
     const [editOrganization, setEditOrganization] = React.useState(false);
     const [saveName, setSaveName] = React.useState(false);
 
+    const bcrypt = require("bcryptjs");
+
+
 
     // for extracting the attributes of the given movie to the approriate state variables
     const extractUser = () => {
@@ -238,7 +241,7 @@ function EditProfileComponent(props) {
         };
 
         back.username = username;
-        back.password = password;
+        back.password = bcrypt.hashSync(password, 8);
         back.interests = interests;
         back.city = city;
         back.university = university;
