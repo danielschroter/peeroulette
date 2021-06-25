@@ -780,11 +780,6 @@ function EditProfileComponent(props) {
                                                 onChange={onChangeDomainsSignUp}
                                             />
                                         </div>
-                                        {registerError !== "" ? (
-                                            <div className={classes.signUpRow}>
-                                                <Typography color="error">{registerError}</Typography>
-                                            </div>
-                                        ) : null}
                                         <div
                                             className={classes.signUpRow + " " + classes.signUpButtons}
                                         >
@@ -972,8 +967,7 @@ function EditProfileComponent(props) {
                                                 })()}
                                             </div>
                                         </div>
-                                        ) : (<div></div>)
-                                    }
+                                        ) : null}
                                 </div>
                             </div>
                         }
