@@ -201,8 +201,8 @@ function EditProfileComponent(props) {
 
         UserService.getUser(props.user._id).then(function(userBackend) {
             setUsername(userBackend.username);
-            setPassword(userBackend.password);
-            setPassword2(userBackend.password);
+            //setPassword(userBackend.password);
+            //setPassword2(userBackend.password);
             setCity(userBackend.city);
             setInterests(userBackend.interests);
             setUniversity(userBackend.university);
@@ -439,10 +439,12 @@ function EditProfileComponent(props) {
     const onCancelPassword = (e) => {
             setRegisterError("");
             setEditPassword(false);
-            UserService.getUser(props.user._id).then(function(userBackend) {
-                setPassword(userBackend.password);
-                setPassword2(userBackend.password);
-            });
+            //UserService.getUser(props.user._id).then(function(userBackend) {
+               // setPassword(userBackend.password);
+               // setPassword2(userBackend.password);
+            //});
+        setPassword("");
+        setPassword2("");
     };
 
     // sign-up functionalities
@@ -590,7 +592,7 @@ function EditProfileComponent(props) {
                                             <div>
                                                 <TextField
                                                     fullWidth
-                                                    label="Password"
+                                                    label="Set New Password"
                                                     value={password}
                                                     error={registerError !== ""}
                                                     onBlur={onBlurPassword}
@@ -599,7 +601,7 @@ function EditProfileComponent(props) {
                                                 />
                                                 <TextField
                                                     fullWidth
-                                                    label="Repeat Password"
+                                                    label="Repeat New Password"
                                                     value={password2}
                                                     error={registerError !== ""}
                                                     onBlur={onBlurPassword}
