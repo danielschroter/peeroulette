@@ -591,6 +591,7 @@ function EditProfileComponent(props) {
                                                     error={registerError !== ""}
                                                     onBlur={onBlurPassword}
                                                     onChange={onChangePassword}
+                                                    type="password"
                                                 />
                                                 <TextField
                                                     fullWidth
@@ -599,6 +600,7 @@ function EditProfileComponent(props) {
                                                     error={registerError !== ""}
                                                     onBlur={onBlurPassword}
                                                     onChange={onChangePassword2}
+                                                    type="password"
                                                 />
                                             </div>
                                         </div>
@@ -612,8 +614,8 @@ function EditProfileComponent(props) {
                                                 > Edit
                                                 </Button>
                                             </div>
-                                            <p>{password}</p>
-                                            <p>{password2}</p>
+                                            <p style={{"fontStyle":"italic"}}>Password top secret</p>
+                                            <p style={{"fontStyle":"italic", "marginTop":"30px", "marginBottom":"43px"}}>Password top secret</p>
                                         </div>
                                     )}
                                     {registerError !== "" ? (
