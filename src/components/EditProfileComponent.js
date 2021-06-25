@@ -150,42 +150,43 @@ function EditProfileComponent(props) {
     const classes = useStyles();
 
     const [alertDeleteProfileOpen, setAltertDeleteProfileOpen] = React.useState(false);
+    const [isAdmin, setIsAdmin] = React.useState("");
+    const [registerError, setRegisterError] = React.useState("");
 
     const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [password2, setPassword2] = React.useState("");
+    const [city, setCity] = React.useState("");
+    const [university, setUniversity] = React.useState("");
+    const [organization, setOrganization] = React.useState("");
+
+
+    //interests
     const [interests, setInterests] = React.useState(["chillen", "gaming", "MERN"]);
     const [allInterests, setAllInterests] = React.useState(["chillen", "gaming", "MERN", "Reading", "Sports",]);
-
     const [editInterests, setEditInterests] = React.useState(false);
     const [deleteInterests, setDeleteInterests] = React.useState(false);
     const [addInterests, setAddInterests] = React.useState(false);
     const [search, setSearch] = React.useState("");
 
+    // identify coperate accounts
     const [corporate_id, setCorporate_id] = React.useState("");
     const [isCorporate, setIsCorporate] = React.useState(false);
 
-    const [password, setPassword] = React.useState("");
-    const [password2, setPassword2] = React.useState("");
-    const [isAdmin, setIsAdmin] = React.useState("");
-    const [registerError, setRegisterError] = React.useState("");
-
-    // Corporate Data
+    // corporate Data
     const [compname, setCompname] = React.useState("");
     const [editCompname, setEditCompname] = React.useState(false);
-    const [editDomains, setEditDomains] = React.useState(false);
     const [domains, setDomains] = React.useState("");
+    const [editDomains, setEditDomains] = React.useState(false);
 
-    const [editPassword, setEditPassword] = React.useState(false);
 
 
     // Data from old code, Ben
-
-    const [editName, setEditName] = React.useState(false);
+    const [editPassword, setEditPassword] = React.useState(false);
+    const [editUsername, setEditUsername] = React.useState(false);
     const [editCity, setEditCity] = React.useState(false);
-    const [city, setCity] = React.useState("");
     const [editUniversity, setEditUniversity] = React.useState(false);
-    const [university, setUniversity] = React.useState("");
     const [editOrganization, setEditOrganization] = React.useState(false);
-    const [organization, setOrganization] = React.useState("");
     const [saveName, setSaveName] = React.useState(false);
 
 
@@ -248,14 +249,15 @@ function EditProfileComponent(props) {
 
 
     const onRegister = (e) => {
-        setEditName(false);
+        setEditUsername(false);
         e.preventDefault();
         props.onRegister(packUser());
     };
 
+    // update user data after clicking on save
     const onUpdateUser = (e) => {
-        if(editName) {
-            setEditName(false);
+        if(editUsername) {
+            setEditUsername(false);
         } else if (editCompname) {
             setEditCompname(false);
         } else if (editDomains) {
@@ -284,7 +286,7 @@ function EditProfileComponent(props) {
         props.onUpdateUser(packUser());
     };
 
-
+    // delete user profile
     const onDeleteProfile = (e) => {
         UserService.logout();
         let id = props.user._id;
@@ -296,6 +298,7 @@ function EditProfileComponent(props) {
         }
     };
 
+    // save temprorary changed variables on input field
     const onChangeUsername = (e) => {
         props.user.username = e.target.value;
         setUsername(e.target.value);
@@ -316,21 +319,80 @@ function EditProfileComponent(props) {
         setOrganization(e.target.value);
     };
 
-    const onCancelUserName = (e) => {
-        setEditName(false);
-        UserService.getUser(props.user._id).then(function(userBackend) {
-            setUsername(userBackend.username)
-        });
-    };
-
     const onChangeCompname = (e) => {
         setCompname(e.target.value);
     };
+
+    const onChangeDomains = (e) => {
+        setDomains(e.target.value);
+        setRegisterError("");
+    };
+
+    const onChangePassword = (e) => {
+        setPassword(e.target.value);
+        setRegisterError("");
+    };
+
+    const onChangePassword2 = (e) => {
+        setPassword2(e.target.value);
+        setRegisterError("");
+    };
+
+    const onBlurPassword = (e) => {
+        if (password !== "" && password2 !== "") {
+            if (password !== password2) {
+                setRegisterError("Passwords do not match.");
+            } else {
+                setRegisterError("");
+            }
+        }
+    };
+
+    const changeDeleteInterests = (e) => {
+        if (deleteInterests) {
+            setDeleteInterests(false);
+        } else {
+            setDeleteInterests(true);
+        }
+    };
+
+    const changeAddInterests = (e) => {
+        if (addInterests) {
+            setAddInterests(false);
+        } else {
+            setAddInterests(true);
+        }
+    };
+
+    const deleteInterest = (e) => {
+        let index = e.target.value;
+        interests.splice(index, 1)
+    };
+
+    const onChangeCompnameSignUp = (e) => {
+        setCompname(e.target.value);
+        setRegisterError("");
+    };
+
+    const onChangeDomainsSignUp = (e) => {
+        setDomains(e.target.value);
+        setRegisterError("");
+    };
+
+    // if data is not saved, because user clicked on cancel,
+    // re-load the old user data from the backend
 
     const onCancelCompname = (e) => {
         setEditCompname(false);
         UserService.getOrganization(corporate_id).then(function(organizationBackend) {
             setCompname(organizationBackend.company_name)
+        });
+    };
+
+    const onCancelUsername = (e) => {
+        setEditUsername(false);
+        UserService.getUser(props.user._id).then(function(userBackend) {
+            setUsername(userBackend.username)
         });
     };
 
@@ -380,68 +442,7 @@ function EditProfileComponent(props) {
             });
     };
 
-    const onChangePassword = (e) => {
-        setPassword(e.target.value);
-        setRegisterError("");
-    };
-
-
-    const onChangeDomains = (e) => {
-        setDomains(e.target.value);
-        setRegisterError("");
-    };
-
-    const onChangePassword2 = (e) => {
-        setPassword2(e.target.value);
-        setRegisterError("");
-    };
-
-    const onBlurPassword = (e) => {
-        if (password !== "" && password2 !== "") {
-            if (password !== password2) {
-                setRegisterError("Passwords do not match.");
-            } else {
-                setRegisterError("");
-            }
-        }
-    };
-
-    const changeDeleteInterests = (e) => {
-     if (deleteInterests) {
-         setDeleteInterests(false);
-     } else {
-         setDeleteInterests(true);
-     }
-    };
-
-    const changeAddInterests = (e) => {
-        if (addInterests) {
-            setAddInterests(false);
-        } else {
-            setAddInterests(true);
-        }
-    };
-
-    const deleteInterest = (e) => {
-        console.warn(e.target.value)
-        console.warn("before userInterests: "+ interests)
-        console.warn("hans" === "hans")
-        let index = e.target.value;
-        interests.splice(index, 1)
-
-        console.warn("after userInterests: " + interests)
-    };
-
-    const onChangeCompnameSignUp = (e) => {
-        setCompname(e.target.value);
-        setRegisterError("");
-    };
-
-    const onChangeDomainsSignUp = (e) => {
-        setDomains(e.target.value);
-        setRegisterError("");
-    };
-
+    // sign-up functionalities
     const onCancelSignUp = (e) => {
         setRegisterError("");
     };
@@ -531,13 +532,13 @@ function EditProfileComponent(props) {
                         title="Name & Password"
                         content={
                             <div className={classes.signUpRow}>
-                                { editName ? (
+                                { editUsername ? (
                                     <div>
                                         <div style={{"display":"flex"}}>
                                             <p className={classes.userDataFont}>Name:</p>
                                             <Button
                                                 className={classes.cancelNameButton}
-                                                onClick={onCancelUserName}
+                                                onClick={onCancelUsername}
                                             > Cancel
                                             </Button>
                                             <Button
@@ -560,7 +561,7 @@ function EditProfileComponent(props) {
                                             <p className={classes.userDataFont}>Name:</p>
                                             <Button
                                                 className={classes.editNameButton}
-                                                onClick={(e) => setEditName(true)}
+                                                onClick={(e) => setEditUsername(true)}
                                             > Edit
                                             </Button>
                                         </div>
