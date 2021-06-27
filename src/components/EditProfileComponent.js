@@ -455,13 +455,9 @@ function EditProfileComponent(props) {
 
     const onRegisterSignUp = (e) => {
         e.preventDefault();
-        console.warn(props.user._id)
-        //UserService.addOrganization(username, password, isAdmin, compname, domains);
         let user_id = props.user._id;
         UserService.registerOrganization(user_id, compname, domains);
         setIsCorporate(true);
-        onUpdateUser(e);
-        //props.onRegister(username, password, isAdmin, compname, domains);
     };
 
     return (
