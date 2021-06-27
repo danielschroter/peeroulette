@@ -458,6 +458,8 @@ function EditProfileComponent(props) {
         let user_id = props.user._id;
         UserService.registerOrganization(user_id, compname, domains);
         setIsCorporate(true);
+
+        window.location.reload();
     };
 
     return (
