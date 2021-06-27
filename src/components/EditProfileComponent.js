@@ -153,6 +153,7 @@ function EditProfileComponent(props) {
     const [isAdmin, setIsAdmin] = React.useState("");
     const [registerError, setRegisterError] = React.useState("");
 
+    const [user_id, setUser_id] = React.useState("");
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
@@ -454,6 +455,9 @@ function EditProfileComponent(props) {
 
     const onRegisterSignUp = (e) => {
         e.preventDefault();
+        console.warn(props.user._id)
+        //UserService.addOrganization(username, password, isAdmin, compname, domains);
+        UserService.registerOrganization(username, password, isAdmin, compname, domains);
         //props.onRegister(username, password, isAdmin, compname, domains);
     };
 

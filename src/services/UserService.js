@@ -160,4 +160,25 @@ export default class UserService {
             );
         });
     }
+
+    static registerOrganization(user, pass, isAdmin, compname, domains) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL_auth()}/register`,
+                {
+                    username: user,
+                    password: pass,
+                    isAdmin: isAdmin,
+                    compname: compname,
+                    domains: domains
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
 }
