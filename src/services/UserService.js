@@ -161,14 +161,12 @@ export default class UserService {
         });
     }
 
-    static registerOrganization(user, pass, isAdmin, compname, domains) {
+    static registerOrganization(user_id, compname, domains) {
         return new Promise((resolve, reject) => {
             HttpService.post(
-                `${UserService.baseURL_auth()}/register`,
+                `${UserService.baseURL_auth()}/registerOrganization`,
                 {
-                    username: user,
-                    password: pass,
-                    isAdmin: isAdmin,
+                    user_id: user_id,
                     compname: compname,
                     domains: domains
                 },
