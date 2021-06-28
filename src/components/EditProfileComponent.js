@@ -154,6 +154,8 @@ function EditProfileComponent(props) {
     const [alertDeleteProfileOpen, setAltertDeleteProfileOpen] = React.useState(false);
     const [isAdmin, setIsAdmin] = React.useState("");
     const [registerError, setRegisterError] = React.useState("");
+    const [addInterestsError, setAddInterestsError] = React.useState("");
+
 
     const [user_id, setUser_id] = React.useState("");
     const [username, setUsername] = React.useState("");
@@ -165,7 +167,7 @@ function EditProfileComponent(props) {
 
 
     //interests
-    const [interests, setInterests] = React.useState(["chillen", "gaming", "MERN"]);
+    const [interests, setInterests] = React.useState([""]);
     const [allInterests, setAllInterests] = React.useState(facebookInterests);
     const [editInterests, setEditInterests] = React.useState(false);
     const [deleteInterests, setDeleteInterests] = React.useState(false);
@@ -355,6 +357,12 @@ function EditProfileComponent(props) {
         }
     };
 
+    const onBlurAddInterests = (e) => {
+        if (true) {
+            setAddInterestsError("Interest already exists.");
+        }
+    };
+
     const changeDeleteInterests = (e) => {
         if (deleteInterests) {
             setDeleteInterests(false);
@@ -464,6 +472,7 @@ function EditProfileComponent(props) {
 
         window.location.reload();
     };
+
 
     return (
         <div
@@ -960,7 +969,8 @@ function EditProfileComponent(props) {
                                         <div>
                                             <div>
                                                 <p className={classes.userDataFont}> Search for your interest:</p>
-                                                <input type="text" placeholder="Search" onChange={ e => setSearch(e.target.value)}/>
+                                                <input type="text" placeholder="Search" onChange={ e => setSearch(e.target.value)}
+                                                       onBlur={onBlurAddInterests} error={addInterestsError !== ""}/>
                                             </div>
                                             <div>
                                                 {(() => {
@@ -971,13 +981,22 @@ function EditProfileComponent(props) {
                                                             if (allInterests[i].toLowerCase().includes(search.toLowerCase())) {
                                                                 interestsWithAdd.push(<button className={classes.deleteInterestsIcon}>{allInterests[i]}</button>);
                                                                 interestsWithAdd.push(<button className={classes.addInterestsIcon} value={allInterests[i]} onClick={(e) => {
-                                                                    interests.push(e.target.value)
-                                                                    setAddInterests(false); }}>Add</button>);
+                                                                    if(interests.includes(e.target.value)) {
+                                                                        setAddInterestsError("Interest Already exists")
+                                                                    } else {
+                                                                        interests.push(e.target.value)
+                                                                        setAddInterests(false);
+                                                                    }}}>Add</button>);
                                                                 }
                                                             }
                                                         return interestsWithAdd;
                                                     }
                                                 })()}
+                                                {addInterestsError !== "" ? (
+                                                    <div className={classes.signUpRow}>
+                                                        <Typography color="error">{addInterestsError}</Typography>
+                                                    </div>
+                                                ) : null}
                                             </div>
                                         </div>
                                         ) : null}
