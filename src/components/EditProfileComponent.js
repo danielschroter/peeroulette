@@ -16,6 +16,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {facebookInterests} from '../components/FacebookInterests';
+
 
 const useStyles = makeStyles((theme) => ({
     flexCol: {
@@ -164,7 +166,7 @@ function EditProfileComponent(props) {
 
     //interests
     const [interests, setInterests] = React.useState(["chillen", "gaming", "MERN"]);
-    const [allInterests, setAllInterests] = React.useState(["chillen", "gaming", "MERN", "Reading", "Sports",]);
+    const [allInterests, setAllInterests] = React.useState(facebookInterests);
     const [editInterests, setEditInterests] = React.useState(false);
     const [deleteInterests, setDeleteInterests] = React.useState(false);
     const [addInterests, setAddInterests] = React.useState(false);
@@ -179,7 +181,6 @@ function EditProfileComponent(props) {
     const [editCompname, setEditCompname] = React.useState(false);
     const [domains, setDomains] = React.useState("");
     const [editDomains, setEditDomains] = React.useState(false);
-
 
 
     // Data from old code, Ben
@@ -227,7 +228,9 @@ function EditProfileComponent(props) {
             setRegisterError("");
         } else
         extractUser();
+
     }, [props.user]);
+
 
     // props for all grid items used below in the JSX
     const girdItemProps = {
