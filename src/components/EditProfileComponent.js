@@ -156,7 +156,7 @@ function EditProfileComponent(props) {
     const [registerError, setRegisterError] = React.useState("");
     const [addInterestsError, setAddInterestsError] = React.useState("");
 
-
+    // user data
     const [user_id, setUser_id] = React.useState("");
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -164,6 +164,14 @@ function EditProfileComponent(props) {
     const [city, setCity] = React.useState("");
     const [university, setUniversity] = React.useState("");
     const [organization, setOrganization] = React.useState("");
+
+    // edit user data
+    const [editPassword, setEditPassword] = React.useState(false);
+    const [editUsername, setEditUsername] = React.useState(false);
+    const [editCity, setEditCity] = React.useState(false);
+    const [editUniversity, setEditUniversity] = React.useState(false);
+    const [editOrganization, setEditOrganization] = React.useState(false);
+    const [saveName, setSaveName] = React.useState(false);
 
 
     //interests
@@ -184,20 +192,9 @@ function EditProfileComponent(props) {
     const [domains, setDomains] = React.useState("");
     const [editDomains, setEditDomains] = React.useState(false);
 
-
-    // Data from old code, Ben
-    const [editPassword, setEditPassword] = React.useState(false);
-    const [editUsername, setEditUsername] = React.useState(false);
-    const [editCity, setEditCity] = React.useState(false);
-    const [editUniversity, setEditUniversity] = React.useState(false);
-    const [editOrganization, setEditOrganization] = React.useState(false);
-    const [saveName, setSaveName] = React.useState(false);
-
     const bcrypt = require("bcryptjs");
 
-
-
-    // for extracting the attributes of the given movie to the approriate state variables
+    // extract all the user data from the backend
     const extractUser = () => {
         if (!props.user) {
             return;
@@ -205,8 +202,6 @@ function EditProfileComponent(props) {
 
         UserService.getUser(props.user._id).then(function(userBackend) {
             setUsername(userBackend.username);
-            //setPassword(userBackend.password);
-            //setPassword2(userBackend.password);
             setCity(userBackend.city);
             setInterests(userBackend.interests);
             setUniversity(userBackend.university);
@@ -240,7 +235,7 @@ function EditProfileComponent(props) {
         className: classes.padding,
     };
 
-    // creating a object with all relevant data to update or create a changed movie
+    // creating a object with all relevant data to update a user
     const packUser = () => {
         let back = {
             ...props.user,
@@ -254,13 +249,6 @@ function EditProfileComponent(props) {
         back.organization = organization;
 
         return back;
-    };
-
-
-    const onRegister = (e) => {
-        setEditUsername(false);
-        e.preventDefault();
-        props.onRegister(packUser());
     };
 
     // update user data after clicking on save
@@ -299,9 +287,7 @@ function EditProfileComponent(props) {
     const onDeleteProfile = (e) => {
         UserService.logout();
         let id = props.user._id;
-        //UserService.deleteUser(id);
         props.onDeleteUser(id);
-
         if (isCorporate) {
                 props.onDeleteOrganization(corporate_id);
         }
@@ -347,21 +333,6 @@ function EditProfileComponent(props) {
         setRegisterError("");
     };
 
-    const onBlurPassword = (e) => {
-        if (password !== "" && password2 !== "") {
-            if (password !== password2) {
-                setRegisterError("Passwords do not match.");
-            } else {
-                setRegisterError("");
-            }
-        }
-    };
-
-    const onBlurAddInterests = (e) => {
-        if (true) {
-            setAddInterestsError("Interest already exists.");
-        }
-    };
 
     const changeDeleteInterests = (e) => {
         if (deleteInterests) {
@@ -394,9 +365,26 @@ function EditProfileComponent(props) {
         setRegisterError("");
     };
 
+    // show error when password not match
+    const onBlurPassword = (e) => {
+        if (password !== "" && password2 !== "") {
+            if (password !== password2) {
+                setRegisterError("Passwords do not match.");
+            } else {
+                setRegisterError("");
+            }
+        }
+    };
+
+    // show error when interest already exists
+    const onBlurAddInterests = (e) => {
+        if (true) {
+            setAddInterestsError("Interest already exists.");
+        }
+    };
+
     // if data is not saved, because user clicked on cancel,
     // re-load the old user data from the backend
-
     const onCancelCompname = (e) => {
         setEditCompname(false);
         UserService.getOrganization(corporate_id).then(function(organizationBackend) {
@@ -449,17 +437,13 @@ function EditProfileComponent(props) {
     };
 
     const onCancelPassword = (e) => {
-            setRegisterError("");
-            setEditPassword(false);
-            //UserService.getUser(props.user._id).then(function(userBackend) {
-               // setPassword(userBackend.password);
-               // setPassword2(userBackend.password);
-            //});
+        setRegisterError("");
+        setEditPassword(false);
         setPassword("");
         setPassword2("");
     };
 
-    // sign-up functionalities
+    // sign-up functionalities for registering Organization only
     const onCancelSignUp = (e) => {
         setRegisterError("");
     };
@@ -467,9 +451,8 @@ function EditProfileComponent(props) {
     const onRegisterSignUp = (e) => {
         e.preventDefault();
         let user_id = props.user._id;
-        UserService.registerOrganization(user_id, compname, domains);
+        props.onRegisterOrganization(user_id, compname, domains);
         setIsCorporate(true);
-
         window.location.reload();
     };
 
@@ -984,6 +967,7 @@ function EditProfileComponent(props) {
                                                                     if(interests.includes(e.target.value)) {
                                                                         setAddInterestsError("Interest Already exists")
                                                                     } else {
+                                                                        setAddInterestsError("")
                                                                         interests.push(e.target.value)
                                                                         setAddInterests(false);
                                                                     }}}>Add</button>);
@@ -1016,8 +1000,8 @@ EditProfileComponent.propTypes = {
     onGetUser: PropTypes.func,
     onUpdateUser: PropTypes.func,
     onUpdateOrganization: PropTypes.func,
+    onRegisterOrganization: PropTypes.func,
     onDeleteUser: PropTypes.func,
-    onRegister: PropTypes.func,
     onDeleteOrganization: PropTypes,
 };
 

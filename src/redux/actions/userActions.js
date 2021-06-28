@@ -138,3 +138,21 @@ export function changeOrganization(changedOrganization) {
         }
     };
 }
+
+export function registerOrganization(user_id, compname, domains) {
+    function onSuccess() {
+        return { type: "LOGIN_SUCCESS"};
+    }
+    function onFailure(error) {
+        return { type: "LOGIN_FAILURE", error: error };
+    }
+
+    return async (dispatch) => {
+        try {
+            let resp = await UserService.registerOrganization(user_id, compname, domains);
+            dispatch(onSuccess(resp.user));
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
+    };
+}

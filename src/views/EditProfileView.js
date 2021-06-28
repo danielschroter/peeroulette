@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import {connect, useSelector} from "react-redux";
 
-import {login, register, changeUser, getUser, deleteUser, deleteOrganization, changeOrganization} from "../redux/actions";
+import {login, register, changeUser, getUser, deleteUser, deleteOrganization, changeOrganization, registerOrganization} from "../redux/actions";
 import EditProfileComponent from "../components/EditProfileComponent";
 
 /**
@@ -39,8 +39,8 @@ function EditProfileView(props) {
         props.dispatch(changeOrganization(organization));
     };
 
-    const onRegister = (username, password, isAdmin, compname, domains) => {
-        props.dispatch(register(username, password, isAdmin, compname, domains));
+    const onRegisterOrganization = (user_id, compname, domains) => {
+        props.dispatch(registerOrganization(user_id, compname, domains));
     };
 
     return (
@@ -49,8 +49,8 @@ function EditProfileView(props) {
             onGetUser={onGetUser}
             onUpdateUser={onUpdateUser}
             onUpdateOrganization={onUpdateOrganization}
+            onRegisterOrganization={onRegisterOrganization}
             onDeleteUser={onDeleteUser}
-            onRegister={onRegister}
             onDeleteOrganization={onDeleteOrganization}
         />
     );
