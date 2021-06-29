@@ -21,7 +21,7 @@ function LandingPageView(props) {
 
 
                 <Typography variant="body1" align="center" paragraph>
-                    Comming soon...
+                    Coming soon...
                 </Typography>
                 <Grid container justify="center">
                     <Button variant="outlined" color="primary" href="/movies">

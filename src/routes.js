@@ -4,6 +4,7 @@ import SignUpView from "./views/SignUpView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import CorporateSignUpView from "./views/CorporateSignUpView";
+import CallView from "./views/CallView";
 import EditProfileViewOld from "./views/EditProfileView";
 import EditProfileView from "./views/EditProfileView";
 
@@ -42,6 +43,14 @@ const routes = [
     {
         path: "/movie/:id",
         component: MovieDetailsView,
+    },
+    {
+        path: "/meeting",
+        component: MeetingView,
+    },
+    {
+        path: "/call",
+        component: CallView,
     },
 ];
 
