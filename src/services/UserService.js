@@ -9,6 +9,12 @@ export default class UserService {
         return "http://localhost:4000/user";
     }
 
+    static baseURL_organization() {
+        return "http://localhost:4000/organization";
+    }
+
+
+
     static register(user, pass, isAdmin, compname, domains) {
         return new Promise((resolve, reject) => {
             HttpService.post(
@@ -94,6 +100,76 @@ export default class UserService {
             HttpService.put(
                 `${UserService.baseURL_user()}/${user._id}`,
                 user,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static updateOrganization(organization) {
+        return new Promise((resolve, reject) => {
+            HttpService.put(
+                `${UserService.baseURL_organization()}/${organization._id}`,
+                organization,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static deleteOrganization(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.remove(
+                `${UserService.baseURL_organization()}/${id}`,
+                function (data) {
+                    if (data.message !== undefined) {
+                        resolve(data.message);
+                    } else {
+                        reject("Error while deleting");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getOrganization(id) {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                `${UserService.baseURL_organization()}/${id}`,
+                function (data) {
+                    if (data !== undefined || Object.keys(data).length !== 0) {
+                        resolve(data);
+                    } else {
+                        reject("Error while retrieving user");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static registerOrganization(user_id, compname, domains) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL_auth()}/registerOrganization`,
+                {
+                    user_id: user_id,
+                    compname: compname,
+                    domains: domains
+                },
                 function (data) {
                     resolve(data);
                 },

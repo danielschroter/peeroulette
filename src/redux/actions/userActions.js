@@ -65,6 +65,24 @@ export function changeUser(changedUser) {
     };
 }
 
+export function deleteUser(id) {
+    function onSuccess() {
+        return { type: "DELETEUSER_SUCCESS"};
+    }
+    function onFailure(error) {
+        console.log("delete user failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            await UserService.deleteUser(id);
+            dispatch(onSuccess());
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}
+
 export const getUser = (id) => {
     function onSuccess(user) {
         return { type: "GETUSER_SUCCESS", user: user };
@@ -81,4 +99,60 @@ export const getUser = (id) => {
             onFailure(e);
         }
     };
-};
+}
+
+export function deleteOrganization(id) {
+    function onSuccess() {
+        return { type: "DELETORGANIZATION_SUCCESS"};
+    }
+    function onFailure(error) {
+        console.log("delete organization failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            await UserService.deleteOrganization(id);
+            dispatch(onSuccess());
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}
+
+export function changeOrganization(changedOrganization) {
+
+    function onSuccess(organization) {
+        return { type: "UPDATEMOVIE_SUCCESS", organization: organization };
+    }
+
+    function onFailure(error) {
+        console.log("change movie failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            let organization = await UserService.updateOrganization(changedOrganization);
+            dispatch(onSuccess(organization));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}
+
+export function registerOrganization(user_id, compname, domains) {
+    function onSuccess() {
+        return { type: "LOGIN_SUCCESS"};
+    }
+    function onFailure(error) {
+        return { type: "LOGIN_FAILURE", error: error };
+    }
+
+    return async (dispatch) => {
+        try {
+            let resp = await UserService.registerOrganization(user_id, compname, domains);
+            dispatch(onSuccess(resp.user));
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
+    };
+}
