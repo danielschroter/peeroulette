@@ -13,6 +13,10 @@ export default class UserService {
         return "http://localhost:4000/organization";
     }
 
+    static baseURL_interests() {
+        return "http://localhost:4000/interests";
+    }
+
   static register(email, user, pass, isAdmin, compname, domains) {
     return new Promise((resolve, reject) => {
       HttpService.post(
@@ -186,6 +190,20 @@ export default class UserService {
                     compname: compname,
                     domains: domains
                 },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getInterests() {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                this.baseURL_interests(),
                 function (data) {
                     resolve(data);
                 },

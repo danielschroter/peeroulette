@@ -176,7 +176,7 @@ function EditProfileComponent(props) {
 
     //interests
     const [interests, setInterests] = React.useState([""]);
-    const [allInterests, setAllInterests] = React.useState(facebookInterests);
+    const [allInterests, setAllInterests] = React.useState([]);
     const [editInterests, setEditInterests] = React.useState(false);
     const [deleteInterests, setDeleteInterests] = React.useState(false);
     const [addInterests, setAddInterests] = React.useState(false);
@@ -220,11 +220,20 @@ function EditProfileComponent(props) {
         });
     };
 
+    const extractInterests = () => {
+        UserService.getInterests().then(function(interestsBackend) {
+            if (interestsBackend[0] !== undefined) {
+                setAllInterests(interestsBackend[0].facebookInterests);
+            }
+        });
+    };
+
     useEffect(() => {
         if (props.user == undefined) {
             setRegisterError("");
         } else
         extractUser();
+        extractInterests();
 
     }, [props.user]);
 
