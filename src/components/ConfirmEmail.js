@@ -16,7 +16,7 @@ function ConfirmEmail(props) {
   const classes = useStyles();
 
   // get user id from URL "/confirm/:id"
-  const { id } = useParams();
+  const { id, domain } = useParams();
 
   useEffect(() => {
     // This gets called after every render, by default
@@ -38,9 +38,16 @@ function ConfirmEmail(props) {
   return (
     <div style={{ marginTop: "150px", marginBottom: "150px" }}>
       <Container maxWidth="sm">
-        <Typography variant="h4" align="center" gutterBottom>
-          Email confirmation for User-ID {id}
-        </Typography>
+        {!domain ? (
+            <Typography variant="h4" align="center" gutterBottom>
+              Email confirmation for User-ID {id}
+            </Typography>
+        ): (
+            <Typography variant="h4" align="center" gutterBottom>
+              Email confirmation for domain: {domain}
+            </Typography>
+        )}
+
         <div className={classes.loginButtons}>
           <Button
             className={classes.loginButton}
