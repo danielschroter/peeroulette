@@ -458,9 +458,11 @@ function EditProfileComponent(props) {
 
     const onRegisterSignUp = (e) => {
         e.preventDefault();
-        let user_id = props.user._id;
-        props.onRegisterOrganization(user_id, compname, domains);
-        setIsCorporate(true);
+        if (props.user !== undefined) {
+            let user_id = props.user._id;
+            props.onRegisterOrganization(user_id, compname, domains);
+            setIsCorporate(true);
+        }
         window.location.reload();
     };
 
@@ -1010,7 +1012,7 @@ EditProfileComponent.propTypes = {
     onUpdateOrganization: PropTypes.func,
     onRegisterOrganization: PropTypes.func,
     onDeleteUser: PropTypes.func,
-    onDeleteOrganization: PropTypes,
+    onDeleteOrganization: PropTypes.func,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
