@@ -210,8 +210,18 @@ function EditProfileComponent(props) {
                 setIsCorporate(true);
                 UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
                     setCompname(organizationBackend.company_name);
-                    setDomains(organizationBackend.domains);
                     setCorporate_id(organizationBackend._id);
+                    let allDomainIds = organizationBackend.domains;
+                    let allDomainNames = [];
+                    let i = 0;
+                    if (allDomainIds.length > 0) {
+                        for (i; i < allDomainIds.length; i++) {
+                            UserService.getDomain(allDomainIds[i]).then(function(domainBackend) {
+                                allDomainNames.push(domainBackend.name)
+                            });
+                        }
+                        setDomains(allDomainNames);
+                    }
                 });
             } else {
                 setIsCorporate(false);
@@ -410,7 +420,27 @@ function EditProfileComponent(props) {
     const onCancelDomains = (e) => {
         setEditDomains(false);
         UserService.getOrganization(corporate_id).then(function(organizationBackend) {
-            setDomains(organizationBackend.domains)
+            let allDomainIds = organizationBackend.domains;
+            let allDomainNames = [];
+            let i = 0;
+            console.warn(allDomainIds[0])
+            console.warn(allDomainIds[1])
+            if (allDomainIds.length > 0) {
+                for (i; i < allDomainIds.length; i++) {
+                    UserService.getDomain(allDomainIds[i]).then(function(domainBackend) {
+                        allDomainNames.push(domainBackend.name)
+                    });
+                }
+            }
+
+            console.warn("all domains")
+            console.warn(allDomainNames)
+
+            setDomains(allDomainNames)
+            console.warn("warn domains total")
+
+            console.warn(domains)
+
         });
     };
 
