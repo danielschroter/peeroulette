@@ -17,6 +17,11 @@ export function login(username, password) {
     }
   };
 }
+export function switchEmployeeFilter(){
+    return{
+        type: "switchEmployeeFilter"
+    };
+}
 
 export function logout() {
   UserService.logout();
@@ -187,4 +192,10 @@ export function registerOrganization(user_id, compname, domains) {
             dispatch(onFailure(e));
         }
     };
+}
+
+export const filterEmployee = () => {
+    return{
+        type: "switchEmployeeFilter"
+    }
 }

@@ -4,11 +4,14 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+
+
 /**
  * Manages the process of getting movie list data
  * @param {props} props
  */
 function LandingPageView(props) {
+    // const user = useSelector((state) => state.user);
 
     return (
         // if no movies are loaded, the above useEffect should be triggered
@@ -16,7 +19,7 @@ function LandingPageView(props) {
             <Container maxWidth="sm">
 
                 <Typography variant="h4" align="center" gutterBottom>
-                    Hello Peeroulette
+                    Hello Peeroullette
                 </Typography>
 
 

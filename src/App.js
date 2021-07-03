@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from "redux-thunk";
+import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   MuiThemeProvider,
   createMuiTheme,
@@ -35,8 +36,9 @@ function App() {
     document.title = "Movie Database App";
   }, []);
 
-  // create store for redux
-  const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+    // create store for redux
+    const store = createStore(reducers, composeWithDevTools(
+        applyMiddleware(thunkMiddleware)));
 
   // theme for app
   const [theme, setTheme] = React.useState(AppTheme.LIGHT);

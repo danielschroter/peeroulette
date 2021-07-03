@@ -41,7 +41,7 @@ const routes = [
     exact: true,
   },
   {
-    path: "/confirm/:id",
+    path: "/confirm/:id/:domain?",
     component: ConfirmView,
   },
   {
