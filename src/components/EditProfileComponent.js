@@ -207,27 +207,22 @@ function EditProfileComponent(props) {
             setOrganization(userBackend.organization);
 
             if (userBackend.account_owner_of_organization !== undefined) {
+                setCorporate_id(userBackend.account_owner_of_organization)
                 setIsCorporate(true);
-                UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
-                    setCompname(organizationBackend.company_name);
-                    setCorporate_id(organizationBackend._id);
-                    let allDomainIds = organizationBackend.domains;
-                    let allDomainNames = [];
-                    let i = 0;
-                    if (allDomainIds.length > 0) {
-                        for (i; i < allDomainIds.length; i++) {
-                            UserService.getDomain(allDomainIds[i]).then(function(domainBackend) {
-                                console.warn("WARN")
-                                console.warn(domainBackend.name)
-                                allDomainNames.push(domainBackend.name)
-                            });
+                    UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
+                        setCompname(organizationBackend.company_name)
+                        let allDomainIds = organizationBackend.domains;
+                        let allDomainNames = [];
+                        let i = 0;
+                        if (allDomainIds.length > 0) {
+                            for (i; i < allDomainIds.length; i++) {
+                                UserService.getDomain(allDomainIds[i]).then(function(domainBackend) {
+                                    allDomainNames.push(domainBackend.name)
+                                });
+                            }
                         }
-                    }
-                    console.warn("I HAVE SET THE DOMAINS")
-                    setDomains(allDomainNames)
-                    console.warn("alldomain names")
-                    console.warn(domains)
-                });
+                        setDomains(allDomainNames);
+                    });
             } else {
                 setIsCorporate(false);
             }
@@ -276,6 +271,7 @@ function EditProfileComponent(props) {
 
     // update user data after clicking on save
     const onUpdateUser = (e) => {
+        console.warn("UPDATE USER CALLED")
         if(editUsername) {
             setEditUsername(false);
         } else if (editCompname) {
@@ -425,17 +421,16 @@ function EditProfileComponent(props) {
     const onCancelDomains = (e) => {
         setEditDomains(false);
         UserService.getOrganization(corporate_id).then(function(organizationBackend) {
-            let allDomainIds = organizationBackend.domains;
-            let allDomainNames = [];
-            let i = 0;
-            console.warn(allDomainIds[0])
-            console.warn(allDomainIds[1])
-            if (allDomainIds.length > 0) {
+            if(organizationBackend.domains > 0) {
+                let allDomainIds = organizationBackend.domains;
+                let allDomainNames = [];
+                let i = 0;
                 for (i; i < allDomainIds.length; i++) {
                     UserService.getDomain(allDomainIds[i]).then(function(domainBackend) {
                         allDomainNames.push(domainBackend.name)
                     });
                 }
+                setDomains(allDomainNames);
             }
         });
     };
@@ -489,7 +484,7 @@ function EditProfileComponent(props) {
             props.onRegisterOrganization(user_id, compname, domains);
             setIsCorporate(true);
         }
-        window.location.reload();
+        //window.location.reload();
     };
 
 
@@ -921,7 +916,7 @@ function EditProfileComponent(props) {
                                                                     if (i === domains.length-1) {
                                                                         presentDomains.push(domains[i])
                                                                     } else {
-                                                                        presentDomains.push(domains[i] + ",")
+                                                                        presentDomains.push(domains[i] + ", ")
                                                                     }
                                                                 }
                                                                 return <p>{presentDomains}</p>;
