@@ -16,7 +16,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {facebookInterests} from '../components/FacebookInterests';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -176,7 +175,7 @@ function EditProfileComponent(props) {
 
     //interests
     const [interests, setInterests] = React.useState([""]);
-    const [allInterests, setAllInterests] = React.useState(facebookInterests);
+    const [allInterests, setAllInterests] = React.useState([]);
     const [editInterests, setEditInterests] = React.useState(false);
     const [deleteInterests, setDeleteInterests] = React.useState(false);
     const [addInterests, setAddInterests] = React.useState(false);
@@ -220,11 +219,20 @@ function EditProfileComponent(props) {
         });
     };
 
+    const extractInterests = () => {
+        UserService.getInterests().then(function(interestsBackend) {
+            if (interestsBackend[0] !== undefined) {
+                setAllInterests(interestsBackend[0].facebookInterests);
+            }
+        });
+    };
+
     useEffect(() => {
         if (props.user == undefined) {
             setRegisterError("");
         } else
         extractUser();
+        extractInterests();
 
     }, [props.user]);
 
@@ -450,9 +458,11 @@ function EditProfileComponent(props) {
 
     const onRegisterSignUp = (e) => {
         e.preventDefault();
-        let user_id = props.user._id;
-        props.onRegisterOrganization(user_id, compname, domains);
-        setIsCorporate(true);
+        if (props.user !== undefined) {
+            let user_id = props.user._id;
+            props.onRegisterOrganization(user_id, compname, domains);
+            setIsCorporate(true);
+        }
         window.location.reload();
     };
 
@@ -1002,7 +1012,7 @@ EditProfileComponent.propTypes = {
     onUpdateOrganization: PropTypes.func,
     onRegisterOrganization: PropTypes.func,
     onDeleteUser: PropTypes.func,
-    onDeleteOrganization: PropTypes,
+    onDeleteOrganization: PropTypes.func,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
