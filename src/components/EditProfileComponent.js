@@ -174,7 +174,7 @@ function EditProfileComponent(props) {
 
 
     //interests
-    const [interests, setInterests] = React.useState([""]);
+    const [interests, setInterests] = React.useState([]);
     const [allInterests, setAllInterests] = React.useState([]);
     const [editInterests, setEditInterests] = React.useState(false);
     const [deleteInterests, setDeleteInterests] = React.useState(false);
@@ -188,7 +188,7 @@ function EditProfileComponent(props) {
     // corporate Data
     const [compname, setCompname] = React.useState("");
     const [editCompname, setEditCompname] = React.useState(false);
-    const [domains, setDomains] = React.useState("");
+    const [domains, setDomains] = React.useState([]);
     const [editDomains, setEditDomains] = React.useState(false);
 
     const bcrypt = require("bcryptjs");
@@ -217,11 +217,16 @@ function EditProfileComponent(props) {
                     if (allDomainIds.length > 0) {
                         for (i; i < allDomainIds.length; i++) {
                             UserService.getDomain(allDomainIds[i]).then(function(domainBackend) {
+                                console.warn("WARN")
+                                console.warn(domainBackend.name)
                                 allDomainNames.push(domainBackend.name)
                             });
                         }
-                        setDomains(allDomainNames);
                     }
+                    console.warn("I HAVE SET THE DOMAINS")
+                    setDomains(allDomainNames)
+                    console.warn("alldomain names")
+                    console.warn(domains)
                 });
             } else {
                 setIsCorporate(false);
@@ -243,7 +248,7 @@ function EditProfileComponent(props) {
         } else
         extractUser();
         extractInterests();
-
+        console.warn("CALL USE-EFFECT")
     }, [props.user]);
 
 
@@ -432,15 +437,6 @@ function EditProfileComponent(props) {
                     });
                 }
             }
-
-            console.warn("all domains")
-            console.warn(allDomainNames)
-
-            setDomains(allDomainNames)
-            console.warn("warn domains total")
-
-            console.warn(domains)
-
         });
     };
 
@@ -916,7 +912,25 @@ function EditProfileComponent(props) {
                                                         > Edit
                                                         </Button>
                                                     </div>
-                                                    <p>{domains}</p>
+                                                    <div>
+                                                        {(() => {
+                                                            if(domains.length > 0) {
+                                                                let i = 0;
+                                                                let presentDomains = []
+                                                                for (i; i < domains.length; i++) {
+                                                                    if (i === domains.length-1) {
+                                                                        presentDomains.push(domains[i])
+                                                                    } else {
+                                                                        presentDomains.push(domains[i] + ",")
+                                                                    }
+                                                                }
+                                                                return <p>{presentDomains}</p>;
+                                                            } else {
+                                                                console.warn("domain not found")
+                                                                return <p>no domains</p>;
+                                                            }
+                                                        })()}
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
