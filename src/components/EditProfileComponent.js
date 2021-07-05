@@ -463,19 +463,22 @@ function EditProfileComponent(props) {
 
     const onCancelDomains = (e) => {
         setEditDomains(false);
-        UserService.getOrganization(corporate_id).then(function(organizationBackend) {
-            if(organizationBackend.domains > 0) {
-                let allDomainIds = organizationBackend.domains;
-                let allDomainNames = [];
+        let i = 0;
+        if (domainIds.length > 0) {
+            UserService.getDomains().then(function (domainsBackend) {
                 let i = 0;
-                for (i; i < allDomainIds.length; i++) {
-                    UserService.getDomain(allDomainIds[i]).then(function(domainBackend) {
-                        allDomainNames.push(domainBackend.name)
-                    });
+                let domainNames = [];
+                for (i; i < domainIds.length; i++) {
+                    let j = 0;
+                    for (j; j < domainsBackend.length; j++) {
+                        if (domainsBackend[j]._id === domainIds[i]) {
+                            domainNames.push(domainsBackend[j].name)
+                        }
+                    }
                 }
-                setDomains(allDomainNames);
-            }
-        });
+                setDomains(domainNames)
+            });
+        }
     };
 
     const onAddNewDomain = (e) => {
