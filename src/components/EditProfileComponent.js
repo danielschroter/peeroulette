@@ -189,6 +189,7 @@ function EditProfileComponent(props) {
     const [compname, setCompname] = React.useState("");
     const [editCompname, setEditCompname] = React.useState(false);
     const [domains, setDomains] = React.useState([]);
+    const [domainIds, setDomainIds] = React.useState([]);
     const [editDomains, setEditDomains] = React.useState(false);
 
     const bcrypt = require("bcryptjs");
@@ -211,6 +212,7 @@ function EditProfileComponent(props) {
                 setIsCorporate(true);
                     UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
                         setCompname(organizationBackend.company_name)
+                        setDomainIds(organizationBackend.domains)
                         let userDomainIds = organizationBackend.domains;
                         UserService.getDomains().then(function (domainsBackend) {
                             let i = 0;
@@ -298,7 +300,7 @@ function EditProfileComponent(props) {
             organization._id = corporate_id;
             organization.company_name = compname;
             organization.account_owner = props.user._id;
-            organization.domains = domains;
+            organization.domains = domainIds;
             props.onUpdateOrganization(organization);
         }
         props.onUpdateUser(packUser());
