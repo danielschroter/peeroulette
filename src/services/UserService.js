@@ -218,6 +218,20 @@ export default class UserService {
         });
     }
 
+    static getDomains() {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                this.baseURL_domain(),
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static getDomain(id) {
         return new Promise(async (resolve, reject) => {
             HttpService.get(

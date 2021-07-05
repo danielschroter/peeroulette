@@ -211,17 +211,20 @@ function EditProfileComponent(props) {
                 setIsCorporate(true);
                     UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
                         setCompname(organizationBackend.company_name)
-                        let allDomainIds = organizationBackend.domains;
-                        let allDomainNames = [];
-                        let i = 0;
-                        if (allDomainIds.length > 0) {
-                            for (i; i < allDomainIds.length; i++) {
-                                UserService.getDomain(allDomainIds[i]).then(function(domainBackend) {
-                                    allDomainNames.push(domainBackend.name)
-                                });
+                        let userDomainIds = organizationBackend.domains;
+                        UserService.getDomains().then(function (domainsBackend) {
+                            let i = 0;
+                            let domainNames = [];
+                            for (i; i < userDomainIds.length; i++) {
+                                let j = 0;
+                                for (j; j < domainsBackend.length; j++) {
+                                    if (domainsBackend[j]._id === userDomainIds[i]) {
+                                        domainNames.push(domainsBackend[j].name)
+                                    }
+                                }
                             }
-                        }
-                        setDomains(allDomainNames);
+                            setDomains(domainNames)
+                        });
                     });
             } else {
                 setIsCorporate(false);
@@ -243,7 +246,6 @@ function EditProfileComponent(props) {
         } else
         extractUser();
         extractInterests();
-        console.warn("CALL USE-EFFECT")
     }, [props.user]);
 
 
