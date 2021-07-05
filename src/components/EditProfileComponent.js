@@ -154,6 +154,8 @@ function EditProfileComponent(props) {
     const [isAdmin, setIsAdmin] = React.useState("");
     const [registerError, setRegisterError] = React.useState("");
     const [addInterestsError, setAddInterestsError] = React.useState("");
+    const [addDomainsError, setAddDomainsError] = React.useState("");
+
 
     // user data
     const [user_id, setUser_id] = React.useState("");
@@ -191,6 +193,11 @@ function EditProfileComponent(props) {
     const [domains, setDomains] = React.useState([]);
     const [domainIds, setDomainIds] = React.useState([]);
     const [editDomains, setEditDomains] = React.useState(false);
+    const [addDomains, setAddDomains] = React.useState(false);
+    const [deleteDomains, setDeleteDomains] = React.useState(false);
+    const [inputDomain, setInputDomain] = React.useState("");
+
+
 
     const bcrypt = require("bcryptjs");
 
@@ -342,8 +349,9 @@ function EditProfileComponent(props) {
     };
 
     const onChangeDomains = (e) => {
-        setDomains(e.target.value);
-        setRegisterError("");
+        let tmp = domains;
+        tmp.push(e.target.value);
+        setDomains(tmp);
     };
 
     const onChangePassword = (e) => {
@@ -378,6 +386,31 @@ function EditProfileComponent(props) {
         interests.splice(index, 1)
     };
 
+    //
+
+    const changeDeleteDomains = (e) => {
+        if (deleteDomains) {
+            setDeleteDomains(false);
+        } else {
+            setDeleteDomains(true);
+        }
+    };
+
+    const changeAddDomains = (e) => {
+        if (addDomains) {
+            setAddDomains(false);
+        } else {
+            setAddDomains(true);
+        }
+    };
+
+    const deleteDomain = (e) => {
+        let index = e.target.value;
+        domains.splice(index, 1)
+    };
+
+    //
+
     const onChangeCompnameSignUp = (e) => {
         setCompname(e.target.value);
         setRegisterError("");
@@ -403,6 +436,12 @@ function EditProfileComponent(props) {
     const onBlurAddInterests = (e) => {
         if (true) {
             setAddInterestsError("Interest already exists.");
+        }
+    };
+
+    const onBlurAddDomains = (e) => {
+        if (true) {
+            setAddDomainsError("Domain already exists.");
         }
     };
 
@@ -437,6 +476,22 @@ function EditProfileComponent(props) {
                 setDomains(allDomainNames);
             }
         });
+    };
+
+    const onAddNewDomain = (e) => {
+        let tmp = domains;
+        if(inputDomain !== undefined) {
+            if(tmp.includes(inputDomain)) {
+                console.warn("DOES NOT INCLUDE")
+                setAddDomainsError("Domain Already exists")
+                return;
+            } else {
+                tmp.push(inputDomain)
+                setAddDomainsError("");
+            }
+        }
+        setAddDomains(false);
+        setInputDomain("");
     };
 
     const onCancelInterests = (e) => {
@@ -879,59 +934,81 @@ function EditProfileComponent(props) {
                                         )}
                                         <div>
                                             { editDomains ? (
-                                                <div>
-                                                    <div style={{"display":"flex"}}>
-                                                        <p className={classes.userDataFont}>Domains:</p>
-                                                        <Button
-                                                            className={classes.cancelNameButton}
-                                                            onClick={onCancelDomains}
-                                                        > Cancel
-                                                        </Button>
-                                                        <Button
-                                                            className={classes.saveNameButton}
-                                                            onClick={onUpdateUser}
-                                                        > Save
-                                                        </Button>
-                                                    </div>
-                                                    <div>
-                                                        <TextField
-                                                            fullWidth
-                                                            value={domains}
-                                                            onChange={onChangeDomains}
-                                                        />
-                                                    </div>
+                                                <div style={{"display":"flex"}}>
+                                                    <p className={classes.userDataFont}>Domains:</p>
+                                                    <Button
+                                                        className={classes.cancelDomainsButton}
+                                                        onClick={onCancelDomains}
+                                                    > Cancel
+                                                    </Button>
+                                                    <Button
+                                                        className={classes.cancelDomains}
+                                                        onClick={changeAddDomains}
+                                                    > Add
+                                                    </Button>
+                                                    <Button
+                                                        className={classes.cancelNameButton}
+                                                        onClick={changeDeleteDomains}
+                                                    > Delete
+                                                    </Button>
+                                                    <Button
+                                                        className={classes.saveNameButton}
+                                                        onClick={onUpdateUser}
+                                                    > Save
+                                                    </Button>
                                                 </div>
                                             ) : (
-                                                <div>
-                                                    <div style={{"display":"flex"}}>
-                                                        <p className={classes.userDataFont}>Domains:</p>
-                                                        <Button
-                                                            className={classes.editNameButton}
-                                                            onClick={(e) => setEditDomains(true)}
-                                                        > Edit
-                                                        </Button>
-                                                    </div>
-                                                    <div>
-                                                        {(() => {
-                                                            if(domains.length > 0) {
-                                                                let i = 0;
-                                                                let presentDomains = []
-                                                                for (i; i < domains.length; i++) {
-                                                                    if (i === domains.length-1) {
-                                                                        presentDomains.push(domains[i])
-                                                                    } else {
-                                                                        presentDomains.push(domains[i] + ", ")
-                                                                    }
-                                                                }
-                                                                return <p>{presentDomains}</p>;
-                                                            } else {
-                                                                console.warn("domain not found")
-                                                                return <p>no domains</p>;
-                                                            }
-                                                        })()}
-                                                    </div>
+                                                <div style={{"display":"flex"}}>
+                                                    <p className={classes.userDataFont}>Domains:</p>
+                                                    <Button
+                                                        className={classes.editNameButton}
+                                                        onClick={(e) => setEditDomains(true)}
+                                                    > Edit
+                                                    </Button>
                                                 </div>
                                             )}
+                                            <div className="center">
+                                                {(() => {
+                                                    let domainsConfirmed = [];
+                                                    let domainsNotConfirmed = [];
+                                                    let domainsWithDelete = [];
+                                                    let i = 0;
+                                                    for (i; i < domains.length; i++) {
+                                                        domainsConfirmed.push(<button className={classes.interestsButton}>{domains[i]}</button>);
+                                                        domainsWithDelete.push(<button className={classes.deleteInterestsIcon}>{domains[i]}</button>);
+                                                        domainsWithDelete.push(<button className={classes.deleteInterestsCross} value={i} onClick={(e) => {
+                                                            domains.splice(e.target.value, 1);
+                                                            setDeleteDomains(false);
+                                                        }}>Delete</button>);
+                                                    }
+                                                    if(deleteDomains) {
+                                                        return domainsWithDelete;
+                                                    } else {
+                                                        return domainsConfirmed;
+                                                    }
+                                                })()}
+                                            </div>
+                                            <div>
+                                                { addDomains ? (
+                                                    <div>
+                                                        <div style={{"display":"flex", "marginTop":"15px"}}>
+                                                            <p className={classes.userDataFont}> Enter an email address for a new domain:</p>
+                                                            <Button
+                                                                className={classes.cancelNameButton}
+                                                                onClick={onAddNewDomain}
+                                                            > Add New Domain
+                                                            </Button>
+                                                        </div>
+                                                        <input type="text" placeholder="" onChange={ e => setInputDomain(e.target.value)}
+                                                               onBlur={onBlurAddDomains} error={addDomainsError !== ""}/>
+                                                        {addDomainsError !== "" ? (
+                                                            <div className={classes.signUpRow}>
+                                                                <Typography color="error">{addDomainsError}</Typography>
+                                                            </div>
+                                                            ) : null}
+                                                    </div>
+                                                ) : null}
+                                            </div>
                                         </div>
                                     </div>
                                 ) }
@@ -1028,7 +1105,107 @@ function EditProfileComponent(props) {
                                                             }
                                                         return interestsWithAdd;
                                                     }
-                                                })()}
+                                                    <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
+                                                        <DetailsArea
+                                                            title="Interests"
+                                                            content={
+                                                                <div>
+                                                                    { editInterests ? (
+                                                                        <div style={{"display":"flex"}}>
+                                                                            <p className={classes.userDataFont}>Interests:</p>
+                                                                            <Button
+                                                                                className={classes.cancelNameButton}
+                                                                                onClick={onCancelInterests}
+                                                                            > Cancel
+                                                                            </Button>
+                                                                            <Button
+                                                                                className={classes.cancelNameButton}
+                                                                                onClick={changeAddInterests}
+                                                                            > Add
+                                                                            </Button>
+                                                                            <Button
+                                                                                className={classes.cancelNameButton}
+                                                                                onClick={changeDeleteInterests}
+                                                                            > Delete
+                                                                            </Button>
+                                                                            <Button
+                                                                                className={classes.saveNameButton}
+                                                                                onClick={onUpdateUser}
+                                                                            > Save
+                                                                            </Button>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div style={{"display":"flex"}}>
+                                                                            <p className={classes.userDataFont}>Interests:</p>
+                                                                            <Button
+                                                                                className={classes.editNameButton}
+                                                                                onClick={(e) => setEditInterests(true)}
+                                                                            > Edit
+                                                                            </Button>
+                                                                        </div>
+                                                                    )}
+                                                                    <div className="center">
+                                                                        {(() => {
+                                                                            let interestsWithDelete = [];
+                                                                            let interestsWithoutDelete = [];
+                                                                            let i = 0;
+                                                                            for (i; i < interests.length; i++) {
+                                                                                interestsWithoutDelete.push(<button className={classes.interestsButton}>{interests[i]}</button>);
+                                                                                interestsWithDelete.push(<button className={classes.deleteInterestsIcon}>{interests[i]}</button>);
+                                                                                interestsWithDelete.push(<button className={classes.deleteInterestsCross} value={i} onClick={(e) => {
+                                                                                    interests.splice(e.target.value, 1);
+                                                                                    setDeleteInterests(false);
+                                                                                }}>Delete</button>);
+                                                                            }
+                                                                            if(deleteInterests) {
+                                                                                return interestsWithDelete;
+                                                                            } else {
+                                                                                return interestsWithoutDelete;
+                                                                            }
+                                                                        })()}
+                                                                    </div>
+                                                                    <div>
+                                                                        { addInterests ? (
+                                                                            <div>
+                                                                                <div>
+                                                                                    <p className={classes.userDataFont}> Search for your interest:</p>
+                                                                                    <input type="text" placeholder="Search" onChange={ e => setSearch(e.target.value)}
+                                                                                           onBlur={onBlurAddInterests} error={addInterestsError !== ""}/>
+                                                                                </div>
+                                                                                <div>
+                                                                                    {(() => {
+                                                                                        if(search.length > 0) {
+                                                                                            let i = 0;
+                                                                                            let interestsWithAdd = [];
+                                                                                            for (i; i < allInterests.length; i++) {
+                                                                                                if (allInterests[i].toLowerCase().includes(search.toLowerCase())) {
+                                                                                                    interestsWithAdd.push(<button className={classes.deleteInterestsIcon}>{allInterests[i]}</button>);
+                                                                                                    interestsWithAdd.push(<button className={classes.addInterestsIcon} value={allInterests[i]} onClick={(e) => {
+                                                                                                        if(interests.includes(e.target.value)) {
+                                                                                                            setAddInterestsError("Interest Already exists")
+                                                                                                        } else {
+                                                                                                            setAddInterestsError("")
+                                                                                                            interests.push(e.target.value)
+                                                                                                            setAddInterests(false);
+                                                                                                        }}}>Add</button>);
+                                                                                                }
+                                                                                            }
+                                                                                            return interestsWithAdd;
+                                                                                        }
+                                                                                    })()}
+                                                                                    {addInterestsError !== "" ? (
+                                                                                        <div className={classes.signUpRow}>
+                                                                                            <Typography color="error">{addInterestsError}</Typography>
+                                                                                        </div>
+                                                                                    ) : null}
+                                                                                </div>
+                                                                            </div>
+                                                                        ) : null}
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        />
+                                                    </Grid>       })()}
                                                 {addInterestsError !== "" ? (
                                                     <div className={classes.signUpRow}>
                                                         <Typography color="error">{addInterestsError}</Typography>
