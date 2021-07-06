@@ -195,7 +195,7 @@ function EditProfileComponent(props) {
     const [editDomains, setEditDomains] = React.useState(false);
     const [addDomains, setAddDomains] = React.useState(false);
     const [deleteDomains, setDeleteDomains] = React.useState(false);
-    const [inputDomain, setInputDomain] = React.useState("");
+    const [inputDomainName, setInputDomainName] = React.useState("");
 
 
 
@@ -228,7 +228,7 @@ function EditProfileComponent(props) {
                                 let j = 0;
                                 for (j; j < domainsBackend.length; j++) {
                                     if (domainsBackend[j]._id === userDomainIds[i]) {
-                                        domainNames.push(domainsBackend[j].name)
+                                        domainNames.push(domainsBackend[j])
                                     }
                                 }
                             }
@@ -463,8 +463,11 @@ function EditProfileComponent(props) {
 
     const onCancelDomains = (e) => {
         setEditDomains(false);
+        setAddDomains(false);
+        setDeleteDomains(false);
         let i = 0;
         if (domainIds.length > 0) {
+            console.warn()
             UserService.getDomains().then(function (domainsBackend) {
                 let i = 0;
                 let domainNames = [];
@@ -472,7 +475,7 @@ function EditProfileComponent(props) {
                     let j = 0;
                     for (j; j < domainsBackend.length; j++) {
                         if (domainsBackend[j]._id === domainIds[i]) {
-                            domainNames.push(domainsBackend[j].name)
+                            domainNames.push(domainsBackend[j])
                         }
                     }
                 }
@@ -483,18 +486,23 @@ function EditProfileComponent(props) {
 
     const onAddNewDomain = (e) => {
         let tmp = domains;
-        if(inputDomain !== undefined) {
-            if(tmp.includes(inputDomain)) {
-                console.warn("DOES NOT INCLUDE")
-                setAddDomainsError("Domain Already exists")
-                return;
-            } else {
-                tmp.push(inputDomain)
-                setAddDomainsError("");
+        if(inputDomainName !== undefined && tmp.length > 0) {
+            let i = 0;
+            for (i; i < tmp.length; i++) {
+                if(tmp[i].name === inputDomainName) {
+                    setAddDomainsError("Domain Already exists")
+                    return;
+                }
             }
+            let  newDomain = Object();
+            newDomain.name = inputDomainName;
+            newDomain.verified_by = props.user._id;
+            newDomain.organization = corporate_id;
+            tmp.push(newDomain)
+            setAddDomainsError("");
         }
         setAddDomains(false);
-        setInputDomain("");
+        setInputDomainName("");
     };
 
     const onCancelInterests = (e) => {
@@ -977,8 +985,12 @@ function EditProfileComponent(props) {
                                                     let domainsWithDelete = [];
                                                     let i = 0;
                                                     for (i; i < domains.length; i++) {
-                                                        domainsConfirmed.push(<button className={classes.interestsButton}>{domains[i]}</button>);
-                                                        domainsWithDelete.push(<button className={classes.deleteInterestsIcon}>{domains[i]}</button>);
+                                                        let confirmed = " (confirmed)";
+                                                        if (!domains[i].confirmed) {
+                                                            confirmed =" (unconfirmed)"
+                                                        }
+                                                        domainsConfirmed.push(<button className={classes.interestsButton}>{domains[i].name + confirmed}</button>);
+                                                        domainsWithDelete.push(<button className={classes.deleteInterestsIcon}>{domains[i].name + confirmed}</button>);
                                                         domainsWithDelete.push(<button className={classes.deleteInterestsCross} value={i} onClick={(e) => {
                                                             domains.splice(e.target.value, 1);
                                                             setDeleteDomains(false);
@@ -1002,7 +1014,7 @@ function EditProfileComponent(props) {
                                                             > Add New Domain
                                                             </Button>
                                                         </div>
-                                                        <input type="text" placeholder="" onChange={ e => setInputDomain(e.target.value)}
+                                                        <input type="text" placeholder="" onChange={ e => setInputDomainName(e.target.value)}
                                                                onBlur={onBlurAddDomains} error={addDomainsError !== ""}/>
                                                         {addDomainsError !== "" ? (
                                                             <div className={classes.signUpRow}>
