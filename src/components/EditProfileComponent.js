@@ -196,7 +196,8 @@ function EditProfileComponent(props) {
     const [addDomains, setAddDomains] = React.useState(false);
     const [deleteDomains, setDeleteDomains] = React.useState(false);
     const [inputDomainName, setInputDomainName] = React.useState("");
-
+    const [deletedDomainIds, setDeletedDomainIds] = React.useState([]);
+    const [addedDomains, setAddedDomains] = React.useState([]);
 
 
     const bcrypt = require("bcryptjs");
@@ -311,6 +312,16 @@ function EditProfileComponent(props) {
             props.onUpdateOrganization(organization);
         }
         props.onUpdateUser(packUser());
+    };
+
+    const onUpdateDomains = (e) => {
+        console.warn("DELETED DOMAINS")
+        console.warn(deletedDomainIds)
+        console.warn("ADDED DOMAINS")
+        console.warn(addedDomains)
+
+        setDeletedDomainIds([])
+        setAddedDomains([])
     };
 
     // delete user profile
@@ -464,7 +475,10 @@ function EditProfileComponent(props) {
     const onCancelDomains = (e) => {
         setEditDomains(false);
         setAddDomains(false);
+        setAddedDomains([])
         setDeleteDomains(false);
+        setDeletedDomainIds([])
+
         let i = 0;
         if (domainIds.length > 0) {
             console.warn()
@@ -499,6 +513,10 @@ function EditProfileComponent(props) {
             newDomain.verified_by = props.user._id;
             newDomain.organization = corporate_id;
             tmp.push(newDomain)
+
+            let tmp2 = addedDomains;
+            tmp2.push(newDomain);
+            setAddedDomains(tmp2);
             setAddDomainsError("");
         }
         setAddDomains(false);
@@ -964,7 +982,7 @@ function EditProfileComponent(props) {
                                                     </Button>
                                                     <Button
                                                         className={classes.saveNameButton}
-                                                        onClick={onUpdateUser}
+                                                        onClick={onUpdateDomains}
                                                     > Save
                                                     </Button>
                                                 </div>
@@ -992,6 +1010,10 @@ function EditProfileComponent(props) {
                                                         domainsConfirmed.push(<button className={classes.interestsButton}>{domains[i].name + confirmed}</button>);
                                                         domainsWithDelete.push(<button className={classes.deleteInterestsIcon}>{domains[i].name + confirmed}</button>);
                                                         domainsWithDelete.push(<button className={classes.deleteInterestsCross} value={i} onClick={(e) => {
+                                                            let i = e.target.value;
+                                                            let tmp = deletedDomainIds;
+                                                            tmp.push(domains[i]._id);
+                                                            setDeletedDomainIds(tmp);
                                                             domains.splice(e.target.value, 1);
                                                             setDeleteDomains(false);
                                                         }}>Delete</button>);
