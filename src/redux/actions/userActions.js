@@ -156,6 +156,24 @@ export function deleteOrganization(id) {
     };
 }
 
+export function deleteDomain(id) {
+    function onSuccess() {
+        return { type: "DELETDOMAIN_SUCCESS"};
+    }
+    function onFailure(error) {
+        console.log("delete domain failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            await UserService.deleteDomain(id);
+            dispatch(onSuccess());
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}
+
 export function changeOrganization(changedOrganization) {
 
     function onSuccess(organization) {

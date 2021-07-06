@@ -191,7 +191,6 @@ function EditProfileComponent(props) {
     const [compname, setCompname] = React.useState("");
     const [editCompname, setEditCompname] = React.useState(false);
     const [domains, setDomains] = React.useState([]);
-    const [domainIds, setDomainIds] = React.useState([]);
     const [editDomains, setEditDomains] = React.useState(false);
     const [addDomains, setAddDomains] = React.useState(false);
     const [deleteDomains, setDeleteDomains] = React.useState(false);
@@ -220,7 +219,6 @@ function EditProfileComponent(props) {
                 setIsCorporate(true);
                     UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
                         setCompname(organizationBackend.company_name)
-                        setDomainIds(organizationBackend.domains)
                         let userDomainIds = organizationBackend.domains;
                         UserService.getDomains().then(function (domainsBackend) {
                             let i = 0;
@@ -308,6 +306,11 @@ function EditProfileComponent(props) {
             organization._id = corporate_id;
             organization.company_name = compname;
             organization.account_owner = props.user._id;
+            let domainIds = [];
+            let i = 0;
+            for (i; i < domains.length; i++) {
+                domainIds.push(domains[i]._id)
+            }
             organization.domains = domainIds;
             props.onUpdateOrganization(organization);
         }
@@ -315,13 +318,15 @@ function EditProfileComponent(props) {
     };
 
     const onUpdateDomains = (e) => {
-        console.warn("DELETED DOMAINS")
-        console.warn(deletedDomainIds)
-        console.warn("ADDED DOMAINS")
-        console.warn(addedDomains)
+        let i = 0;
+        for (i; i < domains.length; i++) {
+            props.onDeleteDomain(deletedDomainIds[i])
+        }
 
+        onUpdateUser(e);
         setDeletedDomainIds([])
         setAddedDomains([])
+        setEditDomains(false)
     };
 
     // delete user profile
@@ -330,7 +335,11 @@ function EditProfileComponent(props) {
         let id = props.user._id;
         props.onDeleteUser(id);
         if (isCorporate) {
-                props.onDeleteOrganization(corporate_id);
+            props.onDeleteOrganization(corporate_id);
+            let i = 0;
+            for (i; i < domains.length; i++) {
+                props.onDeleteDomain(domains[i]._id)
+            }
         }
     };
 
@@ -480,22 +489,20 @@ function EditProfileComponent(props) {
         setDeletedDomainIds([])
 
         let i = 0;
-        if (domainIds.length > 0) {
             console.warn()
             UserService.getDomains().then(function (domainsBackend) {
                 let i = 0;
                 let domainNames = [];
-                for (i; i < domainIds.length; i++) {
+                for (i; i < domains.length; i++) {
                     let j = 0;
                     for (j; j < domainsBackend.length; j++) {
-                        if (domainsBackend[j]._id === domainIds[i]) {
+                        if (domainsBackend[j]._id === domains[i]._id) {
                             domainNames.push(domainsBackend[j])
                         }
                     }
                 }
                 setDomains(domainNames)
             });
-        }
     };
 
     const onAddNewDomain = (e) => {
@@ -1270,6 +1277,7 @@ EditProfileComponent.propTypes = {
     onRegisterOrganization: PropTypes.func,
     onDeleteUser: PropTypes.func,
     onDeleteOrganization: PropTypes.func,
+    onDeleteDomain: PropTypes.func,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
