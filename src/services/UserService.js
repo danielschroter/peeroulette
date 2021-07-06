@@ -149,6 +149,23 @@ export default class UserService {
         });
     }
 
+    static addDomain(domain) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL_domain()}/addDomain`,
+                {
+                    domain: domain,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
 
     static deleteDomain(id) {
         return new Promise((resolve, reject) => {

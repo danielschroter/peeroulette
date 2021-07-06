@@ -212,6 +212,24 @@ export function registerOrganization(user_id, compname, domains) {
     };
 }
 
+export function addDomain(domain) {
+    function onSuccess() {
+        return { type: "DOMAIN_SUCCESS"};
+    }
+    function onFailure(error) {
+        return { type: "DOMAIN_FAILURE", error: error };
+    }
+
+    return async (dispatch) => {
+        try {
+            let resp = await UserService.addDomain(domain);
+            dispatch(onSuccess(resp.user));
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
+    };
+}
+
 export const filterEmployee = () => {
     return{
         type: "switchEmployeeFilter"

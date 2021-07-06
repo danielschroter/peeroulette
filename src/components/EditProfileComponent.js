@@ -320,13 +320,23 @@ function EditProfileComponent(props) {
     const onUpdateDomains = (e) => {
         let i = 0;
         for (i; i < domains.length; i++) {
-            props.onDeleteDomain(deletedDomainIds[i])
+            if(deletedDomainIds[i] !== undefined) {
+                props.onDeleteDomain(deletedDomainIds[i])
+            }
+        }
+
+        let j = 0;
+        for (j; j < addedDomains.length; j++) {
+            props.onAddDomain(addedDomains[j])
+            console.warn("ENTER INTO ADD DOMAINS")
+            console.warn(addedDomains[j])
         }
 
         onUpdateUser(e);
         setDeletedDomainIds([])
         setAddedDomains([])
         setEditDomains(false)
+        setAddDomainsError("")
     };
 
     // delete user profile
@@ -487,6 +497,7 @@ function EditProfileComponent(props) {
         setAddedDomains([])
         setDeleteDomains(false);
         setDeletedDomainIds([])
+        setAddDomainsError("")
 
         let i = 0;
             console.warn()
@@ -517,6 +528,7 @@ function EditProfileComponent(props) {
             }
             let  newDomain = Object();
             newDomain.name = inputDomainName;
+            newDomain.confirmed = false;
             newDomain.verified_by = props.user._id;
             newDomain.organization = corporate_id;
             tmp.push(newDomain)
@@ -1278,6 +1290,7 @@ EditProfileComponent.propTypes = {
     onDeleteUser: PropTypes.func,
     onDeleteOrganization: PropTypes.func,
     onDeleteDomain: PropTypes.func,
+    onAddDomain: PropTypes.func,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
