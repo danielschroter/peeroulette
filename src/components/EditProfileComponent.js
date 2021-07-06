@@ -223,12 +223,9 @@ function EditProfileComponent(props) {
                         UserService.getDomains().then(function (domainsBackend) {
                             let i = 0;
                             let domainNames = [];
-                            for (i; i < userDomainIds.length; i++) {
-                                let j = 0;
-                                for (j; j < domainsBackend.length; j++) {
-                                    if (domainsBackend[j]._id === userDomainIds[i]) {
-                                        domainNames.push(domainsBackend[j])
-                                    }
+                            for (i; i < domainsBackend.length; i++) {
+                                if (domainsBackend[i].verified_by === props.user._id) {
+                                    domainNames.push(domainsBackend[i])
                                 }
                             }
                             setDomains(domainNames)
@@ -328,8 +325,6 @@ function EditProfileComponent(props) {
         let j = 0;
         for (j; j < addedDomains.length; j++) {
             props.onAddDomain(addedDomains[j])
-            console.warn("ENTER INTO ADD DOMAINS")
-            console.warn(addedDomains[j])
         }
 
         onUpdateUser(e);
@@ -502,6 +497,17 @@ function EditProfileComponent(props) {
         let i = 0;
             console.warn()
             UserService.getDomains().then(function (domainsBackend) {
+                console.warn("ALL DOMAINS BACKEND")
+                console.warn(domainsBackend)
+
+                let i = 0;
+                let domainNames = [];
+                for (i; i < domainsBackend.length; i++) {
+                    if (domainsBackend[i].verified_by === props.user._id) {
+                        domainNames.push(domainsBackend[i])
+                    }
+                }
+                    {/*
                 let i = 0;
                 let domainNames = [];
                 for (i; i < domains.length; i++) {
@@ -512,6 +518,7 @@ function EditProfileComponent(props) {
                         }
                     }
                 }
+                */}
                 setDomains(domainNames)
             });
     };
