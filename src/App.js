@@ -33,7 +33,7 @@ function App() {
 
   // set document title
   useEffect(() => {
-    document.title = "peeroulette";
+    document.title = "Movie Database App";
   }, []);
 
     // create store for redux
