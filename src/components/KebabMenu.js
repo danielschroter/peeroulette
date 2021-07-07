@@ -62,15 +62,6 @@ function KebabMenu(props) {
         props.history.push("/edit");
     };
 
-    const onClickCall = () => {
-        // trigger redux logout action
-        // props.dispatch(logout());
-        // close this menu
-        props.onClose();
-        // navigate to the edit profile page
-        props.history.push("/call");
-    };
-
     return (
         <Menu
             open={props.open}
@@ -82,30 +73,18 @@ function KebabMenu(props) {
                 horizontal: "right",
             }}
         >
-
             {user.user
                 ? [
-                    <MenuItem key="user"
-                              className={classes.menuitem}
-                              onClick={onClickEditProfile}
-                    >
-                        <Avatar className={classes.avatar}>
-                            {user.user.username ? user.user.username[0] : ""}
-                        </Avatar>
-                        {user.user.username}
-                    </MenuItem>,
-                    <Divider key="divider" />,
-                    <MenuItem key="user"
-                              className={classes.menuitem}
-                              onClick={onClickCall}
-                    >
-                        {/*<Avatar className={classes.avatar}>
-                            {user.user.username ? user.user.username[0] : ""}
-                        </Avatar>*/}
-                        {/* user.user.username */}
-                        Start new Call
-                    </MenuItem>,
-                    <Divider key="divider" />,
+                      <MenuItem key="user"
+                                className={classes.menuitem}
+                                onClick={onClickEditProfile}
+                      >
+                          <Avatar className={classes.avatar}>
+                              {user.user.username ? user.user.username[0] : ""}
+                          </Avatar>
+                          {user.user.username}
+                      </MenuItem>,
+                      <Divider key="divider" />,
                       <MenuItem
                           key="logout"
                           onClick={onClickLogout}
