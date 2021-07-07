@@ -276,6 +276,7 @@ function EditProfileComponent(props) {
         return back;
     };
 
+
     // update user data after clicking on save
     const onUpdateUser = (e) => {
         console.warn("UPDATE USER CALLED")
@@ -303,13 +304,35 @@ function EditProfileComponent(props) {
             organization._id = corporate_id;
             organization.company_name = compname;
             organization.account_owner = props.user._id;
-            let domainIds = [];
+            console.warn("check domains")
+            console.warn(domains)
+
+             UserService.getDomains().then(function (domainsBackend) {
+                let i = 0;
+                let domainIds = [];
+                for (i; i < domainsBackend.length; i++) {
+                    if(domainsBackend[i].verified_by === props.user._id) {
+                        console.warn(domainsBackend[i].name)
+                        domainIds.push(domainsBackend[i]._id)
+                    }
+                }
+                organization.domains = domainIds;
+                props.onUpdateOrganization(organization);
+                console.warn("ALL DOMAINS")
+                console.warn(domainIds)
+            });
+
+            {/*
+              let domainIds = [];
             let i = 0;
             for (i; i < domains.length; i++) {
                 domainIds.push(domains[i]._id)
             }
             organization.domains = domainIds;
             props.onUpdateOrganization(organization);
+            console.warn("update organization")
+            console.warn(organization.domains)
+            */}
         }
         props.onUpdateUser(packUser());
     };
@@ -331,6 +354,8 @@ function EditProfileComponent(props) {
         setDeletedDomainIds([])
         setAddedDomains([])
         setEditDomains(false)
+        setAddDomains(false)
+        setDeleteDomains(false)
         setAddDomainsError("")
     };
 
