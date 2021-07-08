@@ -589,6 +589,47 @@ function EditProfileComponent(props) {
         }
         setAddDomains(false);
         setInputDomainName("");
+
+        let j = 0;
+        for (j; j < addedDomains.length; j++) {
+            props.onAddDomain(addedDomains[j])
+        }
+        console.warn("ADDED DOMAIN HERE")
+        console.warn(addedDomains)
+
+        onUpdateUser(e);
+
+        setAddedDomains([])
+        setEditDomains(false)
+        setAddDomains(false)
+        setAddDomainsError("")
+
+        extractUser();
+    };
+
+    const onDeleteOldDomain = (e) => {
+        let i = e.target.value;
+        let tmp = deletedDomainIds;
+        tmp.push(domains[i]._id);
+        setDeletedDomainIds(tmp);
+        domains.splice(e.target.value, 1);
+        setDeleteDomains(false);
+
+        let j = 0;
+        for (j; j < domains.length; j++) {
+            if(deletedDomainIds[j] !== undefined) {
+                props.onDeleteDomain(deletedDomainIds[j])
+            }
+        }
+        console.warn("DELETED DOMAIN HERE")
+        console.warn(deletedDomainIds)
+
+        onUpdateUser(e);
+
+        setDeletedDomainIds([])
+        setEditDomains(false)
+        setDeleteDomains(false)
+        extractUser();
     };
 
     const onCancelInterests = (e) => {
@@ -1048,11 +1089,13 @@ function EditProfileComponent(props) {
                                                         onClick={changeDeleteDomains}
                                                     > Delete
                                                     </Button>
+                                                    {/*
                                                     <Button
                                                         className={classes.saveNameButton}
                                                         onClick={onUpdateDomains}
                                                     > Save
                                                     </Button>
+                                                    */}
                                                 </div>
                                             ) : (
                                                 <div style={{"display":"flex"}}>
@@ -1077,14 +1120,7 @@ function EditProfileComponent(props) {
                                                         }
                                                         domainsConfirmed.push(<button className={classes.interestsButton}>{domains[i].name + confirmed}</button>);
                                                         domainsWithDelete.push(<button className={classes.deleteInterestsIcon}>{domains[i].name + confirmed}</button>);
-                                                        domainsWithDelete.push(<button className={classes.deleteInterestsCross} value={i} onClick={(e) => {
-                                                            let i = e.target.value;
-                                                            let tmp = deletedDomainIds;
-                                                            tmp.push(domains[i]._id);
-                                                            setDeletedDomainIds(tmp);
-                                                            domains.splice(e.target.value, 1);
-                                                            setDeleteDomains(false);
-                                                        }}>Delete</button>);
+                                                        domainsWithDelete.push(<button className={classes.deleteInterestsCross} value={i} onClick={onDeleteOldDomain}>Delete</button>);
                                                     }
                                                     if(deleteDomains) {
                                                         return domainsWithDelete;
