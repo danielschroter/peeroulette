@@ -304,22 +304,30 @@ function EditProfileComponent(props) {
             organization._id = corporate_id;
             organization.company_name = compname;
             organization.account_owner = props.user._id;
-            console.warn("check domains")
+            console.warn("domains in front-end")
             console.warn(domains)
-
-             UserService.getDomains().then(function (domainsBackend) {
+            UserService.getDomains().then(function (domainsBackend) {
                 let i = 0;
                 let domainIds = [];
+                let updatedDomains = [];
+                console.warn("domains in back-end")
+                console.warn(domainsBackend)
+
                 for (i; i < domainsBackend.length; i++) {
                     if(domainsBackend[i].verified_by === props.user._id) {
-                        console.warn(domainsBackend[i].name)
                         domainIds.push(domainsBackend[i]._id)
+                        updatedDomains.push(domainsBackend[i])
                     }
                 }
                 organization.domains = domainIds;
-                props.onUpdateOrganization(organization);
-                console.warn("ALL DOMAINS")
+                console.warn("CHEKCK DOMAIN Ids")
                 console.warn(domainIds)
+                organization.domains = domainIds;
+                console.warn("CHEKCK organization.domains")
+                console.warn(organization.domains)
+                console.warn("UPDATED DOMAINS FRONTEND")
+                console.warn(updatedDomains)
+                props.onUpdateOrganization(organization);
             });
 
             {/*
@@ -335,6 +343,7 @@ function EditProfileComponent(props) {
             */}
         }
         props.onUpdateUser(packUser());
+
     };
 
     const onUpdateDomains = (e) => {
@@ -344,19 +353,27 @@ function EditProfileComponent(props) {
                 props.onDeleteDomain(deletedDomainIds[i])
             }
         }
+        console.warn("DELETED DOMAIN HERE")
+        console.warn(deletedDomainIds)
+
 
         let j = 0;
         for (j; j < addedDomains.length; j++) {
             props.onAddDomain(addedDomains[j])
         }
+        console.warn("ADDED DOMAIN HERE")
+        console.warn(addedDomains)
 
         onUpdateUser(e);
+
         setDeletedDomainIds([])
         setAddedDomains([])
         setEditDomains(false)
         setAddDomains(false)
         setDeleteDomains(false)
         setAddDomainsError("")
+
+        extractUser();
     };
 
     // delete user profile
@@ -554,7 +571,7 @@ function EditProfileComponent(props) {
             let i = 0;
             for (i; i < tmp.length; i++) {
                 if(tmp[i].name === inputDomainName) {
-                    setAddDomainsError("Domain Already exists")
+                    //setAddDomainsError("Domain Already exists")
                     return;
                 }
             }
