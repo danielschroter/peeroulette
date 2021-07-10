@@ -580,7 +580,19 @@ function EditProfileComponent(props) {
             });
     };
 
-    const onAddNewDomain = (e) => {
+    const addDomain = (domainName) => {
+        let  newDomain = Object();
+        newDomain.name = domainName;
+        newDomain.confirmed = false;
+        newDomain.verified_by = props.user._id;
+        newDomain.organization = corporate_id;
+        console.warn("NEW DOMAIN")
+        console.warn(newDomain)
+        props.onAddDomain(newDomain)
+    }
+
+
+        const onAddNewDomain = (e) => {
         extractUser();
         let inputDomainNameTail = inputDomainName.split('@')[1];
         if (!inputDomainName.includes('@')) {
@@ -602,7 +614,19 @@ function EditProfileComponent(props) {
             newDomain.confirmed = false;
             newDomain.verified_by = props.user._id;
             newDomain.organization = corporate_id;
+            console.warn("NEW DOMAIN")
+            console.warn(newDomain)
             props.onAddDomain(newDomain)
+
+            {/*
+            let  newDomain = Object();
+            newDomain.name = inputDomainNameTail;
+            newDomain.confirmed = false;
+            newDomain.verified_by = props.user._id;
+            newDomain.organization = corporate_id;
+            props.onAddDomain(newDomain)
+            */}
+
 
             onCancelDomains(e)
             updateOrganization();
@@ -671,8 +695,7 @@ function EditProfileComponent(props) {
         if(deletedDomainId !== undefined) {
             props.onDeleteDomain(deletedDomainId)
         }
-        onCancelDomains(e);
-
+        onCancelDomains(e)
         updateOrganization();
         extractUser();
         setEditDomains(false)
@@ -752,11 +775,54 @@ function EditProfileComponent(props) {
     };
 
     const onRegisterSignUp = (e) => {
+        // one first needs to create an organization with empty domains and then update the domains
+        // because the organization needs to be first created, because the organization.id
+        // is needed to link the domains with the organizatino which is only available after creating
+        // the organization
         e.preventDefault();
+
+
         if (props.user !== undefined) {
             let user_id = props.user._id;
-            props.onRegisterOrganization(user_id, compname, domains);
+            let i = 0;
+            console.warn("CHECK DOMAINS")
+            console.warn(domains)
+            let fullInputDomains = domains.split(',');
+            console.warn("full domains")
+            console.warn(fullInputDomains)
+            let domainNamesTail = []
+            for (i; i < fullInputDomains.length; i++) {
+                let domainTail = fullInputDomains[i].split("@")[1];
+                domainNamesTail.push(domainTail)
+                console.warn("domainTail")
+                console.warn(domainTail)
+            }
+            console.warn("domain names tail")
+            console.warn(domainNamesTail)
+
+            console.warn(domains)
+            // here we first add the empty domain while storing the entered domains in the domainNamesTail variable
+            props.onRegisterOrganization(user_id, compname, domainNamesTail);
             setIsCorporate(true);
+            console.warn("DEBUG DOMAINS")
+            console.warn(domains)
+            console.warn("DEBUG COMPNAME")
+            console.warn(compname)
+            onUpdateUser(e)
+
+            {/*
+            console.warn("START NEW LOOP HERE")
+            console.warn("corporate ID")
+            console.warn(corporate_id)
+            for (i; i < domainNamesTail.length; i++) {
+                if (domainNamesTail[i] !== undefined) {
+                    addDomain(domainNamesTail[i])
+                    console.warn("ADDED DOMAIN")
+                }
+            }
+            */}
+
+
         }
         //window.location.reload();
     };

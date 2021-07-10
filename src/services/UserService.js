@@ -221,14 +221,14 @@ export default class UserService {
         });
     }
 
-    static registerOrganization(user_id, compname, domains) {
+    static registerOrganization(user_id, compname, domainNames) {
         return new Promise((resolve, reject) => {
             HttpService.post(
                 `${UserService.baseURL_auth()}/registerOrganization`,
                 {
                     user_id: user_id,
                     compname: compname,
-                    domains: domains
+                    domainNames: domainNames
                 },
                 function (data) {
                     resolve(data);
