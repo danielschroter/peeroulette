@@ -535,6 +535,15 @@ function EditProfileComponent(props) {
     };
 
     const onCancelDomains = (e) => {
+        {/*
+         console.warn("NEW USER DOMAINS FUNCTION CALL")
+        UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
+            console.warn("inside function call")
+            console.warn(domainsBackend)
+        });
+        */}
+
+
         setEditDomains(false);
         setAddDomains(false);
         setAddedDomains([])
@@ -594,6 +603,8 @@ function EditProfileComponent(props) {
             newDomain.verified_by = props.user._id;
             newDomain.organization = corporate_id;
             props.onAddDomain(newDomain)
+
+            onCancelDomains(e)
             updateOrganization();
             setInputDomainName("")
             setAddDomains(false)
@@ -660,12 +671,14 @@ function EditProfileComponent(props) {
         if(deletedDomainId !== undefined) {
             props.onDeleteDomain(deletedDomainId)
         }
+        onCancelDomains(e);
 
         updateOrganization();
         extractUser();
         setEditDomains(false)
         setDeleteDomains(false)
         extractUser();
+
 
         {/*
         //extractUser();
