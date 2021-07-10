@@ -1266,13 +1266,18 @@ function EditProfileComponent(props) {
                                         </Button>
                                     </div>
                                 ) : (
-                                    <div style={{"display":"flex"}}>
-                                        <p className={classes.userDataFont}>Interests:</p>
-                                        <Button
-                                            className={classes.editNameButton}
-                                            onClick={(e) => setEditInterests(true)}
-                                        > Edit
-                                        </Button>
+                                    <div>
+                                        <div style={{"display":"flex"}}>
+                                            <p className={classes.userDataFont}>Interests:</p>
+                                            <Button
+                                                className={classes.editNameButton}
+                                                onClick={(e) => setEditInterests(true)}
+                                            > Edit
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <p>No domains</p>
+                                        </div>
                                     </div>
                                 )}
                                 <div className="center">
