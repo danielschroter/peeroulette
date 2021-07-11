@@ -767,15 +767,9 @@ function EditProfileComponent(props) {
             props.onRegisterOrganization(user_id, compname, domainNamesTail);
 
             setIsCorporate(true);
+            setDomains([])
             onUpdateUser(e)
-            //onCancelDomains(e);
-            //onCancelDomains(e)
-            //updateOrganization();
-            //extractUser();
-            //onUpdateUser(e)
 
-            //setDomains([])
-            //window.location.reload();
 
             {/*
             console.warn("START NEW LOOP HERE")
