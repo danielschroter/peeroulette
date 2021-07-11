@@ -1101,9 +1101,6 @@ function EditProfileComponent(props) {
                                             > Edit
                                             </Button>
                                         </div>
-                                        <div>
-                                            <p>No domains</p>
-                                        </div>
                                     </div>
                                 )}
                                 <div className="center">
