@@ -150,7 +150,6 @@ const useStyles = makeStyles((theme) => ({
 function EditProfileComponent(props) {
     const classes = useStyles();
     const [alertDeleteProfileOpen, setAltertDeleteProfileOpen] = React.useState(false);
-    const [isAdmin, setIsAdmin] = React.useState("");
 
     // errors
     const [registerError, setRegisterError] = React.useState("");
@@ -224,20 +223,7 @@ function EditProfileComponent(props) {
                         UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
                             setDomains(domainsBackend)
 
-                        });                        {/*
-                        UserService.getDomains().then(function (domainsBackend) {
-                            console.warn("ALL DOMAINS BACKEND AFTER WINDOWS RELOAD")
-                            console.warn(domainsBackend)
-                            let i = 0;
-                            let domainNames = [];
-                            for (i; i < domainsBackend.length; i++) {
-                                if (domainsBackend[i].verified_by === props.user._id) {
-                                    domainNames.push(domainsBackend[i])
-                                }
-                            }
-                            setDomains(domainNames)
                         });
-                        */}
                     });
             } else {
                 setIsCorporate(false);
@@ -476,8 +462,6 @@ function EditProfileComponent(props) {
         domains.splice(index, 1)
     };
 
-    //
-
     const onChangeCompnameSignUp = (e) => {
         setCompname(e.target.value);
         setRegisterError("");
@@ -530,16 +514,9 @@ function EditProfileComponent(props) {
 
     const onCancelDomains = (e) => {
 
-        console.warn("NEW USER DOMAINS FUNCTION CALL")
-        UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
-            console.warn("inside function call")
-            console.warn(domainsBackend)
-        });
-
         UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
             setDomains(domainsBackend)
         });
-
 
         setEditDomains(false);
         setAddDomains(false);
@@ -587,70 +564,10 @@ function EditProfileComponent(props) {
             console.warn(newDomain)
             props.onAddDomain(newDomain)
 
-            {/*
-            let  newDomain = Object();
-            newDomain.name = inputDomainNameTail;
-            newDomain.confirmed = false;
-            newDomain.verified_by = props.user._id;
-            newDomain.organization = corporate_id;
-            props.onAddDomain(newDomain)
-            */}
-
-            //onCancelDomains(e)
-            //updateOrganization();
             setEditDomains(false)
             setInputDomainName("")
             setAddDomains(false)
         }
-
-        {/*
-        //extractUser();
-
-        let tmp = domains;
-        let inputDomainNameTail = inputDomainName.split('@')[1];
-        if(inputDomainNameTail !== undefined && tmp.length > 0) {
-            let i = 0;
-            for (i; i < tmp.length; i++) {
-                if(tmp[i].name === inputDomainNameTail) {
-                    // don't add domains with the same value
-                    return;
-                }
-            }
-            let  newDomain = Object();
-            newDomain.name = inputDomainNameTail;
-            newDomain.confirmed = false;
-            newDomain.verified_by = props.user._id;
-            newDomain.organization = corporate_id;
-            tmp.push(newDomain)
-
-            let tmp2 = addedDomains;
-            tmp2.push(newDomain);
-            setAddedDomains(tmp2);
-            setAddDomainsError("");
-        }
-        setAddDomains(false);
-        setInputDomainName("");
-
-        let j = 0;
-        for (j; j < addedDomains.length; j++) {
-            props.onAddDomain(addedDomains[j])
-        }
-
-
-        console.warn("ADDED DOMAIN HERE")
-        console.warn(addedDomains)
-
-        extractUser();
-        updateOrganization();
-
-        setAddedDomains([])
-        setEditDomains(false)
-        setAddDomains(false)
-        setAddDomainsError("")
-
-        extractUser();
-        */}
-
     };
 
     const onDeleteOldDomain = (e) => {
@@ -664,41 +581,9 @@ function EditProfileComponent(props) {
         if(deletedDomainId !== undefined) {
             props.onDeleteDomain(deletedDomainId)
         }
-        //onCancelDomains(e)
-        //updateOrganization();
-        //extractUser();
+
         setEditDomains(false)
         setDeleteDomains(false)
-        //extractUser();
-
-
-        {/*
-        //extractUser();
-        let i = e.target.value;
-        let tmp = deletedDomainIds;
-        tmp.push(domains[i]._id);
-        setDeletedDomainIds(tmp);
-        domains.splice(e.target.value, 1);
-        setDeleteDomains(false);
-
-
-        let j = 0;
-        for (j; j < deletedDomainIds.length; j++) {
-            if(deletedDomainIds[j] !== undefined) {
-                props.onDeleteDomain(deletedDomainIds[j])
-            }
-        }
-        console.warn("DELETED DOMAIN HERE")
-        console.warn(deletedDomainIds)
-
-        extractUser();
-        updateOrganization();
-
-        setDeletedDomainIds([])
-        setEditDomains(false)
-        setDeleteDomains(false)
-        extractUser();
-        */}
     };
 
     const onCancelInterests = (e) => {
@@ -769,21 +654,6 @@ function EditProfileComponent(props) {
             setIsCorporate(true);
             setDomains([])
             onUpdateUser(e)
-
-
-            {/*
-            console.warn("START NEW LOOP HERE")
-            console.warn("corporate ID")
-            console.warn(corporate_id)
-            for (i; i < domainNamesTail.length; i++) {
-                if (domainNamesTail[i] !== undefined) {
-                    addDomain(domainNamesTail[i])
-                    console.warn("ADDED DOMAIN")
-                }
-            }
-            */}
-
-
         }
     };
 
