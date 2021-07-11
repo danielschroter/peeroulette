@@ -41,10 +41,10 @@ export function register(
   domains
 ) {
   function onSuccess(user) {
-    return { type: "LOGIN_SUCCESS", user: user };
+    return { type: "REGISTER_SUCCESS", user: user };
   }
   function onFailure(error) {
-    return { type: "LOGIN_FAILURE", error: error };
+    return { type: "REGISTER_FAILURE", error: error };
   }
 
   return async (dispatch) => {

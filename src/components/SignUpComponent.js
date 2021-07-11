@@ -136,12 +136,20 @@ function SignUpComponent(props) {
     }
   };
 
+  // https://stackoverflow.com/questions/39356826/how-to-check-if-it-a-text-input-has-a-valid-email-format-in-reactjs
+  const onBlurEmail = (e) => {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(email)) {
+        setRegisterError("Type in a correct email.");
+      }
+  };
+
   return (
     <div className={classes.usersignUpRoot}>
       <Paper className={classes.signUpPaper} component="form">
         <div className={classes.signUpRow}>
           <Typography variant="h4" align="center">
-            Welcome to the Movie Database App!
+            Welcome to Peeroulette!
           </Typography>
         </div>
         <div className={classes.signUpRow}>
@@ -150,6 +158,9 @@ function SignUpComponent(props) {
             fullWidth
             value={email}
             onChange={onChangeEmail}
+            error={registerError !== ""}
+            onBlur={onBlurEmail}
+            type="email"
           />
         </div>
         <div className={classes.signUpRow}>
@@ -158,6 +169,7 @@ function SignUpComponent(props) {
             fullWidth
             value={username}
             onChange={onChangeUsername}
+            error={registerError !== ""}
           />
         </div>
         <div className={classes.signUpRow}>
