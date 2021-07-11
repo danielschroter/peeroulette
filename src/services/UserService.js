@@ -270,8 +270,8 @@ export default class UserService {
 
     static getUserDomains(user_id) {
         return new Promise(async (resolve, reject) => {
-            HttpService.get(
-                `${this.baseURL_domain()}/getUserDomains`,
+            HttpService.post(
+                "http://localhost:4000/domain/getUserDomains",
                 {
                     user_id: user_id,
                 },

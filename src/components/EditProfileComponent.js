@@ -220,7 +220,11 @@ function EditProfileComponent(props) {
                 setIsCorporate(true);
                     UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
                         setCompname(organizationBackend.company_name)
-                        let userDomainIds = organizationBackend.domains;
+
+                        UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
+                            setDomains(domainsBackend)
+
+                        });                        {/*
                         UserService.getDomains().then(function (domainsBackend) {
                             console.warn("ALL DOMAINS BACKEND AFTER WINDOWS RELOAD")
                             console.warn(domainsBackend)
@@ -231,9 +235,9 @@ function EditProfileComponent(props) {
                                     domainNames.push(domainsBackend[i])
                                 }
                             }
-
                             setDomains(domainNames)
                         });
+                        */}
                     });
             } else {
                 setIsCorporate(false);
@@ -288,28 +292,15 @@ function EditProfileComponent(props) {
             organization.account_owner = props.user._id;
             console.warn("domains in front-end")
             console.warn(domains)
-            UserService.getDomains().then(function (domainsBackend) {
+            
+            UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
                 let i = 0;
                 let domainIds = [];
-                let updatedDomains = [];
-                console.warn("domains in back-end")
-                console.warn(domainsBackend)
 
                 for (i; i < domainsBackend.length; i++) {
-                    if(domainsBackend[i].verified_by === props.user._id) {
-                        domainIds.push(domainsBackend[i]._id)
-                        updatedDomains.push(domainsBackend[i])
-                    }
+                    domainIds.push(domainsBackend[i]._id)
                 }
-
                 organization.domains = domainIds;
-                console.warn("CHEKCK DOMAIN Ids")
-                console.warn(domainIds)
-                organization.domains = domainIds;
-                console.warn("CHEKCK organization.domains")
-                console.warn(organization.domains)
-                console.warn("UPDATED DOMAINS FRONTEND")
-                console.warn(updatedDomains)
                 props.onUpdateOrganization(organization);
             });
 
@@ -538,13 +529,17 @@ function EditProfileComponent(props) {
     };
 
     const onCancelDomains = (e) => {
-        {/*
-         console.warn("NEW USER DOMAINS FUNCTION CALL")
+
+        console.warn("NEW USER DOMAINS FUNCTION CALL")
         UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
             console.warn("inside function call")
             console.warn(domainsBackend)
         });
-        */}
+
+        UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
+            setDomains(domainsBackend)
+        });
+
 
         setEditDomains(false);
         setAddDomains(false);
@@ -553,33 +548,6 @@ function EditProfileComponent(props) {
         setDeletedDomainIds([])
         setAddDomainsError("")
 
-        let i = 0;
-            console.warn()
-            UserService.getDomains().then(function (domainsBackend) {
-                console.warn("ALL DOMAINS BACKEND")
-                console.warn(domainsBackend)
-
-                let i = 0;
-                let domainNames = [];
-                for (i; i < domainsBackend.length; i++) {
-                    if (domainsBackend[i].verified_by === props.user._id) {
-                        domainNames.push(domainsBackend[i])
-                    }
-                }
-                    {/*
-                let i = 0;
-                let domainNames = [];
-                for (i; i < domains.length; i++) {
-                    let j = 0;
-                    for (j; j < domainsBackend.length; j++) {
-                        if (domainsBackend[j]._id === domains[i]._id) {
-                            domainNames.push(domainsBackend[j])
-                        }
-                    }
-                }
-                */}
-                setDomains(domainNames)
-            });
     };
 
     const addDomain = (domainName) => {
@@ -593,7 +561,7 @@ function EditProfileComponent(props) {
         props.onAddDomain(newDomain)
     }
 
-        const onAddNewDomain = (e) => {
+    const onAddNewDomain = (e) => {
         extractUser();
         let inputDomainNameTail = inputDomainName.split('@')[1];
         if (!inputDomainName.includes('@')) {
@@ -630,6 +598,7 @@ function EditProfileComponent(props) {
 
             //onCancelDomains(e)
             //updateOrganization();
+            setEditDomains(false)
             setInputDomainName("")
             setAddDomains(false)
         }
@@ -798,14 +767,15 @@ function EditProfileComponent(props) {
             props.onRegisterOrganization(user_id, compname, domainNamesTail);
 
             setIsCorporate(true);
-            //onUpdateUser(e)
+            onUpdateUser(e)
             //onCancelDomains(e);
-            //extractUser();
             //onCancelDomains(e)
             //updateOrganization();
-            setDomains([])
-            window.location.reload();
+            //extractUser();
+            //onUpdateUser(e)
 
+            //setDomains([])
+            //window.location.reload();
 
             {/*
             console.warn("START NEW LOOP HERE")

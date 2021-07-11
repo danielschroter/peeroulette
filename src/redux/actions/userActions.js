@@ -195,11 +195,11 @@ export function changeOrganization(changedOrganization) {
 }
 
 export function registerOrganization(user_id, compname, domains) {
-    function onSuccess() {
-        return { type: "LOGIN_SUCCESS"};
+    function onSuccess(user) {
+        return { type: "REGISTER_ORG_SUCCESS", user: user};
     }
     function onFailure(error) {
-        return { type: "LOGIN_FAILURE", error: error };
+        return { type: "REGISTER_ORG_FAILURE", error: error };
     }
 
     return async (dispatch) => {
