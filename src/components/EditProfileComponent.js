@@ -543,7 +543,6 @@ function EditProfileComponent(props) {
         });
         */}
 
-
         setEditDomains(false);
         setAddDomains(false);
         setAddedDomains([])
@@ -590,7 +589,6 @@ function EditProfileComponent(props) {
         console.warn(newDomain)
         props.onAddDomain(newDomain)
     }
-
 
         const onAddNewDomain = (e) => {
         extractUser();
@@ -785,30 +783,23 @@ function EditProfileComponent(props) {
         if (props.user !== undefined) {
             let user_id = props.user._id;
             let i = 0;
-            console.warn("CHECK DOMAINS")
-            console.warn(domains)
             let fullInputDomains = domains.split(',');
-            console.warn("full domains")
-            console.warn(fullInputDomains)
             let domainNamesTail = []
             for (i; i < fullInputDomains.length; i++) {
                 let domainTail = fullInputDomains[i].split("@")[1];
                 domainNamesTail.push(domainTail)
-                console.warn("domainTail")
-                console.warn(domainTail)
             }
             console.warn("domain names tail")
             console.warn(domainNamesTail)
 
-            console.warn(domains)
             // here we first add the empty domain while storing the entered domains in the domainNamesTail variable
             props.onRegisterOrganization(user_id, compname, domainNamesTail);
+
             setIsCorporate(true);
-            console.warn("DEBUG DOMAINS")
-            console.warn(domains)
-            console.warn("DEBUG COMPNAME")
-            console.warn(compname)
-            onUpdateUser(e)
+            //onUpdateUser(e)
+            //onCancelDomains(e);
+            setDomains([])
+            window.location.reload();
 
             {/*
             console.warn("START NEW LOOP HERE")
@@ -824,7 +815,6 @@ function EditProfileComponent(props) {
 
 
         }
-        //window.location.reload();
     };
 
 
