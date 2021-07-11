@@ -222,6 +222,8 @@ function EditProfileComponent(props) {
                         setCompname(organizationBackend.company_name)
                         let userDomainIds = organizationBackend.domains;
                         UserService.getDomains().then(function (domainsBackend) {
+                            console.warn("ALL DOMAINS BACKEND AFTER WINDOWS RELOAD")
+                            console.warn(domainsBackend)
                             let i = 0;
                             let domainNames = [];
                             for (i; i < domainsBackend.length; i++) {
@@ -229,6 +231,7 @@ function EditProfileComponent(props) {
                                     domainNames.push(domainsBackend[i])
                                 }
                             }
+
                             setDomains(domainNames)
                         });
                     });
@@ -625,9 +628,8 @@ function EditProfileComponent(props) {
             props.onAddDomain(newDomain)
             */}
 
-
-            onCancelDomains(e)
-            updateOrganization();
+            //onCancelDomains(e)
+            //updateOrganization();
             setInputDomainName("")
             setAddDomains(false)
         }
@@ -693,12 +695,12 @@ function EditProfileComponent(props) {
         if(deletedDomainId !== undefined) {
             props.onDeleteDomain(deletedDomainId)
         }
-        onCancelDomains(e)
-        updateOrganization();
-        extractUser();
+        //onCancelDomains(e)
+        //updateOrganization();
+        //extractUser();
         setEditDomains(false)
         setDeleteDomains(false)
-        extractUser();
+        //extractUser();
 
 
         {/*
@@ -798,8 +800,12 @@ function EditProfileComponent(props) {
             setIsCorporate(true);
             //onUpdateUser(e)
             //onCancelDomains(e);
+            //extractUser();
+            //onCancelDomains(e)
+            //updateOrganization();
             setDomains([])
             window.location.reload();
+
 
             {/*
             console.warn("START NEW LOOP HERE")
