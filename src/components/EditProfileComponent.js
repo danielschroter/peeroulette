@@ -156,9 +156,7 @@ function EditProfileComponent(props) {
     const [addInterestsError, setAddInterestsError] = React.useState("");
     const [addDomainsError, setAddDomainsError] = React.useState("");
 
-
     // user data
-    const [user_id, setUser_id] = React.useState("");
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
@@ -172,7 +170,6 @@ function EditProfileComponent(props) {
     const [editCity, setEditCity] = React.useState(false);
     const [editUniversity, setEditUniversity] = React.useState(false);
     const [editOrganization, setEditOrganization] = React.useState(false);
-    const [saveName, setSaveName] = React.useState(false);
 
 
     //interests
@@ -219,10 +216,8 @@ function EditProfileComponent(props) {
                 setIsCorporate(true);
                     UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
                         setCompname(organizationBackend.company_name)
-
                         UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
                             setDomains(domainsBackend)
-
                         });
                     });
             } else {
@@ -240,7 +235,7 @@ function EditProfileComponent(props) {
     };
 
     useEffect(() => {
-        if (props.user == undefined) {
+        if (props.user === undefined) {
             setRegisterError("");
         } else
         extractUser();
@@ -276,37 +271,23 @@ function EditProfileComponent(props) {
             organization._id = corporate_id;
             organization.company_name = compname;
             organization.account_owner = props.user._id;
-            console.warn("domains in front-end")
-            console.warn(domains)
-            
+
+            // update domains of organization
             UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
                 let i = 0;
                 let domainIds = [];
-
                 for (i; i < domainsBackend.length; i++) {
                     domainIds.push(domainsBackend[i]._id)
                 }
                 organization.domains = domainIds;
                 props.onUpdateOrganization(organization);
             });
-
-            {/*
-              let domainIds = [];
-            let i = 0;
-            for (i; i < domains.length; i++) {
-                domainIds.push(domains[i]._id)
-            }
-            organization.domains = domainIds;
-            props.onUpdateOrganization(organization);
-            console.warn("update organization")
-            console.warn(organization.domains)
-            */}
         }
     }
 
 
 
-        // update user data after clicking on save
+    // update user data after clicking on save
     const onUpdateUser = (e) => {
         if(editUsername) {
             setEditUsername(false);
@@ -329,37 +310,6 @@ function EditProfileComponent(props) {
         updateOrganization();
 
         props.onUpdateUser(packUser());
-
-    };
-
-    const onUpdateDomains = (e) => {
-        let i = 0;
-        for (i; i < domains.length; i++) {
-            if(deletedDomainIds[i] !== undefined) {
-                props.onDeleteDomain(deletedDomainIds[i])
-            }
-        }
-        console.warn("DELETED DOMAIN HERE")
-        console.warn(deletedDomainIds)
-
-
-        let j = 0;
-        for (j; j < addedDomains.length; j++) {
-            props.onAddDomain(addedDomains[j])
-        }
-        console.warn("ADDED DOMAIN HERE")
-        console.warn(addedDomains)
-
-        onUpdateUser(e);
-
-        setDeletedDomainIds([])
-        setAddedDomains([])
-        setEditDomains(false)
-        setAddDomains(false)
-        setDeleteDomains(false)
-        setAddDomainsError("")
-
-        extractUser();
     };
 
     // delete user profile
@@ -367,6 +317,7 @@ function EditProfileComponent(props) {
         UserService.logout();
         let id = props.user._id;
         props.onDeleteUser(id);
+        // also delete organizatio and domains
         if (isCorporate) {
             props.onDeleteOrganization(corporate_id);
             let i = 0;
@@ -376,7 +327,8 @@ function EditProfileComponent(props) {
         }
     };
 
-    // save temprorary changed variables on input field
+    // on change functions need in order to save temprorary changed variables
+    // on the input field of the frontend
     const onChangeUsername = (e) => {
         props.user.username = e.target.value;
         setUsername(e.target.value);
@@ -401,12 +353,6 @@ function EditProfileComponent(props) {
         setCompname(e.target.value);
     };
 
-    const onChangeDomains = (e) => {
-        let tmp = domains;
-        tmp.push(e.target.value);
-        setDomains(tmp);
-    };
-
     const onChangePassword = (e) => {
         setPassword(e.target.value);
         setRegisterError("");
@@ -417,7 +363,17 @@ function EditProfileComponent(props) {
         setRegisterError("");
     };
 
+    const onChangeCompnameSignUp = (e) => {
+        setCompname(e.target.value);
+        setRegisterError("");
+    };
 
+    const onChangeDomainsSignUp = (e) => {
+        setDomains(e.target.value);
+        setRegisterError("");
+    };
+
+    // change functions are needed to change the edit states of the buttons
     const changeDeleteInterests = (e) => {
         if (deleteInterests) {
             setDeleteInterests(false);
@@ -438,8 +394,6 @@ function EditProfileComponent(props) {
         let index = e.target.value;
         interests.splice(index, 1)
     };
-
-    //
 
     const changeDeleteDomains = (e) => {
         if (deleteDomains) {
@@ -462,15 +416,6 @@ function EditProfileComponent(props) {
         domains.splice(index, 1)
     };
 
-    const onChangeCompnameSignUp = (e) => {
-        setCompname(e.target.value);
-        setRegisterError("");
-    };
-
-    const onChangeDomainsSignUp = (e) => {
-        setDomains(e.target.value);
-        setRegisterError("");
-    };
 
     // show error when password not match
     const onBlurPassword = (e) => {
@@ -490,6 +435,7 @@ function EditProfileComponent(props) {
         }
     };
 
+    // show error for domain inputs
     const onBlurAddDomains = (e) => {
         if (true) {
             setAddDomainsError("");
@@ -513,77 +459,15 @@ function EditProfileComponent(props) {
     };
 
     const onCancelDomains = (e) => {
-
         UserService.getUserDomains(props.user._id).then(function (domainsBackend) {
             setDomains(domainsBackend)
         });
-
         setEditDomains(false);
         setAddDomains(false);
         setAddedDomains([])
         setDeleteDomains(false);
         setDeletedDomainIds([])
         setAddDomainsError("")
-
-    };
-
-    const addDomain = (domainName) => {
-        let  newDomain = Object();
-        newDomain.name = domainName;
-        newDomain.confirmed = false;
-        newDomain.verified_by = props.user._id;
-        newDomain.organization = corporate_id;
-        console.warn("NEW DOMAIN")
-        console.warn(newDomain)
-        props.onAddDomain(newDomain)
-    }
-
-    const onAddNewDomain = (e) => {
-        extractUser();
-        let inputDomainNameTail = inputDomainName.split('@')[1];
-        if (!inputDomainName.includes('@')) {
-            setAddDomainsError("@ missing, not a valid domain.");
-            return;
-        }
-        if(inputDomainNameTail !== undefined) {
-            let i = 0;
-            for (i; i < domains.length; i++) {
-                if (domains[i].name === inputDomainNameTail) {
-                    // don't add domains with the same value
-                    setAddDomainsError("Domain already exists");
-                    return;
-                }
-            }
-
-            let  newDomain = Object();
-            newDomain.name = inputDomainNameTail;
-            newDomain.confirmed = false;
-            newDomain.verified_by = props.user._id;
-            newDomain.organization = corporate_id;
-            console.warn("NEW DOMAIN")
-            console.warn(newDomain)
-            props.onAddDomain(newDomain)
-
-            setEditDomains(false)
-            setInputDomainName("")
-            setAddDomains(false)
-        }
-    };
-
-    const onDeleteOldDomain = (e) => {
-        extractUser();
-        let i = e.target.value;
-        let deletedDomainId = domains[i]._id;
-
-        domains.splice(e.target.value, 1);
-        setDeleteDomains(false);
-
-        if(deletedDomainId !== undefined) {
-            props.onDeleteDomain(deletedDomainId)
-        }
-
-        setEditDomains(false)
-        setDeleteDomains(false)
     };
 
     const onCancelInterests = (e) => {
@@ -628,13 +512,68 @@ function EditProfileComponent(props) {
         setRegisterError("");
     };
 
+    // methods for adding and deleting domains
+    const addDomain = (domainName) => {
+        let  newDomain = Object();
+        newDomain.name = domainName;
+        newDomain.confirmed = false;
+        newDomain.verified_by = props.user._id;
+        newDomain.organization = corporate_id;
+        props.onAddDomain(newDomain)
+    }
+
+    const onAddNewDomain = (e) => {
+        extractUser();
+        let inputDomainNameTail = inputDomainName.split('@')[1];
+        if (!inputDomainName.includes('@')) {
+            setAddDomainsError("@ missing, not a valid domain.");
+            return;
+        }
+        if(inputDomainNameTail !== undefined) {
+            let i = 0;
+            for (i; i < domains.length; i++) {
+                if (domains[i].name === inputDomainNameTail) {
+                    // don't add domains with the same value
+                    setAddDomainsError("Domain already exists");
+                    return;
+                }
+            }
+
+            let  newDomain = Object();
+            newDomain.name = inputDomainNameTail;
+            newDomain.confirmed = false;
+            newDomain.verified_by = props.user._id;
+            newDomain.organization = corporate_id;
+            props.onAddDomain(newDomain)
+
+            setEditDomains(false)
+            setInputDomainName("")
+            setAddDomains(false)
+        }
+    };
+
+    const onDeleteOldDomain = (e) => {
+        extractUser();
+        let i = e.target.value;
+        let deletedDomainId = domains[i]._id;
+
+        domains.splice(e.target.value, 1);
+        setDeleteDomains(false);
+
+        if(deletedDomainId !== undefined) {
+            props.onDeleteDomain(deletedDomainId)
+        }
+
+        setEditDomains(false)
+        setDeleteDomains(false)
+    };
+
     const onRegisterSignUp = (e) => {
         // one first needs to create an organization with empty domains and then update the domains
         // because the organization needs to be first created, because the organization.id
         // is needed to link the domains with the organizatino which is only available after creating
-        // the organization
+        // the organization, this all happens in the backend
         e.preventDefault();
-
 
         if (props.user !== undefined) {
             let user_id = props.user._id;
@@ -645,18 +584,16 @@ function EditProfileComponent(props) {
                 let domainTail = fullInputDomains[i].split("@")[1];
                 domainNamesTail.push(domainTail)
             }
-            console.warn("domain names tail")
-            console.warn(domainNamesTail)
 
             // here we first add the empty domain while storing the entered domains in the domainNamesTail variable
             props.onRegisterOrganization(user_id, compname, domainNamesTail);
-
             setIsCorporate(true);
+            // need to set [] because in the frontend the input domains are first presented before it loads from the backend
             setDomains([])
+
             onUpdateUser(e)
         }
     };
-
 
     return (
         <div
@@ -1062,13 +999,6 @@ function EditProfileComponent(props) {
                                                         onClick={changeDeleteDomains}
                                                     > Delete
                                                     </Button>
-                                                    {/*
-                                                    <Button
-                                                        className={classes.saveNameButton}
-                                                        onClick={onUpdateDomains}
-                                                    > Save
-                                                    </Button>
-                                                    */}
                                                 </div>
                                             ) : (
                                                 <div style={{"display":"flex"}}>

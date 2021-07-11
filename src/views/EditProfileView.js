@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import {connect, useSelector} from "react-redux";
 
-import {login, register, changeUser, getUser, deleteUser, deleteOrganization, changeOrganization, registerOrganization, deleteDomain, addDomain} from "../redux/actions";
+import {changeUser, getUser, deleteUser, deleteOrganization, changeOrganization, registerOrganization, deleteDomain, addDomain} from "../redux/actions";
 import EditProfileComponent from "../components/EditProfileComponent";
 
 /**
