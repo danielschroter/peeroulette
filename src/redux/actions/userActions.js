@@ -17,9 +17,21 @@ export function login(username, password) {
     }
   };
 }
-export function switchEmployeeFilter(){
-    return{
-        type: "switchEmployeeFilter"
+export function switchEmployeeFilter(id){
+    function onSuccess(filterValue) {
+        return { type: "switchEmployeeFilter_success", filterValue: filterValue };
+    }
+    function onFailure(error) {
+        return { type: "switchEmployeeFilter_failure" };
+    }
+
+    return async (dispatch) => {
+        try {
+            let resp = await UserService.switchEmployeeFilter(id);
+            dispatch(onSuccess(resp));
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
     };
 }
 

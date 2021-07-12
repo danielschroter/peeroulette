@@ -4,6 +4,7 @@ import {
     FormControlLabel,
 } from "@material-ui/core";
 import UserService from "../services/UserService";
+import {useSelector} from "react-redux";
 
 
 /**
@@ -11,19 +12,20 @@ import UserService from "../services/UserService";
  * @param {props} props
  */
 function CorporateFilterEmployeeComponent(props) {
+
     const [employeesFiltered, setEmployeesFiltered] = React.useState(false);
 
 
 
 
     // extract all the user data from the backend
-    const extractUser = () => {
+    const extractUser = async() => {
         if (!props.user) {
             return;
         }
 
-        UserService.getUser(props.user._id).then(function(userBackend) {
-            setEmployeesFiltered(userBackend.employeeFilter);
+       await UserService.getUser(props.user._id).then(function(userBackend) {
+            setEmployeesFiltered(userBackend.employeeFilter)
         });
     };
 
@@ -36,8 +38,12 @@ function CorporateFilterEmployeeComponent(props) {
             extractUser();
     }, [props.user]);
 
-    const onSwitchEmployeeFilter = (e) => {
-        props.onSwitchEmployeeFilter();
+    const onSwitchEmployeeFilter = async (value) => {
+
+        await UserService.switchEmployeeFilter(props.user._id);
+        let backendUser = await UserService.getUser(props.user._id);
+        setEmployeesFiltered(backendUser.employeeFilter);
+        //extractUser();
     };
 
     return (

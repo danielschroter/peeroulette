@@ -22,8 +22,8 @@ import {switchEmployeeFilter} from "../redux/actions";
 function CorporateSignUpView(props) {
     const user = useSelector((state) => state.user.user);
 
-    const onSwitchEmployeeFilter = () => {
-        props.dispatch(switchEmployeeFilter());
+    const onSwitchEmployeeFilter = (id) => {
+        props.dispatch(switchEmployeeFilter(id));
     };
 
     return (
