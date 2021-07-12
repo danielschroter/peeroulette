@@ -32,6 +32,10 @@ export default function user(state = getUser(), action) {
             return {};
         case "LOGOUT":
             return {};
+        case "REGISTER_ORG_SUCCESS" :
+            return { user: action.user }
+        case "CHANGE_USER_SUCCESS" :
+            return { user: action.user };
         default:
             return state;
     }

@@ -41,10 +41,10 @@ export function register(
   domains
 ) {
   function onSuccess(user) {
-    return { type: "LOGIN_SUCCESS", user: user };
+    return { type: "REGISTER_SUCCESS", user: user };
   }
   function onFailure(error) {
-    return { type: "LOGIN_FAILURE", error: error };
+    return { type: "REGISTER_FAILURE", error: error };
   }
 
   return async (dispatch) => {
@@ -84,11 +84,11 @@ export function confirm(id) {
 
 export function changeUser(changedUser) {
   function onSuccess(user) {
-    return { type: "UPDATEMOVIE_SUCCESS", user: user };
+    return { type: "CHANGE_USER_SUCCESS", user: user };
   }
 
   function onFailure(error) {
-    console.log("change movie failure", error);
+    console.log("change user failure", error);
   }
 
   return async (dispatch) => {
@@ -103,7 +103,7 @@ export function changeUser(changedUser) {
 
 export function deleteUser(id) {
     function onSuccess() {
-        return { type: "DELETEUSER_SUCCESS"};
+        return { type: "DELETE_USER_SUCCESS"};
     }
     function onFailure(error) {
         console.log("delete user failure", error);
@@ -121,7 +121,7 @@ export function deleteUser(id) {
 
 export const getUser = (id) => {
   function onSuccess(user) {
-    return { type: "GETUSER_SUCCESS", user: user };
+    return { type: "GET_USER_SUCCESS", user: user };
   }
   function onFailure(error) {
     console.log("failed to load a user", error);
@@ -140,7 +140,7 @@ export const getUser = (id) => {
 
 export function deleteOrganization(id) {
     function onSuccess() {
-        return { type: "DELETORGANIZATION_SUCCESS"};
+        return { type: "DELETE_ORGANIZATION_SUCCESS"};
     }
     function onFailure(error) {
         console.log("delete organization failure", error);
@@ -156,14 +156,32 @@ export function deleteOrganization(id) {
     };
 }
 
+export function deleteDomain(id) {
+    function onSuccess() {
+        return { type: "DELETE_DOMAIN_SUCCESS"};
+    }
+    function onFailure(error) {
+        console.log("delete domain failure", error);
+    }
+
+    return async (dispatch) => {
+        try {
+            await UserService.deleteDomain(id);
+            dispatch(onSuccess());
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+}
+
 export function changeOrganization(changedOrganization) {
 
     function onSuccess(organization) {
-        return { type: "UPDATEMOVIE_SUCCESS", organization: organization };
+        return { type: "CHANGE_ORGANIZATION_SUCCESS", organization: organization };
     }
 
     function onFailure(error) {
-        console.log("change movie failure", error);
+        console.log("change organization failure", error);
     }
 
     return async (dispatch) => {
@@ -177,16 +195,34 @@ export function changeOrganization(changedOrganization) {
 }
 
 export function registerOrganization(user_id, compname, domains) {
-    function onSuccess() {
-        return { type: "LOGIN_SUCCESS"};
+    function onSuccess(user) {
+        return { type: "REGISTER_ORGANIZATION_SUCCESS", user: user};
     }
     function onFailure(error) {
-        return { type: "LOGIN_FAILURE", error: error };
+        return { type: "REGISTER_ORGANIZATION_FAILURE", error: error };
     }
 
     return async (dispatch) => {
         try {
             let resp = await UserService.registerOrganization(user_id, compname, domains);
+            dispatch(onSuccess(resp.user));
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
+    };
+}
+
+export function addDomain(domain) {
+    function onSuccess() {
+        return { type: "DOMAIN_SUCCESS"};
+    }
+    function onFailure(error) {
+        return { type: "DOMAIN_FAILURE", error: error };
+    }
+
+    return async (dispatch) => {
+        try {
+            let resp = await UserService.addDomain(domain);
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));
