@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography, Container } from "@material-ui/core";
 import { useParams } from "react-router-dom";
+import UserService from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
   loginButtons: {
@@ -15,19 +16,20 @@ const useStyles = makeStyles((theme) => ({
 function ConfirmEmail(props) {
   const classes = useStyles();
 
+  const [username, setUsername] = React.useState("");
+
   // get user id from URL "/confirm/:id"
   const { id, domain } = useParams();
 
-  useEffect(() => {
-    // This gets called after every render, by default
-    // (the first one, and every one after that)
-    console.log("I have been mounted -> render!");
+  const extractUser = () => {
+    UserService.getUser(id).then(function(userBackend) {
+        setUsername(userBackend.username);
+    });
+};
 
-    const someFunc = () => {
+  useEffect(() => {
       props.OnConfirm(id);
-      console.log("Function being run after/on mount");
-    };
-    someFunc();
+      extractUser();
   });
 
   const onSignIn = () => {
@@ -40,7 +42,7 @@ function ConfirmEmail(props) {
       <Container maxWidth="sm">
         {!domain ? (
             <Typography variant="h4" align="center" gutterBottom>
-              Email confirmation for User-ID {id}
+              Email confirmation for User-ID {id} {username}
             </Typography>
         ): (
             <Typography variant="h4" align="center" gutterBottom>

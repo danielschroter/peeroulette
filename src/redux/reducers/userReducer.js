@@ -40,6 +40,10 @@ export default function user(state = getUser(), action) {
             return { user: action.user };
         case "CONFIRM_FAILURE":
             return { error: action.error };    
+        case "REGISTER_ORG_SUCCESS" :
+            return { user: action.user }
+        case "CHANGE_USER_SUCCESS" :
+            return { user: action.user };
         default:
             return state;
     }
