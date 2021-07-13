@@ -11,6 +11,17 @@ import Button from "@material-ui/core/Button";
 import CorporateFilterEmployeeComponent from "../components/CorporateFilterEmployeeComponent";
 import {switchEmployeeFilter} from "../redux/actions";
 
+
+import Paper from '@material-ui/core/Paper';
+import { ViewState } from '@devexpress/dx-react-scheduler';
+import {
+    Scheduler,
+    DayView,
+    Appointments,
+} from '@devexpress/dx-react-scheduler-material-ui';
+import MyCalendarComponent from "../components/MyCalendarComponent";
+
+
 /**
  * For register new users
  * @param {props} props
@@ -25,6 +36,8 @@ function CorporateSignUpView(props) {
     const onSwitchEmployeeFilter = (id) => {
         props.dispatch(switchEmployeeFilter(id));
     };
+
+
 
     return (
         // if no movies are loaded, the above useEffect should be triggered
@@ -46,6 +59,10 @@ function CorporateSignUpView(props) {
                 </Grid>
                 <Grid container justify="center" style={{'marginTop':'20px'}}>
                     <CorporateFilterEmployeeComponent onSwitchEmployeeFilter={onSwitchEmployeeFilter} user={user}/>
+                </Grid>
+
+                <Grid container justify="center" style={{'marginTop':'20px'}}>
+                    <MyCalendarComponent/>
                 </Grid>
 
             </Container>
