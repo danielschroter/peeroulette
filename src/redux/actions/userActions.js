@@ -137,6 +137,24 @@ export const getUser = (id) => {
   };
 };
 
+export const getAvailable = (id, page) => {
+  function onSuccess(user) {
+    return { type: "GETUSER_SUCCESS", user: user };
+  }
+  function onFailure(error) {
+    console.log("failed to load a user", error);
+  }
+
+  return async (dispatch, getState) => {
+    try {
+      let user = await UserService.getAvailable(id, page);
+      dispatch(onSuccess(user));
+    } catch (e) {
+      onFailure(e);
+    }
+  };
+};
+
 
 export function deleteOrganization(id) {
     function onSuccess() {
