@@ -57,7 +57,7 @@ function SignUpComponent(props) {
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [isCorporate, setIsCorporate] = React.useState(false);
 
-  // Open state for push notifications
+  // Open state for push notification (Snackbar)
   const [open, setOpen] = React.useState(false);
 
   // Corporate Data
@@ -67,6 +67,13 @@ function SignUpComponent(props) {
   const [registerError, setRegisterError] = React.useState("");
 
   useEffect(() => {
+    // if registration was successful set Snackbar state open to true
+    if (props.user.message) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+    // if error during registration set RegisterError
     if (props.user.error) {
       setRegisterError(props.user.error);
     } else {
@@ -79,21 +86,9 @@ function SignUpComponent(props) {
     props.onRegister(email, username, password, isAdmin, compname, domains);
   };
 
-  // handleClick does not work...set new state directly while rendering
-  const handleClick = (e) => {
-    console.log("Before handleClick: " + open);
-    setOpen(true);
-    console.log("After handleClick: " + open);
-  };
-
-  // set notification state to true (works)
-  const handleClose = (e, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    console.log("Before handleClose: " + open);
+  // set notification/Snackbar state to false after closing Snackbar
+  const handleClose = () => {
     setOpen(false);
-    console.log("After handleClose: " + open);
   };
 
   const onChangeEmail = (e) => {
@@ -135,7 +130,7 @@ function SignUpComponent(props) {
       }
     }
   };
-
+  // check if a correct email address is entered
   // https://stackoverflow.com/questions/39356826/how-to-check-if-it-a-text-input-has-a-valid-email-format-in-reactjs
   const onBlurEmail = (e) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -158,7 +153,7 @@ function SignUpComponent(props) {
             fullWidth
             value={email}
             onChange={onChangeEmail}
-            error={registerError !== ""}
+            error={registerError === "Type in a correct email."}
             onBlur={onBlurEmail}
             type="email"
           />
@@ -169,7 +164,7 @@ function SignUpComponent(props) {
             fullWidth
             value={username}
             onChange={onChangeUsername}
-            error={registerError !== ""}
+            error={registerError === "Username already exists."}
           />
         </div>
         <div className={classes.signUpRow}>
@@ -178,7 +173,7 @@ function SignUpComponent(props) {
             fullWidth
             value={password}
             onChange={onChangePassword}
-            error={registerError !== ""}
+            error={registerError === "Passwords do not match."}
             onBlur={onBlurPassword}
             type="password"
           />
@@ -189,7 +184,7 @@ function SignUpComponent(props) {
             fullWidth
             value={password2}
             onChange={onChangePassword2}
-            error={registerError !== ""}
+            error={registerError === "Passwords do not match."}
             onBlur={onBlurPassword}
             type="password"
           />
@@ -251,7 +246,6 @@ function SignUpComponent(props) {
             color="primary"
             onClick={(e) => {
               onRegister(e);
-              setOpen(true);
             }}
             disabled={
               email === "" ||
