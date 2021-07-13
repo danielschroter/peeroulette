@@ -588,7 +588,7 @@ function EditProfileComponent(props) {
             }
 
             // here we first add the empty domain while storing the entered domains in the domainNamesTail variable
-            props.onRegisterOrganization(user_id, compname, domainNamesTail);
+            props.onRegisterOrganization(user_id, compname, fullInputDomains);
             setIsCorporate(true);
             // need to set [] because in the frontend the input domains are first presented before it loads from the backend
             setDomains([])
