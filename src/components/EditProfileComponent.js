@@ -540,7 +540,9 @@ function EditProfileComponent(props) {
             }
 
             let  newDomain = Object();
-            newDomain.name = inputDomainNameTail;
+            //newDomain.name = inputDomainNameTail;
+
+            newDomain.name = inputDomainName;
             newDomain.confirmed = false;
             newDomain.verified_by = props.user._id;
             newDomain.organization = corporate_id;
