@@ -32,6 +32,7 @@ function KebabMenu(props) {
         if (state.user.user != undefined && state.user.user._id != undefined) {
             UserService.getUser(state.user.user._id).then(function(result) {
                 state.user.user.username = result.username;
+                //state.user.user = result;
             } );
         }
         return state.user;
