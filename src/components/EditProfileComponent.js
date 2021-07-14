@@ -1253,7 +1253,8 @@ function EditProfileComponent(props) {
                                                                 </div>
                                                             }
                                                         />
-                                                    </Grid>       })()}
+                                                    </Grid>
+                                                })()}
                                                 {addInterestsError !== "" ? (
                                                     <div className={classes.signUpRow}>
                                                         <Typography color="error">{addInterestsError}</Typography>
