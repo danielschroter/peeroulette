@@ -1187,7 +1187,6 @@ function EditProfileComponent(props) {
 // attributes of props and their type
 EditProfileComponent.propTypes = {
     user: PropTypes.object,
-    onGetUser: PropTypes.func,
     onUpdateUser: PropTypes.func,
     onUpdateOrganization: PropTypes.func,
     onRegisterOrganization: PropTypes.func,
