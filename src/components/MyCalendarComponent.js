@@ -18,6 +18,7 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui';
 import {withStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import UserService from "../services/UserService";
 
 
 const appointments = [
@@ -118,11 +119,21 @@ export default class MyCalendarComponent extends React.PureComponent {
     }
 
     async commitChanges({added, changed, deleted}) {
+        var app = null;
+
+        if (added){
+            try{
+                const response = await AppointmentService.createAppointment(added);
+                app = response.map(this.mapAppointmentData)[0];
+            }catch (e) {
+                return e;
+            }
+        }
         this.setState((state) => {
             let {data} = state;
             if (added) {
-                const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-                data = [...data, {id: startingAddedId, ...added}];
+                //const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
+                data = [...data, {id: app.id, ...added}];
             }
             if (changed) {
 
@@ -145,6 +156,7 @@ export default class MyCalendarComponent extends React.PureComponent {
             }
             if (deleted !== undefined) {
                 data = data.filter(appointment => appointment.id !== deleted);
+                AppointmentService.deleteAppointment(deleted);
             }
             console.log(data);
             return {data};

@@ -61,9 +61,14 @@ function CorporateSignUpView(props) {
                     <CorporateFilterEmployeeComponent onSwitchEmployeeFilter={onSwitchEmployeeFilter} user={user}/>
                 </Grid>
 
+
+
                 <Grid container justify="center" style={{'marginTop':'20px'}}>
                     <MyCalendarComponent/>
                 </Grid>
+
+
+
 
             </Container>
 
