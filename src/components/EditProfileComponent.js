@@ -241,9 +241,13 @@ function EditProfileComponent(props) {
     useEffect(() => {
         if (props.user === undefined) {
             setRegisterError("");
-        } else
-        extractUser();
-        extractInterests();
+        } else if (props.user.error) {
+            console.warn("PRINT ERROR")
+            console.log(props.user.error)
+        } else {
+            extractUser();
+            extractInterests();
+        }
     }, [props.user]);
 
 
@@ -654,13 +658,13 @@ function EditProfileComponent(props) {
                 registerDomains[i].toString().replace(" ", "")
             }
             setRegisterDomainsError("")
-            try {
-                props.onRegisterOrganization(props.user._id, compname, registerDomains);
-            } catch {
-                
-            }
+            props.onRegisterOrganization(props.user._id, compname, registerDomains);
+
+            console.warn("PRINT ERROR")
+            console.warn(props.user.error)
+
             setIsCorporate(true);
-            onUpdateUser(e)
+            //onUpdateUser(e)
         }
     };
 
