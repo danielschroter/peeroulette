@@ -5,6 +5,7 @@ import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import CorporateSignUpView from "./views/CorporateSignUpView";
 import CallView from "./views/CallView";
+import WaitingView from "./views/WaitingView";
 import EditProfileView from "./views/EditProfileView";
 import ConfirmView from "./views/ConfirmView";
 
@@ -48,9 +49,21 @@ const routes = [
     path: "/movie/:id",
     component: MovieDetailsView,
   },
+  // {
+  //     path: "/call",
+  //     component: CallView,
+  // },
   {
-      path: "/call",
+      path: "/call/:id",
       component: CallView,
+  },
+  {
+      path: "/wait/:page",
+      component: WaitingView,
+  },
+  {
+      path: "/wait",
+      component: WaitingView,
   },
 ];
 

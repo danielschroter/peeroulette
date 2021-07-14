@@ -144,7 +144,7 @@ function SignUpComponent(props) {
       <Paper className={classes.signUpPaper} component="form">
         <div className={classes.signUpRow}>
           <Typography variant="h4" align="center">
-            Welcome to Peeroulette!
+            Welcome to peeroulette!
           </Typography>
         </div>
         <div className={classes.signUpRow}>

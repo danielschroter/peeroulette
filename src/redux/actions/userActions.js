@@ -17,9 +17,21 @@ export function login(username, password) {
     }
   };
 }
-export function switchEmployeeFilter(){
-    return{
-        type: "switchEmployeeFilter"
+export function switchEmployeeFilter(id){
+    function onSuccess(filterValue) {
+        return { type: "switchEmployeeFilter_success", filterValue: filterValue };
+    }
+    function onFailure(error) {
+        return { type: "switchEmployeeFilter_failure" };
+    }
+
+    return async (dispatch) => {
+        try {
+            let resp = await UserService.switchEmployeeFilter(id);
+            dispatch(onSuccess(resp));
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
     };
 }
 
@@ -130,6 +142,24 @@ export const getUser = (id) => {
   return async (dispatch, getState) => {
     try {
       let user = await UserService.getUser(id);
+      dispatch(onSuccess(user));
+    } catch (e) {
+      onFailure(e);
+    }
+  };
+};
+
+export const getAvailable = (id, page) => {
+  function onSuccess(user) {
+    return { type: "GETUSER_SUCCESS", user: user };
+  }
+  function onFailure(error) {
+    console.log("failed to load a user", error);
+  }
+
+  return async (dispatch, getState) => {
+    try {
+      let user = await UserService.getAvailable(id, page);
       dispatch(onSuccess(user));
     } catch (e) {
       onFailure(e);
