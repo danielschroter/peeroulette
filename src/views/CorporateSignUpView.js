@@ -20,10 +20,10 @@ import {switchEmployeeFilter} from "../redux/actions";
 
 
 function CorporateSignUpView(props) {
-    // const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user.user);
 
-    const onSwitchEmployeeFilter = () => {
-        props.dispatch(switchEmployeeFilter());
+    const onSwitchEmployeeFilter = (id) => {
+        props.dispatch(switchEmployeeFilter(id));
     };
 
     return (
@@ -45,7 +45,7 @@ function CorporateSignUpView(props) {
                     </Button>
                 </Grid>
                 <Grid container justify="center" style={{'marginTop':'20px'}}>
-                    <CorporateFilterEmployeeComponent onSwitchEmployeeFilter={onSwitchEmployeeFilter}/>
+                    <CorporateFilterEmployeeComponent onSwitchEmployeeFilter={onSwitchEmployeeFilter} user={user}/>
                 </Grid>
 
             </Container>

@@ -17,6 +17,10 @@ export default class UserService {
         return "http://localhost:4000/interests";
     }
 
+    static baseURL_domain() {
+        return "http://localhost:4000/domain";
+    }
+
   static register(email, user, pass, isAdmin, compname, domains) {
     return new Promise((resolve, reject) => {
       HttpService.post(
@@ -38,6 +42,23 @@ export default class UserService {
       );
     });
   }
+
+    static switchEmployeeFilter(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL_user()}/switchEmployeeFilter`,
+                {
+                    id: id,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
 
   static confirm(id) {
     return new Promise((resolve, reject) => {
@@ -164,6 +185,42 @@ export default class UserService {
         });
     }
 
+    static addDomain(domain) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL_domain()}/addDomain`,
+                {
+                    domain: domain,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+
+    static deleteDomain(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.remove(
+                `${UserService.baseURL_domain()}/${id}`,
+                function (data) {
+                    if (data.message !== undefined) {
+                        resolve(data.message);
+                    } else {
+                        reject("Error while deleting");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static deleteOrganization(id) {
         return new Promise((resolve, reject) => {
             HttpService.remove(
@@ -200,14 +257,14 @@ export default class UserService {
         });
     }
 
-    static registerOrganization(user_id, compname, domains) {
+    static registerOrganization(user_id, compname, domainNames) {
         return new Promise((resolve, reject) => {
             HttpService.post(
                 `${UserService.baseURL_auth()}/registerOrganization`,
                 {
                     user_id: user_id,
                     compname: compname,
-                    domains: domains
+                    domainNames: domainNames
                 },
                 function (data) {
                     resolve(data);
@@ -233,4 +290,52 @@ export default class UserService {
         });
     }
 
+    static getDomains() {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                this.baseURL_domain(),
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getUserDomains(user_id) {
+        return new Promise(async (resolve, reject) => {
+            HttpService.post(
+                "http://localhost:4000/domain/getUserDomains",
+                {
+                    user_id: user_id,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getDomain(id) {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                `${UserService.baseURL_domain()}/${id}`,
+                function (data) {
+                    if (data !== undefined || Object.keys(data).length !== 0) {
+                        resolve(data);
+                    } else {
+                        reject("Error while retrieving user");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
 }
