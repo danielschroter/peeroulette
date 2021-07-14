@@ -191,6 +191,7 @@ function EditProfileComponent(props) {
     const [compname, setCompname] = React.useState("");
     const [editCompname, setEditCompname] = React.useState(false);
     const [domains, setDomains] = React.useState([]);
+    const [registerDomains, setRegisterDomains] = React.useState([]);
     const [editDomains, setEditDomains] = React.useState(false);
     const [addDomains, setAddDomains] = React.useState(false);
     const [deleteDomains, setDeleteDomains] = React.useState(false);
@@ -374,7 +375,7 @@ function EditProfileComponent(props) {
     };
 
     const onChangeDomainsSignUp = (e) => {
-        //setDomains(e.target.value);
+        setRegisterDomains(e.target.value);
         setRegisterDomainsError("");
     };
 
@@ -424,20 +425,20 @@ function EditProfileComponent(props) {
 
     // show error when password not match
     const onBlurDomains = (e) => {
-        let re1 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        let re2 = /^[ ]*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})[ ]*$/i;
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let i = 0;
-        let inputDomains = e.target.value;
+        let inputDomains = registerDomains.replace(" ", "").split(',');
         console.warn("DOMAINS BEFORE")
-        console.warn(inputDomains)
+        console.warn(inputDomains.length)
         for (i; i < inputDomains.length; i++) {
-            if (!re2.test(inputDomains[i])) {
+            if (!re.test(inputDomains[i])) {
                 console.warn("in invalid")
-                console.warn(inputDomains + "END")
+                console.warn(inputDomains[i])
                 setRegisterDomainsError("Type in a correct email.")
-                return;
+                return
             }
         }
+        setRegisterDomains(inputDomains)
         setRegisterDomainsError("")
     };
 
@@ -983,12 +984,13 @@ function EditProfileComponent(props) {
                                         </div>
                                         <div className={classes.signUpRow}>
                                             <TextField
-                                                label="domains"
+                                                label="InputDomains"
                                                 fullWidth
                                                 onChange={onChangeDomainsSignUp}
+                                                value={registerDomains}
                                                 onBlur={onBlurDomains}
                                                 error={registerDomainsError === "Type in a correct email."}
-                                                type = "domain"
+                                                type = "inputDomains"
                                             />
                                         </div>
                                         <div
