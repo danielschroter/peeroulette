@@ -258,7 +258,9 @@ function EditProfileComponent(props) {
         };
 
         back.username = username;
-        back.password = bcrypt.hashSync(password, 8);
+        if (editPassword) {
+            back.password = bcrypt.hashSync(password, 8);
+        }
         back.interests = interests;
         back.city = city;
         back.university = university;

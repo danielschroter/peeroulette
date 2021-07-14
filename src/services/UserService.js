@@ -43,6 +43,23 @@ export default class UserService {
     });
   }
 
+    static switchEmployeeFilter(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL_user()}/switchEmployeeFilter`,
+                {
+                    id: id,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
   static confirm(id) {
     return new Promise((resolve, reject) => {
       HttpService.post(
