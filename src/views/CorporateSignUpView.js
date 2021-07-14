@@ -64,7 +64,7 @@ function CorporateSignUpView(props) {
 
 
                 <Grid container justify="center" style={{'marginTop':'20px'}}>
-                    <MyCalendarComponent/>
+                    <MyCalendarComponent user={user}/>
                 </Grid>
 
 

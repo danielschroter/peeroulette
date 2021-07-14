@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Paper from '@material-ui/core/Paper';
 import AppointmentService from "../services/AppointmentService";
-import {ViewState, EditingState} from '@devexpress/dx-react-scheduler';
+import {ViewState, EditingState, IntegratedEditing} from '@devexpress/dx-react-scheduler';
 import {
     Scheduler,
     Toolbar,
@@ -19,26 +19,7 @@ import {
 import {withStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import UserService from "../services/UserService";
-
-
-const appointments = [
-    {
-        id: 234234,
-        startDate: '2021-07-13T10:45',
-        endDate: '2021-07-13T12:45',
-        title: 'Gym',
-        link: "Jitsi URL1",
-        description: "Get ready in the gym for summer"
-    },
-    {
-        id: 12312323,
-        startDate: '2021-07-13T17:30',
-        endDate: '2021-07-13T19:30',
-        title: 'DeepL Exam',
-        link: "Jitsi URL2",
-        description: "Make an Exam in DeepLearning Test"
-    },
-];
+import {useSelector} from "react-redux";
 
 
 const style = ({palette}) => ({
@@ -66,6 +47,78 @@ const style = ({palette}) => ({
     },
 });
 
+
+const messages = {
+    moreInformationLabel: '',
+};
+
+const TextEditor = (props) => {
+    if(props.type === 'multilineTextEditor'){
+        return null;
+    }return <AppointmentForm.TextEditor {...props} />
+}
+
+const BasicLayout = ({onFieldChange, appointmentData, ...restProps}) => {
+    const onURLFieldChange = (nextValue) => {
+        onFieldChange({link: nextValue})
+    };
+
+    const onDescriptionFieldChange = (nextValue) => {
+        onFieldChange({description: nextValue})
+    };
+
+    return (
+        <AppointmentForm.BasicLayout
+           appointmentData={appointmentData}
+           onFieldChange={onFieldChange}
+            {...restProps}
+            >
+            <AppointmentForm.Label
+                text = "Video URL"
+                type = "title"
+                />
+            <AppointmentForm.TextEditor
+                value={appointmentData.link}
+                placeholder="We will automatically set this value after saving :)"
+                onValueChange={onURLFieldChange}
+                readOnly
+                />
+            <AppointmentForm.Label
+                text = "Description"
+                type = "title"
+            />
+            <AppointmentForm.TextEditor
+                type='multilineTextEditor'
+                value={appointmentData.description}
+                placeholder="Description Field"
+                onValueChange={onDescriptionFieldChange}
+            />
+
+        </AppointmentForm.BasicLayout>
+    );
+};
+
+const appointments = [
+    {
+        id: 234234,
+        startDate: '2021-07-13T10:45',
+        endDate: '2021-07-13T12:45',
+        title: 'Gym',
+        link: "Jitsi URL1",
+        description: "Get ready in the gym for summer"
+    },
+    {
+        id: 12312323,
+        startDate: '2021-07-13T17:30',
+        endDate: '2021-07-13T19:30',
+        title: 'DeepL Exam',
+        link: "Jitsi URL2",
+        description: "Make an Exam in DeepLearning Test"
+    },
+];
+
+
+
 export default class MyCalendarComponent extends React.PureComponent {
 
 
@@ -78,6 +131,7 @@ export default class MyCalendarComponent extends React.PureComponent {
             addedAppointment: {},
             appointmentChanges: {},
             editingAppointment: undefined,
+            user: props.user,
         };
         this.currentDataChange = (currentDate) => {
             this.setState({currentDate});
@@ -123,6 +177,7 @@ export default class MyCalendarComponent extends React.PureComponent {
 
         if (added){
             try{
+                added["user"] = this.state.user._id;
                 const response = await AppointmentService.createAppointment(added);
                 app = response.map(this.mapAppointmentData)[0];
             }catch (e) {
@@ -185,6 +240,12 @@ export default class MyCalendarComponent extends React.PureComponent {
                     <Grid item xs={10}>
                         <span>{appointmentData.description}</span>
                     </Grid>
+                    <Grid item xs={2} className={classes.textCenter}>
+                        <span>Who: </span>
+                    </Grid>
+                    <Grid item xs={10}>
+                        <span>{appointmentData.user}</span>
+                    </Grid>
                 </Grid>
             </AppointmentTooltip.Content>
         ));
@@ -224,7 +285,10 @@ export default class MyCalendarComponent extends React.PureComponent {
                         showOpenButton
                         showDeleteButton
                     />
-                    <AppointmentForm/>
+                    <AppointmentForm
+                    basicLayoutComponent={BasicLayout}
+                    textEditorComponent={TextEditor}
+                    messages={messages}/>
                 </Scheduler>
             </Paper>
         );
