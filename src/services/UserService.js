@@ -117,6 +117,25 @@ export default class UserService {
     });
   }
 
+  static getAvailable(id, page) {
+    console.log(`${UserService.baseURL_user()}/${id}/available/${page}`);
+    return new Promise(async (resolve, reject) => {
+      HttpService.get(
+        `${UserService.baseURL_user()}/${id}/available/${page}`,
+        function (data) {
+          if (data !== undefined || Object.keys(data).length !== 0) {
+            resolve(data);
+          } else {
+            reject("Error while retrieving user");
+          }
+        },
+        function (textStatus) {
+          reject(textStatus);
+        }
+      );
+    });
+  }
+
   static deleteUser(id) {
     return new Promise((resolve, reject) => {
       HttpService.remove(

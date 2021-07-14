@@ -69,7 +69,7 @@ function KebabMenu(props) {
         // close this menu
         props.onClose();
         // navigate to the edit profile page
-        props.history.push("/call");
+        props.history.push("/wait");
     };
 
     return (
@@ -104,7 +104,7 @@ function KebabMenu(props) {
                             {user.user.username ? user.user.username[0] : ""}
                         </Avatar>*/}
                         {/* user.user.username */}
-                        Start new Call
+                        Get a new Match
                     </MenuItem>,
                     <Divider key="divider" />,
                       <MenuItem
