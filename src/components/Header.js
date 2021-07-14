@@ -32,7 +32,7 @@ function Header(props) {
 
     const onClickGithub = (event) => {
         var win = window.open(
-            "https://github.com/sebischair/seba-master-movie-frontend",
+            "https://gitlab.lrz.de/seba-master-2021/team-50/frontend/",
             "_blank"
         );
         win.focus();
@@ -55,7 +55,7 @@ function Header(props) {
                     variant="h5"
                     color="inherit"
                 >
-                    Movie Database App
+                    peeroulette
                 </Typography>
                 <IconButton onClick={onClickGithub} color="inherit">
                     <GitHubIcon />
