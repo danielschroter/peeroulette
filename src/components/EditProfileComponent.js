@@ -467,6 +467,10 @@ function EditProfileComponent(props) {
         setAddDomainsError("")
     };
 
+    const deleteOrg = (e) => {
+        props.onDeleteOrganization(corporate_id)
+    };
+
     const onCancelInterests = (e) => {
         setEditInterests(false);
         setAddInterests(false);
@@ -510,14 +514,23 @@ function EditProfileComponent(props) {
 // Methode unzureichend, Muss im Backend Gecheckt werden. Eine Domain kann nur einem Corporate Account zugeordnet sein. Hier wird nur im Frontend geprüft
 // Benedikt macht merge request wo er das gleiche gemacht hat für den Check vom Username.... Da kann man sich das abschauen.
 
+    const invalidMail = (fullDomianName) => {
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!re.test(fullDomianName)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 //TODO REFACTOR!
     const onAddNewDomain = (e) => {
         extractUser();
-        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(inputDomainName)) {
+          if(invalidMail(inputDomainName)) {
             setAddDomainsError("Invalid email address. Please type in a valid email address.");
             return;
         }
+
         let inputDomainNameTail = inputDomainName.split('@')[1];
         if(inputDomainNameTail !== undefined) {
             let i = 0;
@@ -568,7 +581,6 @@ function EditProfileComponent(props) {
             setAddInterests(false);
             setDeleteInterests(false);
             setSearch("");
-            onUpdateUser(e);
         }
     }
 
@@ -602,11 +614,9 @@ function EditProfileComponent(props) {
             let user_id = props.user._id;
             let i = 0;
             let fullInputDomains = domains.replace(" ", "").split(',');
-            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             for (i; i < fullInputDomains.length; i++) {
-                console.warn(fullInputDomains[i])
-                if (!re.test(fullInputDomains[i])) {
-                    setRegisterDomainsError("Invalid email address. Please type in a valid email address.");
+                if (invalidMail(fullInputDomains[i])) {
+                    setRegisterDomainsError("Invalid email address. Please type in a valid email address.")
                     return;
                 }
             }
