@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         backgroundColor:"#cc0000",
         marginTop:"12px",
+        color: "#ffffff"
     },
     editNameButton: {
         marginRight: theme.spacing(1),
@@ -374,7 +375,7 @@ function EditProfileComponent(props) {
 
     const onChangeDomainsSignUp = (e) => {
         setDomains(e.target.value);
-        setRegisterError("");
+        setRegisterDomainsError("");
     };
 
     // change functions are needed to change the edit states of the buttons
@@ -516,6 +517,8 @@ function EditProfileComponent(props) {
 
     const invalidMail = (fullDomianName) => {
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        console.warn("in invalid")
+        console.warn(fullDomianName+"END")
         if (!re.test(fullDomianName)) {
             return true;
         } else {
@@ -526,10 +529,13 @@ function EditProfileComponent(props) {
 //TODO REFACTOR!
     const onAddNewDomain = (e) => {
         extractUser();
+        {/*
           if(invalidMail(inputDomainName)) {
             setAddDomainsError("Invalid email address. Please type in a valid email address.");
             return;
         }
+        */}
+
 
         let inputDomainNameTail = inputDomainName.split('@')[1];
         if(inputDomainNameTail !== undefined) {
@@ -618,18 +624,23 @@ function EditProfileComponent(props) {
             let i = 0;
             let fullInputDomains = domains.replace(" ", "").split(',');
             for (i; i < fullInputDomains.length; i++) {
-                if (invalidMail(fullInputDomains[i])) {
+
+                {/*
+                   if (invalidMail(fullInputDomains[i])) {
                     setRegisterDomainsError("Invalid email address. Please type in a valid email address.")
                     return;
                 }
+                */}
+
+
             }
             setRegisterDomainsError("")
 
             props.onRegisterOrganization(user_id, compname, fullInputDomains);
             setIsCorporate(true);
             // need to set [] because in the frontend the input domains are first presented before it loads from the backend
-            setDomains([])
-            onUpdateUser(e)
+            //setDomains([])
+            //onUpdateUser(e)
         }
     };
 
@@ -1083,7 +1094,7 @@ function EditProfileComponent(props) {
                                                         <input type="text" placeholder="" onChange={ e => setInputDomainName(e.target.value)}
                                                                onBlur={onBlurAddDomains} error={addDomainsError !== ""}/>
                                                         {addDomainsError !== "" ? (
-                                                            <div className={classes.signUpRow}>
+                                                            <div className={classes.signUpRow} >
                                                                 <Typography color="error">{addDomainsError}</Typography>
                                                             </div>
                                                         ) : null}
