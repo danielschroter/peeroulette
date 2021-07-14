@@ -371,7 +371,7 @@ function EditProfileComponent(props) {
 
     const onChangeCompnameSignUp = (e) => {
         setCompname(e.target.value);
-        setRegisterError("");
+        setRegisterDomainsError("");
     };
 
     const onChangeDomainsSignUp = (e) => {
@@ -427,19 +427,30 @@ function EditProfileComponent(props) {
     const onBlurDomains = (e) => {
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let i = 0;
-        let inputDomains = registerDomains.replace(" ", "").split(',');
+
+        // update value by putting it into array to display spaces which would otherwise be trimmed
+        let inptuDomainsBeforeTrim = registerDomains.toString().split(',');
+
+        // remove spaces to get undistorted variable
+        let inputDomains = registerDomains.toString().replace(" ", "").split(',');
         console.warn("DOMAINS BEFORE")
         console.warn(inputDomains.length)
         for (i; i < inputDomains.length; i++) {
             if (!re.test(inputDomains[i])) {
                 console.warn("in invalid")
                 console.warn(inputDomains[i])
-                setRegisterDomainsError("Type in a correct email.")
+                setRegisterDomainsError("Type in a correct domain address.")
                 return
             }
         }
-        setRegisterDomains(inputDomains)
+        setRegisterDomains(inptuDomainsBeforeTrim)
         setRegisterDomainsError("")
+    };
+
+    const onBlurCompname = (e) => {
+        if (compname === "") {
+           setRegisterDomainsError("Type in a correct company name.")
+        }
     };
 
     const onBlurPassword = (e) => {
@@ -637,28 +648,22 @@ function EditProfileComponent(props) {
 
         // Redundanter Code für Email Check. See Benedikt (using a method which is then called).
         e.preventDefault();
+        console.warn("get in register sign up")
 
         if (props.user !== undefined) {
-            let user_id = props.user._id;
+            // remove spaces before adding it to backend
             let i = 0;
-            let fullInputDomains = domains.replace(" ", "").split(',');
-            for (i; i < fullInputDomains.length; i++) {
-
-                {/*
-                   if (invalidMail(fullInputDomains[i])) {
-                    setRegisterDomainsError("Invalid email address. Please type in a valid email address.")
-                    return;
-                }
-                */}
-
+            for (i; i < registerDomains.length; i++) {
+                registerDomains[i].toString().replace(" ", "")
+                console.warn("X"+registerDomains[i]+"X")
             }
+            let test = ["hans@hans.de", "jo@jo.de"]
+            console.warn("REGISTER DOMAINS")
+            console.warn(registerDomains)
             setRegisterDomainsError("")
-
-            props.onRegisterOrganization(user_id, compname, fullInputDomains);
+            props.onRegisterOrganization(props.user._id, compname, registerDomains);
             setIsCorporate(true);
-            // need to set [] because in the frontend the input domains are first presented before it loads from the backend
-            //setDomains([])
-            //onUpdateUser(e)
+            onUpdateUser(e)
         }
     };
 
@@ -976,21 +981,22 @@ function EditProfileComponent(props) {
                                         <p className={classes.userDataFont}>Sign up for a corporate Account!</p>
                                         <div className={classes.signUpRow}>
                                             <TextField
-                                                label="compname"
+                                                label="Company Name"
                                                 fullWidth
                                                 value={compname}
                                                 onChange={onChangeCompnameSignUp}
+                                                onBlur={onBlurCompname}
+                                                error={registerDomainsError === "Type in a correct company name."}
                                             />
                                         </div>
                                         <div className={classes.signUpRow}>
                                             <TextField
-                                                label="InputDomains"
+                                                label="Domains"
                                                 fullWidth
                                                 onChange={onChangeDomainsSignUp}
                                                 value={registerDomains}
                                                 onBlur={onBlurDomains}
-                                                error={registerDomainsError === "Type in a correct email."}
-                                                type = "inputDomains"
+                                                error={registerDomainsError === "Type in a correct domain address."}
                                             />
                                         </div>
                                         <div
