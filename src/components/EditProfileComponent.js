@@ -423,6 +423,15 @@ function EditProfileComponent(props) {
 
 
     // show error when password not match
+    const onBlurDomains = (e) => {
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        console.warn("in invalid")
+        console.warn(domains+"END")
+        if (!re.test(domains)) {
+            setRegisterDomainsError("Type in a correct email.")
+        }
+    };
+
     const onBlurPassword = (e) => {
         if (password !== "" && password2 !== "") {
             if (password !== password2) {
@@ -631,7 +640,6 @@ function EditProfileComponent(props) {
                     return;
                 }
                 */}
-
 
             }
             setRegisterDomainsError("")
@@ -970,6 +978,9 @@ function EditProfileComponent(props) {
                                                 fullWidth
                                                 value={domains}
                                                 onChange={onChangeDomainsSignUp}
+                                                onBlur={onBlurDomains}
+                                                error={registerDomainsError === "Type in a correct email."}
+                                                type = "domain"
                                             />
                                         </div>
                                         <div
