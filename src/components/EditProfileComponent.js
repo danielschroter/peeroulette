@@ -654,7 +654,11 @@ function EditProfileComponent(props) {
                 registerDomains[i].toString().replace(" ", "")
             }
             setRegisterDomainsError("")
-            props.onRegisterOrganization(props.user._id, compname, registerDomains);
+            try {
+                props.onRegisterOrganization(props.user._id, compname, registerDomains);
+            } catch {
+                
+            }
             setIsCorporate(true);
             onUpdateUser(e)
         }
