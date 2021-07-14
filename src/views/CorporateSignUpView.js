@@ -66,6 +66,7 @@ function CorporateSignUpView(props) {
                 </Grid>
 
             </Container>
+
         </div>
     );
 }
