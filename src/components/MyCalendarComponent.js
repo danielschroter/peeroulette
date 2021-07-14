@@ -65,7 +65,7 @@ const style = ({palette}) => ({
     },
 });
 
-export default class MyCalendarComponent_2 extends React.PureComponent {
+export default class MyCalendarComponent extends React.PureComponent {
 
 
 
@@ -197,12 +197,14 @@ export default class MyCalendarComponent_2 extends React.PureComponent {
                         onEditingAppointmentChange={this.changeEditingAppointment}
                     />
                     <WeekView
+                        startDayHour={0}
+                        endDayHour={24}
                     />
                     <Toolbar/>
                     <DateNavigator/>
                     <AllDayPanel/>
                     <TodayButton/>
-                    {/*<EditRecurrenceMenu/>*/}
+                    <EditRecurrenceMenu/>
                     <ConfirmationDialog/>
                     <Appointments/>
                     <AppointmentTooltip
