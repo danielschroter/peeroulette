@@ -155,6 +155,8 @@ function EditProfileComponent(props) {
     const [registerError, setRegisterError] = React.useState("");
     const [addInterestsError, setAddInterestsError] = React.useState("");
     const [addDomainsError, setAddDomainsError] = React.useState("");
+    const [registerDomainsError, setRegisterDomainsError] = React.useState("");
+
 
     // user data
     const [username, setUsername] = React.useState("");
@@ -503,10 +505,11 @@ function EditProfileComponent(props) {
 
     // sign-up functionalities for registering Organization only
     const onCancelSignUp = (e) => {
-        setRegisterError("");
+        setRegisterDomainsError("");
     };
 
     // methods for adding and deleting domains
+    // check valid email from https://stackoverflow.com/questions/39356826/how-to-check-if-it-a-text-input-has-a-valid-email-format-in-reactjs/39425165
     const addDomain = (domainName) => {
         let  newDomain = Object();
         newDomain.name = domainName;
@@ -518,6 +521,11 @@ function EditProfileComponent(props) {
 
     const onAddNewDomain = (e) => {
         extractUser();
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!re.test(inputDomainName)) {
+            setAddDomainsError("Invalid email address. Please type in a valid email address.");
+            return;
+        }
         let inputDomainNameTail = inputDomainName.split('@')[1];
         if (!inputDomainName.includes('@')) {
             setAddDomainsError("@ missing, not a valid domain.");
@@ -528,14 +536,12 @@ function EditProfileComponent(props) {
             for (i; i < domains.length; i++) {
                 if (domains[i].name === inputDomainNameTail) {
                     // don't add domains with the same value
-                    setAddDomainsError("Domain already exists");
+                    setAddDomainsError("Domain already exists.");
                     return;
                 }
             }
 
             let  newDomain = Object();
-            //newDomain.name = inputDomainNameTail;
-
             newDomain.name = inputDomainName;
             newDomain.confirmed = false;
             newDomain.verified_by = props.user._id;
@@ -602,14 +608,17 @@ function EditProfileComponent(props) {
         if (props.user !== undefined) {
             let user_id = props.user._id;
             let i = 0;
-            let fullInputDomains = domains.split(',');
-            let domainNamesTail = []
+            let fullInputDomains = domains.replace(" ", "").split(',');
+            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             for (i; i < fullInputDomains.length; i++) {
-                let domainTail = fullInputDomains[i].split("@")[1];
-                domainNamesTail.push(domainTail)
+                console.warn(fullInputDomains[i])
+                if (!re.test(fullInputDomains[i])) {
+                    setRegisterDomainsError("Invalid email address. Please type in a valid email address.");
+                    return;
+                }
             }
+            setRegisterDomainsError("")
 
-            // here we first add the empty domain while storing the entered domains in the domainNamesTail variable
             props.onRegisterOrganization(user_id, compname, fullInputDomains);
             setIsCorporate(true);
             // need to set [] because in the frontend the input domains are first presented before it loads from the backend
@@ -951,18 +960,17 @@ function EditProfileComponent(props) {
                                         >
                                             <Button
                                                 className={classes.signUpButton}
-                                                onClick={onCancelSignUp}
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                className={classes.signUpButton}
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={onRegisterSignUp}
                                             >
                                                 Register
                                             </Button>
+                                            {registerDomainsError !== "" ? (
+                                                <div className={classes.signUpRow}>
+                                                    <Typography color="error">{registerDomainsError}</Typography>
+                                                </div>
+                                            ) : null}
                                         </div>
                                     </div>
                                 ) : (
@@ -1072,7 +1080,7 @@ function EditProfileComponent(props) {
                                                             <div className={classes.signUpRow}>
                                                                 <Typography color="error">{addDomainsError}</Typography>
                                                             </div>
-                                                            ) : null}
+                                                        ) : null}
                                                     </div>
                                                 ) : null}
                                             </div>
