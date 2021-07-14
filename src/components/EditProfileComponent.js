@@ -580,7 +580,9 @@ function EditProfileComponent(props) {
             interests.push(e.target.value)
             setAddInterests(false);
             setDeleteInterests(false);
+            setEditInterests(false)
             setSearch("");
+            onUpdateUser(e);
         }
     }
 
@@ -589,6 +591,7 @@ function EditProfileComponent(props) {
         interests.splice(e.target.value, 1);
         setDeleteInterests(false);
         setAddInterests(false);
+        setEditInterests(false)
         onUpdateUser(e);
     }
 
