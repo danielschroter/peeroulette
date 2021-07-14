@@ -329,7 +329,6 @@ function EditProfileComponent(props) {
         }
     };
 
-
     // on change functions need in order to save temprorary changed variables
     // on the input field of the frontend
     const onChangeUsername = (e) => {
@@ -503,22 +502,13 @@ function EditProfileComponent(props) {
         setPassword2("");
     };
 
-    // sign-up functionalities for registering Organization only
-    const onCancelSignUp = (e) => {
-        setRegisterDomainsError("");
-    };
 
     // methods for adding and deleting domains
     // check valid email from https://stackoverflow.com/questions/39356826/how-to-check-if-it-a-text-input-has-a-valid-email-format-in-reactjs/39425165
-    const addDomain = (domainName) => {
-        let  newDomain = Object();
-        newDomain.name = domainName;
-        newDomain.confirmed = false;
-        newDomain.verified_by = props.user._id;
-        newDomain.organization = corporate_id;
-        props.onAddDomain(newDomain)
-    }
+// Methode unzureichend, Muss im Backend Gecheckt werden. Eine Domain kann nur einem Corporate Account zugeordnet sein. Hier wird nur im Frontend geprüft
+// Benedikt macht merge request wo er das gleiche gemacht hat für den Check vom Username.... Da kann man sich das abschauen.
 
+//TODO REFACTOR!
     const onAddNewDomain = (e) => {
         extractUser();
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -527,10 +517,6 @@ function EditProfileComponent(props) {
             return;
         }
         let inputDomainNameTail = inputDomainName.split('@')[1];
-        if (!inputDomainName.includes('@')) {
-            setAddDomainsError("@ missing, not a valid domain.");
-            return;
-        }
         if(inputDomainNameTail !== undefined) {
             let i = 0;
             for (i; i < domains.length; i++) {
@@ -603,6 +589,11 @@ function EditProfileComponent(props) {
         // because the organization needs to be first created, because the organization.id
         // is needed to link the domains with the organizatino which is only available after creating
         // the organization, this all happens in the backend
+
+
+        // We also need to check if the domain already are assigned to another company (Has to be done in backend)
+
+        // Redundanter Code für Email Check. See Benedikt (using a method which is then called).
         e.preventDefault();
 
         if (props.user !== undefined) {
