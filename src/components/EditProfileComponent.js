@@ -559,12 +559,11 @@ function EditProfileComponent(props) {
 //TODO REFACTOR!
     const onAddNewDomain = (e) => {
         extractUser();
-        {/*
-          if(invalidMail(inputDomainName)) {
+
+        if(invalidMail(inputDomainName)) {
             setAddDomainsError("Invalid email address. Please type in a valid email address.");
             return;
         }
-        */}
 
 
         let inputDomainNameTail = inputDomainName.split('@')[1];
@@ -648,18 +647,12 @@ function EditProfileComponent(props) {
 
         // Redundanter Code für Email Check. See Benedikt (using a method which is then called).
         e.preventDefault();
-        console.warn("get in register sign up")
-
         if (props.user !== undefined) {
             // remove spaces before adding it to backend
             let i = 0;
             for (i; i < registerDomains.length; i++) {
                 registerDomains[i].toString().replace(" ", "")
-                console.warn("X"+registerDomains[i]+"X")
             }
-            let test = ["hans@hans.de", "jo@jo.de"]
-            console.warn("REGISTER DOMAINS")
-            console.warn(registerDomains)
             setRegisterDomainsError("")
             props.onRegisterOrganization(props.user._id, compname, registerDomains);
             setIsCorporate(true);
