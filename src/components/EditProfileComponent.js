@@ -374,7 +374,7 @@ function EditProfileComponent(props) {
     };
 
     const onChangeDomainsSignUp = (e) => {
-        setDomains(e.target.value);
+        //setDomains(e.target.value);
         setRegisterDomainsError("");
     };
 
@@ -424,12 +424,21 @@ function EditProfileComponent(props) {
 
     // show error when password not match
     const onBlurDomains = (e) => {
-        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        console.warn("in invalid")
-        console.warn(domains+"END")
-        if (!re.test(domains)) {
-            setRegisterDomainsError("Type in a correct email.")
+        let re1 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let re2 = /^[ ]*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})[ ]*$/i;
+        let i = 0;
+        let inputDomains = e.target.value;
+        console.warn("DOMAINS BEFORE")
+        console.warn(inputDomains)
+        for (i; i < inputDomains.length; i++) {
+            if (!re2.test(inputDomains[i])) {
+                console.warn("in invalid")
+                console.warn(inputDomains + "END")
+                setRegisterDomainsError("Type in a correct email.")
+                return;
+            }
         }
+        setRegisterDomainsError("")
     };
 
     const onBlurPassword = (e) => {
@@ -976,7 +985,6 @@ function EditProfileComponent(props) {
                                             <TextField
                                                 label="domains"
                                                 fullWidth
-                                                value={domains}
                                                 onChange={onChangeDomainsSignUp}
                                                 onBlur={onBlurDomains}
                                                 error={registerDomainsError === "Type in a correct email."}
@@ -991,6 +999,7 @@ function EditProfileComponent(props) {
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={onRegisterSignUp}
+                                                disabled={registerDomainsError !== ""}
                                             >
                                                 Register
                                             </Button>
