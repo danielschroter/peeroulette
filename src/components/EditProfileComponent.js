@@ -433,21 +433,21 @@ function EditProfileComponent(props) {
         let i = 0;
 
         // update value by putting it into array to display spaces which would otherwise be trimmed
-        let inptuDomainsBeforeTrim = registerDomains.toString().split(',');
+        let inputDomainsBeforeTrim = registerDomains.toString().split(',');
 
         // remove spaces to get undistorted variable
-        let inputDomains = registerDomains.toString().replace(" ", "").split(',');
+        let inputDomains = registerDomains.toString().replaceAll(" ", "").split(',');
         console.warn("DOMAINS BEFORE")
         console.warn(inputDomains.length)
         for (i; i < inputDomains.length; i++) {
-            if (!re.test(inputDomains[i].replace(" ", ""))) {
+            if (!re.test(inputDomains[i])) {
                 console.warn("in invalid")
                 console.warn(inputDomains[i])
                 setRegisterDomainsError("Type in a correct domain address.")
                 return
             }
         }
-        setRegisterDomains(inptuDomainsBeforeTrim)
+        setRegisterDomains(inputDomainsBeforeTrim)
         setRegisterDomainsError("")
     };
 
