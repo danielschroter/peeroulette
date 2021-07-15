@@ -16,6 +16,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {useSelector} from "react-redux";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -149,6 +150,9 @@ const useStyles = makeStyles((theme) => ({
  * @param {props} props
  */
 function EditProfileComponent(props) {
+
+    const org = useSelector((state) => state.organization);
+
     const classes = useStyles();
     const [alertDeleteProfileOpen, setAltertDeleteProfileOpen] = React.useState(false);
 
@@ -239,16 +243,33 @@ function EditProfileComponent(props) {
     };
 
     useEffect(() => {
-        if (props.user === undefined) {
-            setRegisterError("");
-        } else if (props.user.error) {
-            console.warn("PRINT ERROR")
-            console.log(props.user)
-        } else {
+        if (props.organization.error) {
+            setIsCorporate(false);
+            setRegisterDomainsError(props.organization.error);
+        } else if (props.organization.organization) {
+            setIsCorporate(true);
+            setRegisterDomainsError("");
+            extractUser();
+            extractInterests();
+        } else{
+            setRegisterDomainsError("");
             extractUser();
             extractInterests();
         }
-    }, [props.user]);
+    }, [props.user, props.organization]);
+
+
+
+    //     if (props.organization === undefined) {
+    //         setRegisterDomainsError("");
+    //     } else if (props.organization.error) {
+    //         console.warn("PRINT ERROR");
+    //         setRegisterDomainsError(props.organization.error);
+    //     } else {
+    //         extractUser();
+    //         extractInterests();
+    //     }
+    // }, [props.user, props.organization]);
 
 
     // props for all grid items used below in the JSX
@@ -658,7 +679,7 @@ function EditProfileComponent(props) {
             }
             setRegisterDomainsError("")
             props.onRegisterOrganization(props.user._id, compname, registerDomains)
-            setIsCorporate(true);
+            // setIsCorporate(true);
             onUpdateUser(e)
         }
     };
@@ -982,7 +1003,7 @@ function EditProfileComponent(props) {
                                                 value={compname}
                                                 onChange={onChangeCompnameSignUp}
                                                 onBlur={onBlurCompname}
-                                                error={registerDomainsError === "Type in a correct company name."}
+                                                error={registerDomainsError !== ""}
                                             />
                                         </div>
                                         <div className={classes.signUpRow}>
@@ -1236,6 +1257,7 @@ function EditProfileComponent(props) {
 // attributes of props and their type
 EditProfileComponent.propTypes = {
     user: PropTypes.object,
+    organization: PropTypes.object,
     onUpdateUser: PropTypes.func,
     onUpdateOrganization: PropTypes.func,
     onRegisterOrganization: PropTypes.func,
