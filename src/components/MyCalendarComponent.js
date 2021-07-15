@@ -151,31 +151,6 @@ const BasicLayout = ({onFieldChange, appointmentData, ...restProps}) => {
                 )}
             />
 
-
-            {/*<TextField*/}
-            {/*    style={{'marginTop':'10px'}}*/}
-            {/*    select*/}
-            {/*    label="Interest 1"*/}
-            {/*    placeholder="Interest..1"*/}
-            {/*    value={appointmentData.interest}*/}
-            {/*    onChange={onInterestFieldChange}*/}
-            {/*    helperText="Please select your main interest"*/}
-            {/*    variant="outlined"*/}
-            {/*    >*/}
-            {/*    {values.map((option) => (*/}
-            {/*        <option key={option} value={option}>*/}
-            {/*            {option}*/}
-            {/*        </option>*/}
-            {/*    ))}*/}
-
-            {/*</TextField>*/}
-
-
-            {/*<p> Search for your interest:</p>*/}
-            {/*<input type="text" placeholder="Search"/>*/}
-            {/*<AppointmentForm.BooleanEditor/>*/}
-
-
         </AppointmentForm.BasicLayout>
     );
 };
@@ -337,7 +312,13 @@ export default class MyCalendarComponent extends React.PureComponent {
                         <span>Link: </span>
                     </Grid>
                     <Grid item xs={10}>
-                        <Link to={appointmentData.link.split("3000")[1]}>{appointmentData.link}</Link>
+                    {
+                        appointmentData.link ?
+                            (
+                                <Link to={appointmentData.link.split("3000")[1]}>{appointmentData.link}</Link>
+                            ):
+                            (<Link to="#">{appointmentData.link}</Link>)
+                    }
                     </Grid>
                     <Grid item xs={2} className={classes.textCenter}>
                         <span>What: </span>
