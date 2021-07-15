@@ -666,7 +666,6 @@ function EditProfileComponent(props) {
         // is needed to link the domains with the organizatino which is only available after creating
         // the organization, this all happens in the backend
 
-
         // We also need to check if the domain already are assigned to another company (Has to be done in backend)
 
         // Redundanter Code für Email Check. See Benedikt (using a method which is then called).
@@ -679,7 +678,7 @@ function EditProfileComponent(props) {
             }
             setRegisterDomainsError("")
             props.onRegisterOrganization(props.user._id, compname, registerDomains)
-            // setIsCorporate(true);
+            setIsCorporate(true);
             onUpdateUser(e)
         }
     };
