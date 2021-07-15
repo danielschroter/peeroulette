@@ -678,7 +678,6 @@ function EditProfileComponent(props) {
             }
             setRegisterDomainsError("")
             props.onRegisterOrganization(props.user._id, compname, registerDomains)
-            setIsCorporate(true);
             onUpdateUser(e)
         }
     };
