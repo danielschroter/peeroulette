@@ -13,6 +13,8 @@ function EditProfileView(props) {
     const user = useSelector((state) => state.user.user);
 
     useEffect(() => {
+        console.warn("DEBUG LOG")
+        console.warn(user)
     }, [user, props.history]);
 
     const onUpdateUser = (user) => {

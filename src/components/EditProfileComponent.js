@@ -243,7 +243,7 @@ function EditProfileComponent(props) {
             setRegisterError("");
         } else if (props.user.error) {
             console.warn("PRINT ERROR")
-            console.log(props.user.error)
+            console.log(props.user)
         } else {
             extractUser();
             extractInterests();
@@ -569,7 +569,6 @@ function EditProfileComponent(props) {
             return;
         }
 
-
         let inputDomainNameTail = inputDomainName.split('@')[1];
         if(inputDomainNameTail !== undefined) {
             let i = 0;
@@ -658,13 +657,9 @@ function EditProfileComponent(props) {
                 registerDomains[i].toString().replace(" ", "")
             }
             setRegisterDomainsError("")
-            props.onRegisterOrganization(props.user._id, compname, registerDomains);
-
-            console.warn("PRINT ERROR")
-            console.warn(props.user.error)
-
+            props.onRegisterOrganization(props.user._id, compname, registerDomains)
             setIsCorporate(true);
-            //onUpdateUser(e)
+            onUpdateUser(e)
         }
     };
 
