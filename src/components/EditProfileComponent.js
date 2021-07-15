@@ -440,7 +440,7 @@ function EditProfileComponent(props) {
         console.warn("DOMAINS BEFORE")
         console.warn(inputDomains.length)
         for (i; i < inputDomains.length; i++) {
-            if (!re.test(inputDomains[i])) {
+            if (!re.test(inputDomains[i].replace(" ", ""))) {
                 console.warn("in invalid")
                 console.warn(inputDomains[i])
                 setRegisterDomainsError("Type in a correct domain address.")
