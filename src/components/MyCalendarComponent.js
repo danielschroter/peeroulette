@@ -2,6 +2,7 @@ import * as React from 'react';
 import Paper from '@material-ui/core/Paper';
 import AppointmentService from "../services/AppointmentService";
 import {ViewState, EditingState, IntegratedEditing} from '@devexpress/dx-react-scheduler';
+import Link from 'react-router-dom/Link';
 import {
     Scheduler,
     Toolbar,
@@ -132,6 +133,7 @@ export default class MyCalendarComponent extends React.PureComponent {
             appointmentChanges: {},
             editingAppointment: undefined,
             user: props.user,
+            mappings: {},
         };
         this.currentDataChange = (currentDate) => {
             this.setState({currentDate});
@@ -142,7 +144,7 @@ export default class MyCalendarComponent extends React.PureComponent {
         this.changeEditingAppointment = this.changeEditingAppointment.bind(this);
     }
 
-    mapAppointmentData = appointment => ({
+    mapAppointmentData = (appointment) => ({
         id: appointment._id,
         startDate: appointment.startDate,
         endDate: appointment.endDate,
@@ -154,8 +156,27 @@ export default class MyCalendarComponent extends React.PureComponent {
 
     async componentDidMount() {
         let response = await AppointmentService.getAppointments();
-        let res_mapped = response.map(this.mapAppointmentData);
-        this.setState({data: res_mapped});
+        let apps = response.appointments;
+        let mapping = response.mapping;
+        // for (var i in response){
+        //     try{
+        //         const u = await UserService.getUser('' + response[i].user);
+        //         console.log("u " + u);
+        //     }catch (e) {
+        //
+        //     }
+        //
+        // }
+        console.log("vorher" + mapping[apps[0].user]);
+        // const val =  mapping[apps[0].user];
+        // apps[0].user = val;
+        console.log("nachher" + mapping[apps[0].user]);
+        let res_mapped = apps.map(this.mapAppointmentData, mapping);
+        // for (var i in res_mapped){
+        //     const val = mapping[apps[i].user];
+        //     res_mapped[i].user = val;
+        // }
+        this.setState({data: res_mapped, mapping: mapping});
     }
 
 
@@ -178,6 +199,7 @@ export default class MyCalendarComponent extends React.PureComponent {
         if (added){
             try{
                 added["user"] = this.state.user._id;
+                added["link"] = "localhost:3000/call/"+Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                 const response = await AppointmentService.createAppointment(added);
                 app = response.map(this.mapAppointmentData)[0];
             }catch (e) {
@@ -232,7 +254,7 @@ export default class MyCalendarComponent extends React.PureComponent {
                         <span>Link: </span>
                     </Grid>
                     <Grid item xs={10}>
-                        <span>{appointmentData.link}</span>
+                        <Link to={appointmentData.link.split("3000")[1]}>{appointmentData.link}</Link>
                     </Grid>
                     <Grid item xs={2} className={classes.textCenter}>
                         <span>What: </span>
@@ -244,7 +266,7 @@ export default class MyCalendarComponent extends React.PureComponent {
                         <span>Who: </span>
                     </Grid>
                     <Grid item xs={10}>
-                        <span>{appointmentData.user}</span>
+                        <span>{this.state.mapping[appointmentData.user]}</span>
                     </Grid>
                 </Grid>
             </AppointmentTooltip.Content>
