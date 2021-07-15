@@ -3,6 +3,10 @@ import Paper from '@material-ui/core/Paper';
 import AppointmentService from "../services/AppointmentService";
 import {ViewState, EditingState, IntegratedEditing} from '@devexpress/dx-react-scheduler';
 import Link from 'react-router-dom/Link';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import Chip from "@material-ui/core/Chip";
 import {
     Scheduler,
     Toolbar,
@@ -60,12 +64,39 @@ const TextEditor = (props) => {
 }
 
 const BasicLayout = ({onFieldChange, appointmentData, ...restProps}) => {
+
+    const values = ["hello", "world", "was ", "ist ", "denn ", "das ", "für ", "ein ", "Selektor"];
+
+    const currencies = [
+        {
+            value: 'USD',
+            label: '$',
+        },
+        {
+            value: 'EUR',
+            label: '€',
+        },
+        {
+            value: 'BTC',
+            label: '฿',
+        },
+        {
+            value: 'JPY',
+            label: '¥',
+        },
+    ];
+
+
     const onURLFieldChange = (nextValue) => {
         onFieldChange({link: nextValue})
     };
 
     const onDescriptionFieldChange = (nextValue) => {
         onFieldChange({description: nextValue})
+    };
+
+    const onInterestFieldChange = (event, nextValue) => {
+        onFieldChange({interests: nextValue})
     };
 
     return (
@@ -94,6 +125,56 @@ const BasicLayout = ({onFieldChange, appointmentData, ...restProps}) => {
                 placeholder="Description Field"
                 onValueChange={onDescriptionFieldChange}
             />
+
+            <AppointmentForm.Label
+                style={{'marginTop':'20px'}}
+                text = "Interests"
+                type = "title"
+            />
+
+            <Autocomplete
+                style={{'marginTop':'10px'}}
+                multiple
+                id="tags-outlined"
+                options={values}
+                getOptionLabel={(option) => option}
+                defaultValue={appointmentData.interests}
+                filterSelectedOptions
+                onChange={onInterestFieldChange}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Your Interests"
+                        placeholder="Your Labels"
+                    />
+                )}
+            />
+
+
+            {/*<TextField*/}
+            {/*    style={{'marginTop':'10px'}}*/}
+            {/*    select*/}
+            {/*    label="Interest 1"*/}
+            {/*    placeholder="Interest..1"*/}
+            {/*    value={appointmentData.interest}*/}
+            {/*    onChange={onInterestFieldChange}*/}
+            {/*    helperText="Please select your main interest"*/}
+            {/*    variant="outlined"*/}
+            {/*    >*/}
+            {/*    {values.map((option) => (*/}
+            {/*        <option key={option} value={option}>*/}
+            {/*            {option}*/}
+            {/*        </option>*/}
+            {/*    ))}*/}
+
+            {/*</TextField>*/}
+
+
+            {/*<p> Search for your interest:</p>*/}
+            {/*<input type="text" placeholder="Search"/>*/}
+            {/*<AppointmentForm.BooleanEditor/>*/}
+
 
         </AppointmentForm.BasicLayout>
     );
@@ -133,6 +214,7 @@ export default class MyCalendarComponent extends React.PureComponent {
             appointmentChanges: {},
             editingAppointment: undefined,
             user: props.user,
+            interests: ["was", "für"],
             mappings: {},
         };
         this.currentDataChange = (currentDate) => {
@@ -152,6 +234,7 @@ export default class MyCalendarComponent extends React.PureComponent {
         description: appointment.description,
         link: appointment.link,
         user: appointment.user,
+        interests:["was", "für"],
     });
 
     async componentDidMount() {
@@ -309,7 +392,7 @@ export default class MyCalendarComponent extends React.PureComponent {
                     />
                     <AppointmentForm
                     basicLayoutComponent={BasicLayout}
-                    textEditorComponent={TextEditor}
+                    // textEditorComponent={TextEditor}
                     messages={messages}/>
                 </Scheduler>
             </Paper>
