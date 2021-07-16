@@ -263,9 +263,7 @@ function PeerInformation(props) {
         socketRef.current.emit("send message", messageObject);
     }
 
-    function handleChange(e) {
-        setMessage("inputText");
-    }
+
 
     // props for all grid items used below in the JSX
     const girdItemProps = {
@@ -295,6 +293,11 @@ function PeerInformation(props) {
     const onChangeInputText = (e) => {
         setInputText(e.target.value)
     };
+
+    function handleChange(e) {
+        setMessage("inputText");
+        //sendMessage(e);
+    }
 
 
 
@@ -327,7 +330,9 @@ function PeerInformation(props) {
             >
                 Change
             </Button>
-            <p>{inputText}</p>
+            {/*<p>{inputText}</p>*/}
+            <p>test </p>
+
         </Paper>
     );
 }
