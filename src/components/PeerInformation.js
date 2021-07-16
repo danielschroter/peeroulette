@@ -177,6 +177,8 @@ function PeerInformation(props) {
     const [editCompname, setEditCompname] = React.useState(false);
     const [domains, setDomains] = React.useState("");
     const [editDomains, setEditDomains] = React.useState(false);
+    const [changeState, setChangeState] = React.useState("");
+
 
     const bcrypt = require("bcryptjs");
 
@@ -218,6 +220,7 @@ function PeerInformation(props) {
     useEffect(() => {
         extractUser();
         extractInterests();
+        setChangeState("init state");
     }, [props.user]);
 
 
@@ -260,6 +263,15 @@ function PeerInformation(props) {
                       return <li>{interest}</li>;
                 })}
             </ul>
+            <Button
+                onClick={(e) => setChangeState("clicked state")}
+                variant="contained"
+                color="primary"
+                className={classes.deleteProfileButton}
+            >
+                Change
+            </Button>
+            <p>{changeState}</p>
         </Paper>
     );
 }
