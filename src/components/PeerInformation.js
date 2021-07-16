@@ -1,4 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+// needed in tutorial
+import io from "socket.io-client";
+
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Button,
@@ -216,11 +219,53 @@ function PeerInformation(props) {
         });
     };
 
+    const [inputText, setInputText] = useState("");
+
+
+    // code for socket io
+
+    const [yourID, setYourID] = useState();
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState("");
+
+    const socketRef = useRef();
+
     useEffect(() => {
         extractUser();
         extractInterests();
+
+        // code for socket io
+        socketRef.current = io.connect('/');
+
+        socketRef.current.on("your id", id => {
+            setYourID(id);
+        })
+
+        socketRef.current.on("message", (message) => {
+            console.log("here");
+            receivedMessage(message);
+        })
     }, [props.user]);
 
+    // code for socket io
+
+    function receivedMessage(message) {
+        setMessages(oldMsgs => [...oldMsgs, message]);
+    }
+
+    function sendMessage(e) {
+        e.preventDefault();
+        const messageObject = {
+            body: message,
+            id: yourID,
+        };
+        setMessage("");
+        socketRef.current.emit("send message", messageObject);
+    }
+
+    function handleChange(e) {
+        setMessage("inputText");
+    }
 
     // props for all grid items used below in the JSX
     const girdItemProps = {
@@ -247,13 +292,11 @@ function PeerInformation(props) {
     console.log( interests );
 
     // delete user profile
-    const onChangeState = (e) => {
-        if(changeState) {
-            setChangeState(false)
-        } else {
-            setChangeState(true)
-        }
+    const onChangeInputText = (e) => {
+        setInputText(e.target.value)
     };
+
+
 
     return (
         <Paper style={{ padding: 20 }}>
@@ -270,15 +313,21 @@ function PeerInformation(props) {
                       return <li>{interest}</li>;
                 })}
             </ul>
+            <TextField
+                label="compname"
+                fullWidth
+                value={inputText}
+                onChange={onChangeInputText}
+            />
             <Button
-                onClick={onChangeState}
+                onClick={handleChange}
                 variant="contained"
                 color="primary"
                 className={classes.deleteProfileButton}
             >
                 Change
             </Button>
-            <p>{""+changeState}</p>
+            <p>{inputText}</p>
         </Paper>
     );
 }
