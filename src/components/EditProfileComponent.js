@@ -259,19 +259,6 @@ function EditProfileComponent(props) {
     }, [props.user, props.organization]);
 
 
-
-    //     if (props.organization === undefined) {
-    //         setRegisterDomainsError("");
-    //     } else if (props.organization.error) {
-    //         console.warn("PRINT ERROR");
-    //         setRegisterDomainsError(props.organization.error);
-    //     } else {
-    //         extractUser();
-    //         extractInterests();
-    //     }
-    // }, [props.user, props.organization]);
-
-
     // props for all grid items used below in the JSX
     const girdItemProps = {
         item: true,
@@ -315,8 +302,6 @@ function EditProfileComponent(props) {
             });
         }
     }
-
-
 
     // update user data after clicking on save
     const onUpdateUser = (e) => {
