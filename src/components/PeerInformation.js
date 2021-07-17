@@ -225,7 +225,7 @@ function PeerInformation(props) {
     // code for socket io
 
     const [yourID, setYourID] = useState();
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(["Hans", "Peter", "Wurst"]);
     const [message, setMessage] = useState("");
 
     const socketRef = useRef();
@@ -255,7 +255,9 @@ function PeerInformation(props) {
     function receivedMessage(message) {
         console.log("received")
         console.log(message)
-        setMessages(oldMsgs => [...oldMsgs, message]);
+        let tmp = messages;
+        tmp.push(message.body)
+        setMessages(tmp);
     }
 
     function sendMessage(e) {
@@ -267,9 +269,6 @@ function PeerInformation(props) {
         };
         socketRef.current.emit("send message", messageObject);
     }
-
-
-
 
     // props for all grid items used below in the JSX
     const girdItemProps = {
@@ -321,12 +320,6 @@ function PeerInformation(props) {
                       return <li>{interest}</li>;
                 })}
             </ul>
-            <TextField
-                label="compname"
-                fullWidth
-                value={inputText}
-                onChange={onChangeInputText}
-            />
             <Button
                 onClick={handleChange}
                 variant="contained"
@@ -335,12 +328,22 @@ function PeerInformation(props) {
             >
                 Change
             </Button>
-            { messages.length > 0 ? (
-                <p>{receivedMessage[0]}</p>
+            { true ? (
+                <div>
+                    {(() => {
+                        console.warn("GOT IN FRONT LOOP")
+                        let i = 0;
+                        let allMessages = []
+                        for (i; i < messages.length; i++) {
+                            allMessages.push(<p>{messages[i]}</p>)
+                            console.warn("added message")
+                        }
+                            return allMessages
+                    })()}
+                </div>
             ) : (
-                <p>No messages</p>
+                <p>{messages}</p>
                 ) }
-
         </Paper>
     );
 }
