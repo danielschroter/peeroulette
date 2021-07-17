@@ -243,25 +243,31 @@ function PeerInformation(props) {
 
         socketRef.current.on("message", (message) => {
             console.log("here");
+            console.log(message)
             receivedMessage(message);
+            console.log("recevied messages")
+            console.log(messages)
         })
+
     }, [props.user]);
 
-    // code for socket io
-
+     // code for socket io
     function receivedMessage(message) {
+        console.log("received")
+        console.log(message)
         setMessages(oldMsgs => [...oldMsgs, message]);
     }
 
     function sendMessage(e) {
         e.preventDefault();
+        setMessage(username);
         const messageObject = {
             body: message,
             id: yourID,
         };
-        setMessage("");
         socketRef.current.emit("send message", messageObject);
     }
+
 
 
 
@@ -296,9 +302,8 @@ function PeerInformation(props) {
 
     function handleChange(e) {
         setMessage("inputText");
-        //sendMessage(e);
+        sendMessage(e);
     }
-
 
 
     return (
@@ -330,8 +335,11 @@ function PeerInformation(props) {
             >
                 Change
             </Button>
-            {/*<p>{inputText}</p>*/}
-            <p>test </p>
+            { messages.length > 0 ? (
+                <p>{receivedMessage[0]}</p>
+            ) : (
+                <p>No messages</p>
+                ) }
 
         </Paper>
     );
