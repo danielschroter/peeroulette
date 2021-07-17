@@ -8,6 +8,7 @@ import { Jutsu, useJitsi }  from 'react-jutsu'
 
 import {login, register, changeUser, getUser, deleteUser, deleteOrganization, changeOrganization, registerOrganization} from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
+import GameComponent from "../components/GameComponent";
 
 function CallView(props) {
     const user = useSelector((state) => state.user.user);
@@ -83,6 +84,12 @@ function CallView(props) {
 
         <Grid container spacing={3} style={{height:"100%", padding: 20}}>
             <Grid item xs>
+                <GameComponent
+                    user={user}
+                    onGetUser={onGetUser}
+                    peer={match.params.id}
+                />
+
                 {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
             </Grid>
             <Grid item xs={6} style={{height:"100%"}}>

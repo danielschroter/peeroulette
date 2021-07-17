@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+// needed in tutorial
+import io from "socket.io-client";
+
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Button,
@@ -148,7 +151,7 @@ const useStyles = makeStyles((theme) => ({
  * For register new users
  * @param {props} props
  */
-function PeerInformation(props) {
+function GameComponent(props) {
     const classes = useStyles();
 
     // user data
@@ -216,11 +219,56 @@ function PeerInformation(props) {
         });
     };
 
+    const [inputText, setInputText] = useState("");
+
+
+    // code for socket io
+
+    const [yourID, setYourID] = useState();
+    const [messages, setMessages] = useState(["Hans", "Peter", "Wurst"]);
+    const [message, setMessage] = useState("");
+
+    const socketRef = useRef();
+
     useEffect(() => {
         extractUser();
         extractInterests();
 
+        // code for socket io
+        socketRef.current = io.connect('/');
+
+        socketRef.current.on("your id", id => {
+            setYourID(id);
+        })
+
+        socketRef.current.on("message", (message) => {
+            console.log("here");
+            console.log(message)
+            receivedMessage(message);
+            console.log("recevied messages")
+            console.log(messages)
+        })
+
     }, [props.user]);
+
+    // code for socket io
+    function receivedMessage(message) {
+        console.log("received")
+        console.log(message)
+        let tmp = messages;
+        tmp.push(message.body)
+        setMessages(tmp);
+    }
+
+    function sendMessage(e) {
+        e.preventDefault();
+        setMessage(username);
+        const messageObject = {
+            body: message,
+            id: yourID,
+        };
+        socketRef.current.emit("send message", messageObject);
+    }
 
     // props for all grid items used below in the JSX
     const girdItemProps = {
@@ -246,32 +294,57 @@ function PeerInformation(props) {
 
     console.log( interests );
 
+    // delete user profile
+    const onChangeInputText = (e) => {
+        setInputText(e.target.value)
+    };
+
+    function handleChange(e) {
+        setMessage("inputText");
+        sendMessage(e);
+    };
+
+
     return (
         <div>
             <Paper style={{ padding: 20 }}>
                 <Typography variant="h4">{username}</Typography>
-                <Typography variant="h5">Information about {username}</Typography>
-                <ul>
-                    <li>{city}</li>
-                    <li>{university}</li>
-                    <li>{organization}</li>
-                </ul>
-                <Typography variant="h5">Interests</Typography>
-                <ul>
-                    {interests.map(interest => {
-                        return <li>{interest}</li>;
-                    })}
-                </ul>
+                <Typography variant="h5">Game</Typography>
+
+                <Button
+                    onClick={handleChange}
+                    variant="contained"
+                    color="primary"
+                    className={classes.deleteProfileButton}
+                >
+                    Change
+                </Button>
+                { true ? (
+                    <div>
+                        {(() => {
+                            console.warn("GOT IN FRONT LOOP")
+                            let i = 0;
+                            let allMessages = []
+                            for (i; i < messages.length; i++) {
+                                allMessages.push(<p>{messages[i]}</p>)
+                                console.warn("added message")
+                            }
+                            return allMessages
+                        })()}
+                    </div>
+                ) : (
+                    <p>{messages}</p>
+                ) }
             </Paper>
         </div>
     );
 }
 
 // attributes of props and their type
-PeerInformation.propTypes = {
+GameComponent.propTypes = {
     user: PropTypes.object,
     onGetUser: PropTypes.func,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
-export default PeerInformation;
+export default GameComponent;
