@@ -304,41 +304,40 @@ function GameComponent(props) {
         sendMessage(e);
     };
 
+        return (
+            <div>
+                <Paper style={{ padding: 20 }}>
+                    <Typography variant="h4">{username}</Typography>
+                    <Typography variant="h5">Game</Typography>
 
-    return (
-        <div>
-            <Paper style={{ padding: 20 }}>
-                <Typography variant="h4">{username}</Typography>
-                <Typography variant="h5">Game</Typography>
-
-                <Button
-                    onClick={handleChange}
-                    variant="contained"
-                    color="primary"
-                    className={classes.deleteProfileButton}
-                >
-                    Change
-                </Button>
-                { true ? (
-                    <div>
-                        {(() => {
-                            console.warn("GOT IN FRONT LOOP")
-                            let i = 0;
-                            let allMessages = []
-                            for (i; i < messages.length; i++) {
-                                allMessages.push(<p>{messages[i]}</p>)
-                                console.warn("added message")
-                            }
-                            return allMessages
-                        })()}
-                    </div>
-                ) : (
-                    <p>{messages}</p>
-                ) }
-            </Paper>
-        </div>
-    );
-}
+                    <Button
+                        onClick={handleChange}
+                        variant="contained"
+                        color="primary"
+                        className={classes.deleteProfileButton}
+                    >
+                        Change
+                    </Button>
+                        { true ? (
+                            <div>
+                                {(() => {
+                                    console.warn("GOT IN FRONT LOOP")
+                                    let i = 0;
+                                    let allMessages = []
+                                    for (i; i < messages.length; i++) {
+                                        allMessages.push(<p>{messages[i]}</p>)
+                                        console.warn("added meessage")
+                                    }
+                                    return allMessages
+                                })()}
+                            </div>
+                        ) : (
+                            <p>{messages}</p>
+                        ) }
+                </Paper>
+            </div>
+        );
+    }
 
 // attributes of props and their type
 GameComponent.propTypes = {
