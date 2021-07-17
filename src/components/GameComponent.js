@@ -225,7 +225,7 @@ function GameComponent(props) {
     // code for socket io
 
     const [yourID, setYourID] = useState();
-    const [messages, setMessages] = useState(["Hans", "Peter", "Wurst"]);
+    const [messages, setMessages] = useState(["Hans", "Peter"]);
     const [message, setMessage] = useState("");
 
     const socketRef = useRef();
