@@ -566,7 +566,6 @@ function EditProfileComponent(props) {
         }
     }
 
-//TODO REFACTOR!
     const onAddNewDomain = (e) => {
         extractUser();
 
