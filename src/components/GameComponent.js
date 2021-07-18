@@ -352,7 +352,13 @@ function GameComponent(props) {
                     >
                         Spin Wheel
                     </Button>
-                        { true ? (
+                    { prizeNumber !== 0 ? (
+                        <p>Icebreaker question: {prizeNumber} </p>
+                    ) : (
+                        <p>Spin the wheel for questions</p>
+                    ) }
+                    {/*
+                    { true ? (
                             <div>
                                 {(() => {
                                     let i = 0;
@@ -367,6 +373,7 @@ function GameComponent(props) {
                         ) : (
                             <p>{messages}</p>
                         ) }
+                    */}
                 </Paper>
             </div>
         );
