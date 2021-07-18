@@ -333,16 +333,16 @@ function GameComponent(props) {
     // needed for lucky wheel
 
     const data = [
-        { option: 'Q1', style: { backgroundColor: 'orange', textColor: 'black' } },
-        { option: 'Q2', style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: 'Q3', style: { backgroundColor: 'orange', textColor: 'black' } },
-        { option: 'Q4', style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: 'Q5', style: { backgroundColor: 'orange', textColor: 'black' } },
-        { option: 'Q6', style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: 'Q7', style: { backgroundColor: 'orange', textColor: 'black' } },
-        { option: 'Q8', style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: 'Q9', style: { backgroundColor: 'orange', textColor: 'black' } },
-        { option: 'Q10', style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: 'Q1', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: 'Q2', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: 'Q3', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: 'Q4', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: 'Q5', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: 'Q6', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: 'Q7', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: 'Q8', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: 'Q9', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: 'Q10', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
     ]
 
         return (
