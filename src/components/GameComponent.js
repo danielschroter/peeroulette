@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Component } from "react";
 // needed in tutorial
 import io from "socket.io-client";
+
+// needed for wheel
+import { Wheel } from 'react-custom-roulette'
 
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -227,6 +230,8 @@ function GameComponent(props) {
     const [yourID, setYourID] = useState();
     const [messages, setMessages] = useState(["Hans", "Peter"]);
     const [message, setMessage] = useState("");
+    const [mustspin, setMustspin] = useState(false);
+    const [prizeNumber, setPrizeNumber] = useState(0);
 
     const socketRef = useRef();
 
@@ -248,6 +253,11 @@ function GameComponent(props) {
             console.log("recevied messages")
             console.log(messages)
             extractUser();
+            if(messages.length > 0) {
+                setMustspin(true)
+                let newPrizeNumber = Math.floor(Math.random() * data.length);
+                setPrizeNumber(newPrizeNumber);
+            }
         })
 
     }, [props.user]);
@@ -306,24 +316,45 @@ function GameComponent(props) {
         extractUser();
     };
 
+    // needed for lucky wheel
+
+    const data = [
+        { option: 'Q1', style: { backgroundColor: 'orange', textColor: 'black' } },
+        { option: 'Q2', style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: 'Q3', style: { backgroundColor: 'orange', textColor: 'black' } },
+        { option: 'Q4', style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: 'Q5', style: { backgroundColor: 'orange', textColor: 'black' } },
+        { option: 'Q6', style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: 'Q7', style: { backgroundColor: 'orange', textColor: 'black' } },
+        { option: 'Q8', style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: 'Q9', style: { backgroundColor: 'orange', textColor: 'black' } },
+        { option: 'Q10', style: { backgroundColor: 'black', textColor: 'white' } },
+    ]
+
         return (
             <div>
                 <Paper style={{ padding: 20 }}>
-                    <Typography variant="h4">{username}</Typography>
-                    <Typography variant="h5">Game</Typography>
-
+                    <Wheel
+                        mustStartSpinning={mustspin}
+                        prizeNumber={prizeNumber}
+                        data={data}
+                        backgroundColors={['#3e3e3e', '#df3428']}
+                        textColors={['#ffffff']}
+                        onStopSpinning={() => {
+                            setMustspin(false)
+                        }}
+                    />
                     <Button
                         onClick={handleChange}
                         variant="contained"
                         color="primary"
                         className={classes.deleteProfileButton}
                     >
-                        Change
+                        Spin Wheel
                     </Button>
                         { true ? (
                             <div>
                                 {(() => {
-                                    console.warn("GOT IN FRONT LOOP")
                                     let i = 0;
                                     let allMessages = []
                                     for (i; i < messages.length; i++) {

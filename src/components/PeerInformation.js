@@ -249,7 +249,7 @@ function PeerInformation(props) {
     return (
         <div>
             <Paper style={{ padding: 20 }}>
-                <Typography variant="h4">{username}</Typography>
+                {/*<Typography variant="h4">{username}</Typography>*/}
                 <Typography variant="h5">Information about {username}</Typography>
                 <ul>
                     <li>{city}</li>

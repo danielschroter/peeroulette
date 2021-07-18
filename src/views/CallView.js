@@ -84,6 +84,7 @@ function CallView(props) {
 
         <Grid container spacing={3} style={{height:"100%", padding: 20}}>
             <Grid item xs>
+                <Typography variant="h4">Break the ice with Peeroulette!</Typography>
                 <GameComponent
                     user={user}
                     onGetUser={onGetUser}
@@ -92,7 +93,9 @@ function CallView(props) {
 
                 {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
             </Grid>
+
             <Grid item xs={6} style={{height:"100%"}}>
+                <Typography variant="h4">Say hello to {user.username} :-)</Typography>
                 <Paper style={{height:"100%", padding: 20 }}>
                     <div style={{height:"100%"}}>
                         {/*{error && <p>{error}</p>}*/}
@@ -100,17 +103,10 @@ function CallView(props) {
                         {/*<Typography variant="h1">Jitsi</Typography>*/}
                     </div>
                 </Paper>
-            </Grid>
-            <Grid item xs>
                 <PeerInformation
                     user={user}
                     onGetUser={onGetUser}
                     peer={match.params.id}
-                    // onUpdateUser={onUpdateUser}
-                    // onUpdateOrganization={onUpdateOrganization}
-                    // onRegisterOrganization={onRegisterOrganization}
-                    // onDeleteUser={onDeleteUser}
-                    // onDeleteOrganization={onDeleteOrganization}
                 />
             </Grid>
         </Grid>
