@@ -302,6 +302,7 @@ function GameComponent(props) {
     function handleChange(e) {
         setMessage("inputText");
         sendMessage(e);
+        extractUser();
     };
 
         return (
