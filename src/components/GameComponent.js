@@ -336,7 +336,7 @@ function GameComponent(props) {
                 <Paper style={{ padding: 20 }}>
                     <Wheel
                         mustStartSpinning={mustspin}
-                        prizeNumber={prizeNumber}
+                        prizeNumber={3}
                         data={data}
                         backgroundColors={['#3e3e3e', '#df3428']}
                         textColors={['#ffffff']}
