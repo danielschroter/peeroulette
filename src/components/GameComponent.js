@@ -4,6 +4,7 @@ import io from "socket.io-client";
 
 // needed for wheel
 import { Wheel } from 'react-custom-roulette'
+import Roulette from './Roulette'
 
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -316,6 +317,19 @@ function GameComponent(props) {
         extractUser();
     };
 
+    const handleOnComplete = (value) => {
+        console.log(value);
+    };
+
+    const options = [
+        "war",
+        "pain",
+        "words",
+        "love",
+        "life",
+    ];
+
+
     // needed for lucky wheel
 
     const data = [
@@ -344,6 +358,17 @@ function GameComponent(props) {
                             setMustspin(false)
                         }}
                     />
+
+                    {/*
+                     <Roulette
+                        options={options}
+                        baseSize={300}
+                        onComplete={handleOnComplete}
+                        mustSpin={0}
+                    />
+                    */}
+
+
                     <Button
                         onClick={handleChange}
                         variant="contained"
@@ -352,11 +377,14 @@ function GameComponent(props) {
                     >
                         Spin Wheel
                     </Button>
-                    { prizeNumber !== 0 ? (
+                    {/*
+                     { prizeNumber !== 0 ? (
                         <p>Icebreaker question: {prizeNumber} </p>
                     ) : (
                         <p>Spin the wheel for questions</p>
                     ) }
+                    */}
+
                     {/*
                     { true ? (
                             <div>
