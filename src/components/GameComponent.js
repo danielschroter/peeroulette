@@ -247,6 +247,7 @@ function GameComponent(props) {
             receivedMessage(message);
             console.log("recevied messages")
             console.log(messages)
+            extractUser();
         })
 
     }, [props.user]);
