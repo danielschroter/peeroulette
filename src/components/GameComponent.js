@@ -193,6 +193,7 @@ function GameComponent(props) {
             return;
         }
         setCalculateRound(false);
+        setEndSpin(false);
 
         // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
@@ -234,6 +235,7 @@ function GameComponent(props) {
     const [mustspin, setMustspin] = useState(false);
     const [newPrizeNumber, setNewPrizeNumber] = useState(0);
     const [calculateRound, setCalculateRound] = useState(false);
+    const [endSpin, setEndSpin] = useState(false);
 
 
     const socketRef = useRef();
@@ -241,6 +243,7 @@ function GameComponent(props) {
     useEffect(() => {
         extractUser();
         extractInterests();
+        console.log(data)
 
         // code for socket io
         socketRef.current = io.connect('/');
@@ -282,6 +285,7 @@ function GameComponent(props) {
         setNewPrizeNumber(newPrizeNumber)
 
         console.log("calculated new prize number")
+
 
         const messageObject = {
             body: newPrizeNumber,
@@ -352,10 +356,10 @@ function GameComponent(props) {
         { option: allInterests[3], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
         { option: allInterests[4], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
         { option: allInterests[5], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
-        { option: 'XXXXXXXXXXX', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: 'Weight lifting', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
-        { option: 'Documentaries', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: 'Q10', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[6], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[7], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[8], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[9], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
     ]
 
         return (
@@ -369,18 +373,9 @@ function GameComponent(props) {
                         textColors={['#ffffff']}
                         onStopSpinning={() => {
                             setMustspin(false)
+                            setEndSpin(true)
                         }}
                     />
-
-                    {/*
-                     <Roulette
-                        options={options}
-                        baseSize={300}
-                        onComplete={handleOnComplete}
-                        mustSpin={0}
-                    />
-                    */}
-
 
                     <Button
                         onClick={handleChange}
@@ -390,31 +385,11 @@ function GameComponent(props) {
                     >
                         Spin Wheel
                     </Button>
-                    {/*
-                     { prizeNumber !== 0 ? (
-                        <p>Icebreaker question: {prizeNumber} </p>
+                    { !endSpin ? (
+                        <p>Spinned interest:</p>
                     ) : (
-                        <p>Spin the wheel for questions</p>
+                        <p>Spinned interest: {data[newPrizeNumber].option}</p>
                     ) }
-                    */}
-
-                    {/*
-                    { true ? (
-                            <div>
-                                {(() => {
-                                    let i = 0;
-                                    let allMessages = []
-                                    for (i; i < messages.length; i++) {
-                                        allMessages.push(<p>{messages[i]}</p>)
-                                        console.warn("added meessage")
-                                    }
-                                    return allMessages
-                                })()}
-                            </div>
-                        ) : (
-                            <p>{messages}</p>
-                        ) }
-                    */}
                 </Paper>
             </div>
         );
