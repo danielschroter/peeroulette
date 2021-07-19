@@ -386,10 +386,10 @@ function GameComponent(props) {
                         Spin Wheel
                     </Button>
                     { !endSpin ? (
-                        <p>Spinned interest:</p>
-                    ) : (
-                        <p>Spinned interest: {data[newPrizeNumber].option}</p>
-                    ) }
+                        <Typography variant="h5" style={{"marginTop":"15px"}}>Spinned interest:</Typography>
+                        ) : (
+                        <Typography variant="h5" style={{"marginTop":"15px"}}>Spinned interest: {data[newPrizeNumber].option}</Typography>
+                        ) }
                 </Paper>
             </div>
         );
