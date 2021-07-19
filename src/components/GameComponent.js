@@ -137,6 +137,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         textDecoration: "none",
         display: "inlineBlock",
+        fontSize: "15px",
         margin: "4px 2px",
     },
     deleteInterestsIcon: {
@@ -387,7 +388,7 @@ function GameComponent(props) {
 
         return (
             <div>
-                <Paper style={{ padding: 20 }}>
+                <Paper style={{ padding: 20, "backgroundColor":"#484848"}}>
                     <Wheel
                         mustStartSpinning={mustspin}
                         prizeNumber={newPrizeNumber}
@@ -409,10 +410,11 @@ function GameComponent(props) {
                         Spin Wheel
                     </Button>
                     { !endSpin ? (
-                        <Typography variant="h5" style={{"marginTop":"15px"}}>Spinned interest:</Typography>
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Spinned interest:</Typography>
                         ) : (
-                        <Typography variant="h5" style={{"marginTop":"15px"}}>Spinned interest: {data[newPrizeNumber].option}</Typography>
-                        ) }
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Spinned interest: {data[newPrizeNumber].option}</Typography>
+                    ) }
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Winner: </Typography>
                 </Paper>
                 <Paper style={{ padding: 20 , "backgroundColor":"green"}}>
                     <Typography style={{"color":"gold"}}>Bet Player A: {newUserBet}</Typography>
