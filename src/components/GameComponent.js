@@ -6,6 +6,9 @@ import io from "socket.io-client";
 import { Wheel } from 'react-custom-roulette'
 import Roulette from './Roulette'
 
+// needed for table
+import Table from 'react-bootstrap/Table'
+
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Button,
@@ -120,6 +123,22 @@ const useStyles = makeStyles((theme) => ({
         fontSize: "15px",
         pointerEvents: "none",
     },
+    talbeButton: {
+        marginTop: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        color: "black",
+        fontSize: "15px",
+    },
+    roundButton: {
+        backgroundColor: "#04AA6D",
+        border: "none",
+        color: "gold",
+        padding: "20px",
+        textAlign: "center",
+        textDecoration: "none",
+        display: "inlineBlock",
+        margin: "4px 2px",
+    },
     deleteInterestsIcon: {
         marginTop: theme.spacing(1),
         fontSize: "15px",
@@ -194,6 +213,7 @@ function GameComponent(props) {
         }
         setCalculateRound(false);
         setEndSpin(false);
+        setNewUserBet("No bet set yet")
 
         // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
@@ -236,7 +256,10 @@ function GameComponent(props) {
     const [newPrizeNumber, setNewPrizeNumber] = useState(0);
     const [calculateRound, setCalculateRound] = useState(false);
     const [endSpin, setEndSpin] = useState(false);
+    const [newUserBet, setNewUserBet] = useState("");
 
+    const [userColour, setUserColour] = useState("white");
+    const white = "white";
 
     const socketRef = useRef();
 
@@ -351,15 +374,15 @@ function GameComponent(props) {
 
     const data = [
         { option: allInterests[0], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[1], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[1], style: { backgroundColor: 'black', textColor: 'white' } },
         { option: allInterests[2], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[3], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[3], style: { backgroundColor: 'black', textColor: 'white' } },
         { option: allInterests[4], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[5], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[5], style: { backgroundColor: 'black', textColor: 'white' } },
         { option: allInterests[6], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[7], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[7], style: { backgroundColor: 'black', textColor: 'white' } },
         { option: allInterests[8], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[9], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[9], style: { backgroundColor: 'black', textColor: 'white' } },
     ]
 
         return (
@@ -390,6 +413,30 @@ function GameComponent(props) {
                         ) : (
                         <Typography variant="h5" style={{"marginTop":"15px"}}>Spinned interest: {data[newPrizeNumber].option}</Typography>
                         ) }
+                </Paper>
+                <Paper style={{ padding: 20 , "backgroundColor":"green"}}>
+                    <Typography style={{"color":"gold"}}>Bet Player A: {newUserBet}</Typography>
+                    <Typography style={{"color":"gold"}}>Bet Player B: {newUserBet}</Typography>
+
+                    <Table striped bordered hover size="sm">
+                        <tbody>
+                        <tr>
+                            {(() => {
+                                console.log("DATA")
+                                console.log(data)
+                                let i = 0;
+                                let dataTable = [];
+                                for (i; i < data.length; i++) {
+                                    dataTable.push(<button className={classes.roundButton} value={i}
+                                                           onClick={(e) => {
+                                        setNewUserBet(data[e.target.value].option)
+                                    }}>{data[i].option}</button>);
+                                }
+                                return dataTable;
+                            })()}
+                        </tr>
+                        </tbody>
+                    </Table>
                 </Paper>
             </div>
         );
