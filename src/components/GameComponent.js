@@ -389,23 +389,25 @@ function GameComponent(props) {
         return (
             <div>
                 <Paper style={{ padding: 20, "backgroundColor":"#484848"}}>
-                    <Wheel
-                        mustStartSpinning={mustspin}
-                        prizeNumber={newPrizeNumber}
-                        data={data}
-                        backgroundColors={['#3e3e3e', '#df3428']}
-                        textColors={['#ffffff']}
-                        onStopSpinning={() => {
-                            setMustspin(false)
-                            setEndSpin(true)
-                        }}
-                    />
+                        <Wheel
+                            mustStartSpinning={mustspin}
+                            prizeNumber={newPrizeNumber}
+                            data={data}
+                            backgroundColors={['#3e3e3e', '#df3428']}
+                            textColors={['#ffffff']}
+                            onStopSpinning={() => {
+                                setMustspin(false)
+                                setEndSpin(true)
+                            }}
+                        />
+
 
                     <Button
                         onClick={handleChange}
                         variant="contained"
                         color="primary"
                         className={classes.deleteProfileButton}
+                        style={{"backgroundColor":"#ED7C31"}}
                     >
                         Spin Wheel
                     </Button>
