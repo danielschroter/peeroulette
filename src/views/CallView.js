@@ -95,7 +95,7 @@ function CallView(props) {
             </Grid>
 
             <Grid item xs={6} style={{height:"100%"}}>
-                <Typography variant="h4">Say hello to {user.username} :-)</Typography>
+                <Typography variant="h4">Say hello :-)</Typography>
                 <Paper style={{height:"100%", padding: 20 }}>
                     <div style={{height:"100%"}}>
                         {/*{error && <p>{error}</p>}*/}

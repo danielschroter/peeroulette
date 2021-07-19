@@ -188,7 +188,6 @@ function GameComponent(props) {
 
     const bcrypt = require("bcryptjs");
 
-    // extract all the user data from the backend
     const extractUser = () => {
         if (!props.user) {
             return;
@@ -315,6 +314,12 @@ function GameComponent(props) {
         setMessage("inputText");
         sendMessage(e);
         extractUser();
+        let i = 0;
+        for (i; i < allInterests.length; i++) {
+            if (allInterests[i].length >= 12) {
+                console.warn(allInterests[i])
+            }
+        }
     };
 
     const handleOnComplete = (value) => {
@@ -333,15 +338,15 @@ function GameComponent(props) {
     // needed for lucky wheel
 
     const data = [
-        { option: 'Q1', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: 'Q2', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
-        { option: 'Q3', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: 'Q4', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
-        { option: 'Q5', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: 'Q6', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
-        { option: 'Q7', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: 'Q8', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
-        { option: 'Q9', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[0], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[1], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[2], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[3], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: allInterests[4], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[5], style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: 'XXXXXXXXXXX', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: 'Weight lifting', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
+        { option: 'Documentaries', style: { backgroundColor: '#ED7C31', textColor: 'black' } },
         { option: 'Q10', style: { backgroundColor: '#baf2ef', textColor: 'black' } },
     ]
 
