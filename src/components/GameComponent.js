@@ -179,8 +179,15 @@ function GameComponent(props) {
     const classes = useStyles();
 
     // user data
-    const [user_id, setUser_id] = React.useState("");
-    const [username, setUsername] = React.useState("");
+    const [otherUser_id, setOtherUser_id] = React.useState("");
+    const [thisUser_id, setThisUser_id] = React.useState("");
+
+    const [otherUsername, setOtherUsername] = React.useState("");
+    const [thisUsername, setThisUsername] = React.useState("");
+
+    const [thisBet, setThisBet] = React.useState("");
+
+
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
     const [city, setCity] = React.useState("");
@@ -216,9 +223,14 @@ function GameComponent(props) {
         setEndSpin(false);
         setNewUserBet("No bet set yet")
 
-        // UserService.getUser(props.user._id).then(function(userBackend) {
+        console.warn("try to get username")
+        setThisUsername(props.user.username)
+        setThisUser_id(props.user._id)
+
+            // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
-            setUsername(userBackend.username);
+            setOtherUser_id(userBackend._id)
+            setOtherUsername(userBackend.username);
             setCity(userBackend.city);
             setInterests(userBackend.interests);
             setUniversity(userBackend.university);
@@ -282,8 +294,10 @@ function GameComponent(props) {
             receivedMessage(message);
             console.log("recevied messages")
             console.log(messages)
+            console.warn("OTHER USER ID")
+            console.warn(otherUser_id)
             extractUser();
-            if(messages.length > 0) {
+            if(messages.length > 0 && (message.id === thisUser_id)) {
                 setMustspin(true)
             }
         })
@@ -292,12 +306,14 @@ function GameComponent(props) {
 
     // code for socket io
     function receivedMessage(message) {
-        console.log("received")
-        console.log(message)
-        let tmp = messages;
-        tmp.push(message.body)
-        setMessages(tmp);
-        setNewPrizeNumber(message.body)
+        console.warn("OTHER USER ID")
+        console.warn(otherUser_id)
+        //if (message.id === thisUser_id || message.id === thisUser_id) {
+            let tmp = messages;
+            tmp.push(message.body)
+            setMessages(tmp);
+            setNewPrizeNumber(message.body)
+        //}
     }
 
     function sendMessage(e) {
@@ -313,7 +329,7 @@ function GameComponent(props) {
 
         const messageObject = {
             body: newPrizeNumber,
-            id: yourID,
+            id: thisUser_id,
         };
 
         console.log("message sent")
@@ -333,7 +349,7 @@ function GameComponent(props) {
             ...props.user,
         };
 
-        back.username = username;
+        back.username = otherUsername;
         back.password = bcrypt.hashSync(password, 8);
         back.interests = interests;
         back.city = city;
@@ -352,7 +368,7 @@ function GameComponent(props) {
 
     function handleChange(e) {
         setCalculateRound(true)
-        setMessage(username);
+        setMessage(otherUsername);
 
         sendMessage(e);
         extractUser();
@@ -401,7 +417,6 @@ function GameComponent(props) {
                             }}
                         />
 
-
                     <Button
                         onClick={handleChange}
                         variant="contained"
@@ -419,8 +434,8 @@ function GameComponent(props) {
                         <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Winner: </Typography>
                 </Paper>
                 <Paper style={{ padding: 20 , "backgroundColor":"green"}}>
-                    <Typography style={{"color":"gold"}}>Bet Player A: {newUserBet}</Typography>
-                    <Typography style={{"color":"gold"}}>Bet Player B: {newUserBet}</Typography>
+                    <Typography style={{"color":"gold"}}>Bet {thisUsername}: {newUserBet} {thisUser_id}</Typography>
+                    <Typography style={{"color":"gold"}}>Bet {otherUsername}: {newUserBet} {}</Typography>
 
                     <Table striped bordered hover size="sm">
                         <tbody>
