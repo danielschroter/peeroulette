@@ -192,6 +192,7 @@ function GameComponent(props) {
         if (!props.user) {
             return;
         }
+        setCalculateRound(false);
 
         // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
@@ -228,10 +229,12 @@ function GameComponent(props) {
     // code for socket io
 
     const [yourID, setYourID] = useState();
-    const [messages, setMessages] = useState(["Hans", "Peter"]);
+    const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [mustspin, setMustspin] = useState(false);
-    const [prizeNumber, setPrizeNumber] = useState(0);
+    const [newPrizeNumber, setNewPrizeNumber] = useState(0);
+    const [calculateRound, setCalculateRound] = useState(false);
+
 
     const socketRef = useRef();
 
@@ -255,8 +258,6 @@ function GameComponent(props) {
             extractUser();
             if(messages.length > 0) {
                 setMustspin(true)
-                let newPrizeNumber = Math.floor(Math.random() * data.length);
-                setPrizeNumber(newPrizeNumber);
             }
         })
 
@@ -269,15 +270,26 @@ function GameComponent(props) {
         let tmp = messages;
         tmp.push(message.body)
         setMessages(tmp);
+        setNewPrizeNumber(message.body)
     }
 
     function sendMessage(e) {
         e.preventDefault();
-        setMessage(username);
+        extractUser();
+
+        let newPrizeNumber = Math.floor(Math.random() * data.length)
+        console.log(newPrizeNumber)
+        setNewPrizeNumber(newPrizeNumber)
+
+        console.log("calculated new prize number")
+
         const messageObject = {
-            body: message,
+            body: newPrizeNumber,
             id: yourID,
         };
+
+        console.log("message sent")
+        console.log(messageObject.body)
         socketRef.current.emit("send message", messageObject);
     }
 
@@ -311,15 +323,11 @@ function GameComponent(props) {
     };
 
     function handleChange(e) {
-        setMessage("inputText");
+        setCalculateRound(true)
+        setMessage(username);
+
         sendMessage(e);
         extractUser();
-        let i = 0;
-        for (i; i < allInterests.length; i++) {
-            if (allInterests[i].length >= 12) {
-                console.warn(allInterests[i])
-            }
-        }
     };
 
     const handleOnComplete = (value) => {
@@ -355,7 +363,7 @@ function GameComponent(props) {
                 <Paper style={{ padding: 20 }}>
                     <Wheel
                         mustStartSpinning={mustspin}
-                        prizeNumber={3}
+                        prizeNumber={newPrizeNumber}
                         data={data}
                         backgroundColors={['#3e3e3e', '#df3428']}
                         textColors={['#ffffff']}
