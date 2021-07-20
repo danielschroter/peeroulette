@@ -272,6 +272,7 @@ function GameComponent(props) {
     const [thisUserBet, setThisUserBet] = useState("");
     const [otherUserBet, setOtherUserBet] = useState("");
     const [spinWheelBool, setSpinWheelBool] = useState(false);
+    const [blockSpin, setBlockSpin] = useState(false);
 
 
     const [userColour, setUserColour] = useState("white");
@@ -303,11 +304,13 @@ function GameComponent(props) {
                 // spin wheel only in match of two peers
                 if ((idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer) ||
                     idOfUserSpinnedWheel === props.peer && idOfPeerOfUserSpinnedWheel === props.user._id) {
-                    if (true) {
+                    if (false) {
+                        if (message.body[3] !== undefined) {
+                            setOtherUserBet(message.body[3])
+                        }
+                        setBlockSpin(false)
+                    } else {
                         setMustspin(true);
-                    }
-                    if (message.body[3] !== undefined) {
-                        setOtherUserBet(message.body[3])
                     }
                 }
             }
@@ -465,7 +468,9 @@ function GameComponent(props) {
                                     dataTable.push(<button className={classes.roundButton} value={i}
                                                            onClick={(e) => {
                                         setThisUserBet(data[e.target.value].option)
-
+                                                                setBlockSpin(true)
+                                                               console.warn("BLOCK SSPIIN")
+                                                               console.warn(blockSpin)
                                     }}>{data[i].option}</button>);
                                 }
                                 return dataTable;
