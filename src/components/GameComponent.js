@@ -220,9 +220,6 @@ function GameComponent(props) {
             return;
         }
         setCalculateRound(false);
-        setEndSpin(false);
-        setThisUserBet("No bet set yet")
-        setOtherUserBet("No bet set yet")
 
         console.warn("try to get username")
         setThisUsername(props.user.username)
@@ -387,6 +384,8 @@ function GameComponent(props) {
         setCalculateRound(true)
         setMessage(otherUsername);
         setSpinWheelBool(true)
+        console.warn("SET spinWheelBool")
+        console.warn(calculateRound)
         sendMessage(e);
         extractUser();
     };
