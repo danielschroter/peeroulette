@@ -289,16 +289,17 @@ function GameComponent(props) {
         })
 
         socketRef.current.on("message", (message) => {
-            console.log("here");
-            console.log(message)
             receivedMessage(message);
-            console.log("recevied messages")
-            console.log(messages)
-            console.warn("OTHER USER ID")
-            console.warn(otherUser_id)
-            extractUser();
-            if(messages.length > 0 && (message.id === thisUser_id)) {
-                setMustspin(true)
+            if (message !== undefined) {
+                let idOfUserSpinnedWheel = message.body[1];
+                let idOfPeerOfUserSpinnedWheel = message.body[2];
+                console.warn("props.user" + props.user._id)
+                console.warn("idOfUserSpinnedWheel: " +idOfUserSpinnedWheel)
+                console.warn("idOfPeerOfUserSpinnedWheel: " +idOfPeerOfUserSpinnedWheel)
+                if ((idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer) ||
+                    idOfUserSpinnedWheel === props.peer && idOfPeerOfUserSpinnedWheel === props.user._id) {
+                    setMustspin(true);
+                }
             }
         })
 
@@ -312,7 +313,7 @@ function GameComponent(props) {
             let tmp = messages;
             tmp.push(message.body)
             setMessages(tmp);
-            setNewPrizeNumber(message.body)
+            setNewPrizeNumber(message.body[0])
         //}
     }
 
@@ -325,10 +326,11 @@ function GameComponent(props) {
         setNewPrizeNumber(newPrizeNumber)
 
         console.log("calculated new prize number")
-
+        // store id's of both users to ensure that wheel only spins on the match between both users
+        let messageBody = [newPrizeNumber, props.user._id, props.peer]
 
         const messageObject = {
-            body: newPrizeNumber,
+            body: messageBody,
             id: thisUser_id,
         };
 
