@@ -221,11 +221,14 @@ function GameComponent(props) {
         }
         setCalculateRound(false);
         setEndSpin(false);
-        setNewUserBet("No bet set yet")
+        setThisUserBet("No bet set yet")
+        setOtherUserBet("No bet set yet")
 
         console.warn("try to get username")
         setThisUsername(props.user.username)
         setThisUser_id(props.user._id)
+        setOtherUserBet("")
+        setSpinWheelBool(false);
 
             // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
@@ -269,7 +272,10 @@ function GameComponent(props) {
     const [newPrizeNumber, setNewPrizeNumber] = useState(0);
     const [calculateRound, setCalculateRound] = useState(false);
     const [endSpin, setEndSpin] = useState(false);
-    const [newUserBet, setNewUserBet] = useState("");
+    const [thisUserBet, setThisUserBet] = useState("");
+    const [otherUserBet, setOtherUserBet] = useState("");
+    const [spinWheelBool, setSpinWheelBool] = useState(false);
+
 
     const [userColour, setUserColour] = useState("white");
     const white = "white";
@@ -296,9 +302,16 @@ function GameComponent(props) {
                 console.warn("props.user" + props.user._id)
                 console.warn("idOfUserSpinnedWheel: " +idOfUserSpinnedWheel)
                 console.warn("idOfPeerOfUserSpinnedWheel: " +idOfPeerOfUserSpinnedWheel)
+
+                // spin wheel only in match of two peers
                 if ((idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer) ||
                     idOfUserSpinnedWheel === props.peer && idOfPeerOfUserSpinnedWheel === props.user._id) {
-                    setMustspin(true);
+                    if (true) {
+                        setMustspin(true);
+                    }
+                    if (message.body[3] !== undefined) {
+                        setOtherUserBet(message.body[3])
+                    }
                 }
             }
         })
@@ -327,7 +340,9 @@ function GameComponent(props) {
 
         console.log("calculated new prize number")
         // store id's of both users to ensure that wheel only spins on the match between both users
-        let messageBody = [newPrizeNumber, props.user._id, props.peer]
+        // add other userBet to variables
+        let otherUserBet = thisUserBet;
+        let messageBody = [newPrizeNumber, props.user._id, props.peer, spinWheelBool]
 
         const messageObject = {
             body: messageBody,
@@ -371,7 +386,7 @@ function GameComponent(props) {
     function handleChange(e) {
         setCalculateRound(true)
         setMessage(otherUsername);
-
+        setSpinWheelBool(true)
         sendMessage(e);
         extractUser();
     };
@@ -436,8 +451,8 @@ function GameComponent(props) {
                         <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Winner: </Typography>
                 </Paper>
                 <Paper style={{ padding: 20 , "backgroundColor":"green"}}>
-                    <Typography style={{"color":"gold"}}>Bet {thisUsername}: {newUserBet} {thisUser_id}</Typography>
-                    <Typography style={{"color":"gold"}}>Bet {otherUsername}: {newUserBet} {}</Typography>
+                    <Typography style={{"color":"gold"}}>Bet {thisUsername}: {thisUserBet} </Typography>
+                    <Typography style={{"color":"gold"}}>Bet {otherUsername}: {otherUserBet} </Typography>
 
                     <Table striped bordered hover size="sm">
                         <tbody>
@@ -450,7 +465,8 @@ function GameComponent(props) {
                                 for (i; i < data.length; i++) {
                                     dataTable.push(<button className={classes.roundButton} value={i}
                                                            onClick={(e) => {
-                                        setNewUserBet(data[e.target.value].option)
+                                        setThisUserBet(data[e.target.value].option)
+
                                     }}>{data[i].option}</button>);
                                 }
                                 return dataTable;
