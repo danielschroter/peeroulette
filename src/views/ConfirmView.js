@@ -10,13 +10,6 @@ import { confirm } from "../redux/actions";
  * @param {props} props
  */
 function ConfirmView(props) {
-  const user = useSelector((state) => state.user);
-
-  useEffect(() => {
-    if (user.user) {
-      props.history.push("/");
-    }
-  }, [user, props.history]);
 
   const OnConfirm = (id) => {
     props.dispatch(confirm(id));

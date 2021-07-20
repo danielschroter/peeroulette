@@ -52,8 +52,8 @@ export function register(
   compname,
   domains
 ) {
-  function onSuccess(user) {
-    return { type: "REGISTER_SUCCESS", user: user };
+  function onSuccess(message) {
+    return { type: "REGISTER_SUCCESS", message: message };
   }
   function onFailure(error) {
     return { type: "REGISTER_FAILURE", error: error };
@@ -69,7 +69,7 @@ export function register(
         compname,
         domains
       );
-      dispatch(onSuccess(resp.user));
+      dispatch(onSuccess(resp.message));
     } catch (e) {
       dispatch(onFailure(e));
     }
