@@ -309,14 +309,14 @@ function GameComponent(props) {
                 let peerUserSpinnedWheel = props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
                 // spin wheel only in match of two peers
                 if (thisUserSpinnedWheel || peerUserSpinnedWheel) {
-                    if (!blockSpin) {
+                    if (true) {
                         setMustspin(true);
                     }
                 }
             }
         })
 
-    }, [props.user, props.blockSpin]);
+    }, [props.user, blockSpin]);
 
     // code for socket io
     function receivedMessage(message) {
@@ -414,7 +414,8 @@ function GameComponent(props) {
 
         return (
             <div>
-                <Paper style={{ padding: 20, "backgroundColor":"#484848"}}>
+                <Paper style={{ padding: 20, "backgroundColor":"#484848",
+                    display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <Wheel
                             mustStartSpinning={mustspin}
                             prizeNumber={newPrizeNumber}
@@ -426,7 +427,8 @@ function GameComponent(props) {
                                 setEndSpin(true)
                             }}
                         />
-
+                </Paper>
+                <Paper style={{ padding: 20, "backgroundColor":"#484848"}}>
                     <Button
                         onClick={handleChange}
                         variant="contained"
