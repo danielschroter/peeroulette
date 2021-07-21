@@ -87,6 +87,7 @@ function CallView(props) {
                 <Typography variant="h4">Break the ice with Peeroulette!</Typography>
                 <GameComponent
                     user={user}
+                    message={false}
                     onGetUser={onGetUser}
                     peer={match.params.id}
                 />

@@ -219,13 +219,10 @@ function GameComponent(props) {
         if (!props.user) {
             return;
         }
-        setCalculateRound(false);
-
         console.warn("try to get username")
         setThisUsername(props.user.username)
         setThisUser_id(props.user._id)
-        setOtherUserBet("")
-        setSpinWheelBool(false);
+        //setBlockSpin(true)
 
             // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
@@ -264,15 +261,19 @@ function GameComponent(props) {
 
     const [yourID, setYourID] = useState();
     const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState("");
+    const [message, setMessage] = useState([]);
     const [mustspin, setMustspin] = useState(false);
     const [newPrizeNumber, setNewPrizeNumber] = useState(0);
     const [calculateRound, setCalculateRound] = useState(false);
     const [endSpin, setEndSpin] = useState(false);
+    //const [thisUserBet, setThisUserBet] = useState("");
+    //const [otherUserBet, setOtherUserBet] = useState("");
+    const [spinWheelBool, setSpinWheelBool] = useState(false);
+
     const [thisUserBet, setThisUserBet] = useState("");
     const [otherUserBet, setOtherUserBet] = useState("");
-    const [spinWheelBool, setSpinWheelBool] = useState(false);
-    const [blockSpin, setBlockSpin] = useState(false);
+    const [blockSpin, setBlockSpin] = useState(true);
+
 
 
     const [userColour, setUserColour] = useState("white");
@@ -297,31 +298,28 @@ function GameComponent(props) {
             if (message !== undefined) {
                 let idOfUserSpinnedWheel = message.body[1];
                 let idOfPeerOfUserSpinnedWheel = message.body[2];
-                console.warn("props.user" + props.user._id)
-                console.warn("idOfUserSpinnedWheel: " +idOfUserSpinnedWheel)
-                console.warn("idOfPeerOfUserSpinnedWheel: " +idOfPeerOfUserSpinnedWheel)
 
+                console.warn("received other userBet")
+                console.warn(message.body[3])
+
+                //console.warn("block spin in USEEFFECT")
+                //console.warn(message.body[3])
+
+                let thisUserSpinnedWheel = idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer;
+                let peerUserSpinnedWheel = props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
                 // spin wheel only in match of two peers
-                if ((idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer) ||
-                    idOfUserSpinnedWheel === props.peer && idOfPeerOfUserSpinnedWheel === props.user._id) {
-                    if (false) {
-                        if (message.body[3] !== undefined) {
-                            setOtherUserBet(message.body[3])
-                        }
-                        setBlockSpin(false)
-                    } else {
+                if (thisUserSpinnedWheel || peerUserSpinnedWheel) {
+                    if (!blockSpin) {
                         setMustspin(true);
                     }
                 }
             }
         })
 
-    }, [props.user]);
+    }, [props.user, props.blockSpin]);
 
     // code for socket io
     function receivedMessage(message) {
-        console.warn("OTHER USER ID")
-        console.warn(otherUser_id)
         //if (message.id === thisUser_id || message.id === thisUser_id) {
             let tmp = messages;
             tmp.push(message.body)
@@ -338,19 +336,15 @@ function GameComponent(props) {
         console.log(newPrizeNumber)
         setNewPrizeNumber(newPrizeNumber)
 
-        console.log("calculated new prize number")
         // store id's of both users to ensure that wheel only spins on the match between both users
         // add other userBet to variables
-        let otherUserBet = thisUserBet;
-        let messageBody = [newPrizeNumber, props.user._id, props.peer, spinWheelBool]
+        let messageBody = [newPrizeNumber, props.user._id, props.peer, thisUserBet]
 
         const messageObject = {
             body: messageBody,
             id: thisUser_id,
         };
 
-        console.log("message sent")
-        console.log(messageObject.body)
         socketRef.current.emit("send message", messageObject);
     }
 
@@ -384,12 +378,9 @@ function GameComponent(props) {
     };
 
     function handleChange(e) {
-        setCalculateRound(true)
         setMessage(otherUsername);
-        setSpinWheelBool(true)
-        console.warn("SET spinWheelBool")
-        console.warn(calculateRound)
         sendMessage(e);
+        setBlockSpin(false);
         extractUser();
     };
 
@@ -453,24 +444,23 @@ function GameComponent(props) {
                         <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Winner: </Typography>
                 </Paper>
                 <Paper style={{ padding: 20 , "backgroundColor":"green"}}>
-                    <Typography style={{"color":"gold"}}>Bet {thisUsername}: {thisUserBet} </Typography>
-                    <Typography style={{"color":"gold"}}>Bet {otherUsername}: {otherUserBet} </Typography>
+                    <Typography style={{"color":"gold"}}>Your Bet: {thisUserBet} </Typography>
 
                     <Table striped bordered hover size="sm">
                         <tbody>
                         <tr>
                             {(() => {
-                                console.log("DATA")
-                                console.log(data)
                                 let i = 0;
                                 let dataTable = [];
                                 for (i; i < data.length; i++) {
                                     dataTable.push(<button className={classes.roundButton} value={i}
                                                            onClick={(e) => {
-                                        setThisUserBet(data[e.target.value].option)
-                                                                setBlockSpin(true)
-                                                               console.warn("BLOCK SSPIIN")
+                                                               setThisUserBet(data[e.target.value].option);
+                                                               //setBlockSpin(true)
+
+                                                               console.warn("block spin on click")
                                                                console.warn(blockSpin)
+                                                               sendMessage(e)
                                     }}>{data[i].option}</button>);
                                 }
                                 return dataTable;
@@ -486,6 +476,7 @@ function GameComponent(props) {
 // attributes of props and their type
 GameComponent.propTypes = {
     user: PropTypes.object,
+    message: PropTypes.object,
     onGetUser: PropTypes.func,
 };
 
