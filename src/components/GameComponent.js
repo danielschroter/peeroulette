@@ -272,7 +272,7 @@ function GameComponent(props) {
 
     const [thisUserBet, setThisUserBet] = useState("");
     const [otherUserBet, setOtherUserBet] = useState("");
-    const [blockSpin, setBlockSpin] = useState(true);
+    const [blockSpin, setBlockSpin] = useState(false);
 
 
 
@@ -304,6 +304,8 @@ function GameComponent(props) {
 
                 //console.warn("block spin in USEEFFECT")
                 //console.warn(message.body[3])
+                console.warn("props body DEBUG")
+                console.warn(props.body)
 
                 let thisUserSpinnedWheel = idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer;
                 let peerUserSpinnedWheel = props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
@@ -316,7 +318,7 @@ function GameComponent(props) {
             }
         })
 
-    }, [props.user, blockSpin]);
+    }, [props.user, props.body]);
 
     // code for socket io
     function receivedMessage(message) {
@@ -447,6 +449,7 @@ function GameComponent(props) {
                 </Paper>
                 <Paper style={{ padding: 20 , "backgroundColor":"green"}}>
                     <Typography style={{"color":"gold"}}>Your Bet: {thisUserBet} </Typography>
+                    <Typography style={{"color":"gold"}}>Peer Bet: {otherUserBet} </Typography>
 
                     <Table striped bordered hover size="sm">
                         <tbody>
@@ -458,7 +461,12 @@ function GameComponent(props) {
                                     dataTable.push(<button className={classes.roundButton} value={i}
                                                            onClick={(e) => {
                                                                setThisUserBet(data[e.target.value].option);
-                                                               //setBlockSpin(true)
+                                                               setBlockSpin(true)
+
+                                                               let tmp = props.body;
+                                                               let tmpBlockSpinWheel = true;
+                                                               props.body.push(tmpBlockSpinWheel);
+
 
                                                                console.warn("block spin on click")
                                                                console.warn(blockSpin)
@@ -478,7 +486,7 @@ function GameComponent(props) {
 // attributes of props and their type
 GameComponent.propTypes = {
     user: PropTypes.object,
-    message: PropTypes.object,
+    body: PropTypes.array,
     onGetUser: PropTypes.func,
 };
 
