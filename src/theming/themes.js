@@ -23,6 +23,7 @@ const appThemeOptions = {
             background: {
                 paper: "#fff",
                 default: "#fafafa",
+                landingPage: "#424242",
             },
         },
         ...themeindependent,
@@ -43,6 +44,7 @@ const appThemeOptions = {
             background: {
                 paper: "#303030",
                 default: "#000",
+                landingPage: "#424242",
             },
         },
         ...themeindependent,
