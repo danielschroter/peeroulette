@@ -11,13 +11,12 @@ import EditProfileComponent from "../components/EditProfileComponent";
  */
 function EditProfileView(props) {
     const user = useSelector((state) => state.user.user);
+    const organization = useSelector((state) => state.organization);
 
     useEffect(() => {
+        console.warn("DEBUG LOG")
+        console.warn(user)
     }, [user, props.history]);
-
-    const onGetUser = (id) => {
-        props.dispatch(getUser(id));
-    };
 
     const onUpdateUser = (user) => {
         props.dispatch(changeUser(user));
@@ -54,7 +53,7 @@ function EditProfileView(props) {
     return (
         <EditProfileComponent
             user={user}
-            onGetUser={onGetUser}
+            organization={organization}
             onUpdateUser={onUpdateUser}
             onUpdateOrganization={onUpdateOrganization}
             onRegisterOrganization={onRegisterOrganization}
