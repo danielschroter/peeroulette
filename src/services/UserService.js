@@ -21,6 +21,14 @@ export default class UserService {
         return "http://localhost:4000/domain";
     }
 
+    static baseURL_conversation() {
+      return "http://localhost:4000/conversation";
+    }
+
+    static baseURL_message() {
+      return "http://localhost:4000/message";
+    }
+
   static register(email, user, pass, isAdmin, compname, domains) {
     return new Promise((resolve, reject) => {
       HttpService.post(
@@ -337,5 +345,96 @@ export default class UserService {
                 }
             );
         });
+    }
+
+    static addConversation(senderId, receiverId) {
+      return new Promise((resolve, reject) => {
+        HttpService.post(
+          `${UserService.baseURL_conversation()}`,
+          {
+            senderId: senderId,
+            receiverId: receiverId,
+          },
+          function (data) {
+            resolve(data);
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
+    }
+
+    static getUserConversation(userId) {
+      return new Promise(async (resolve, reject) => {
+        HttpService.get(
+          `${UserService.baseURL_conversation()}/${userId}`,
+          function (data) {
+            if (data !== undefined || Object.keys(data).length !== 0) {
+              resolve(data);
+            } else {
+              reject("Error while retrieving conversation of user");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
+    }
+
+    static getConversation(firstUserId, secondUserId) {
+      return new Promise(async (resolve, reject) => {
+        HttpService.get(
+          `${UserService.baseURL_conversation()}/find/${firstUserId}/${secondUserId}`,
+          function (data) {
+            if (data !== undefined || Object.keys(data).length !== 0) {
+              resolve(data);
+            } else {
+              reject("Error while retrieving conversation of two user");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
+    }
+
+    static addMessage(conversationId, sender, text) {
+      return new Promise((resolve, reject) => {
+        HttpService.post(
+          `${UserService.baseURL_message()}`,
+          {
+            conversationId: conversationId,
+            sender: sender,
+            text: text,
+          },
+          function (data) {
+            resolve(data);
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
+    }
+
+    static getMessage(conversationId) {
+      return new Promise(async (resolve, reject) => {
+        HttpService.get(
+          `${UserService.baseURL_message()}/${conversationId}`,
+          function (data) {
+            if (data !== undefined || Object.keys(data).length !== 0) {
+              resolve(data);
+            } else {
+              reject("Error while retrieving messages of conversation");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
     }
 }
