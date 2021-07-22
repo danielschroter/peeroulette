@@ -195,6 +195,11 @@ function GameComponent(props) {
     const [editDomains, setEditDomains] = React.useState(false);
     const [changeState, setChangeState] = React.useState(false);
 
+    const [userInterests, setUserInterests] = React.useState([]);
+    const [peerInterests, setPeerInterests] = React.useState([]);
+    const [commonInterests, setCommonInterests] = useState([]);
+
+
     const bcrypt = require("bcryptjs");
 
     const extractUser = () => {
@@ -203,6 +208,49 @@ function GameComponent(props) {
         }
         setThisUsername(props.user.username)
         setThisUser_id(props.user._id)
+
+        console.warn("USER INTERESTS")
+        console.warn(props.user._id)
+
+        console.warn("PEER INTERESTS")
+        console.warn(props.peer)
+
+        // get common interests of both users
+        if (props.commonInterests.length === 0) {
+            UserService.getUser(props.user._id).then(function(userBackend) {
+                setUserInterests(userBackend.interests)
+                UserService.getUser(props.peer).then(function(peerBackend) {
+                    setPeerInterests(peerBackend.interests)
+                    let i = 0;
+                    let userInterests = userBackend.interests;
+                    let peerInterests = peerBackend.interests;
+                    for (i; i < userInterests.length; i++) {
+                        let j = 0;
+                        for (j; j < peerInterests.length; j++) {
+                            if (userInterests[i] === peerInterests[j]) {
+                                commonInterests.push(userInterests[i])
+                                props.commonInterests.push(userInterests[i])
+                            }
+                        }
+                    }
+                    setCommonInterests(commonInterests);
+                });
+            });
+        }
+
+        console.warn("USER INTERESTS")
+        console.warn(userInterests)
+
+        console.warn("PEER INTERESTS")
+        console.warn(peerInterests)
+
+        extractCommonInterests();
+
+        console.warn("COMMON INTERESTS STATE VARIABLE")
+        console.warn(commonInterests)
+
+        console.warn("COMMON INTERESTS PROPS")
+        console.warn(props.commonInterests)
 
             // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
@@ -222,6 +270,22 @@ function GameComponent(props) {
                 setIsCorporate(false);
             }
         });
+    };
+
+    const extractCommonInterests = () => {
+        let commonInterests = [];
+
+        let i = 0;
+        for (i; i < userInterests.length; i++) {
+            let j = 0;
+            for (j; j < peerInterests.length; j++) {
+                if (userInterests[i] === peerInterests[j]) {
+                    console.warn("ADDED INTEREST")
+                    commonInterests.push(userInterests[i])
+                }
+            }
+        }
+        setCommonInterests(commonInterests);
     };
 
     const extractInterests = () => {
@@ -252,7 +316,9 @@ function GameComponent(props) {
     useEffect(() => {
         extractUser();
         extractInterests();
-        console.log(data)
+
+
+
 
         // code for socket io
         socketRef.current = io.connect('/');
@@ -407,6 +473,18 @@ function GameComponent(props) {
         { option: allInterests[7], style: { backgroundColor: 'black', textColor: 'white' } },
         { option: allInterests[8], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
         { option: allInterests[9], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: allInterests[0], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[1], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: allInterests[2], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[3], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: allInterests[4], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[5], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: allInterests[6], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[7], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: allInterests[8], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[9], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: allInterests[0], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: allInterests[1], style: { backgroundColor: 'black', textColor: 'white' } },
     ]
 
         return (
@@ -435,6 +513,12 @@ function GameComponent(props) {
                     >
                         Spin Wheel
                     </Button>
+                    { commonInterests.length === 1  ? (
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>You have {commonInterests.length} common interest.</Typography>
+                    ) : (
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>You have {commonInterests.length} common interests!</Typography>
+                    ) }
+                    <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Spin the wheel to find out which one!</Typography>
                     { endSpin  ? (
                         <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Spinned interest: {data[newPrizeNumber].option}</Typography>
                         ) : (
@@ -490,6 +574,7 @@ GameComponent.propTypes = {
     gameValues: PropTypes.array,
     userBet: PropTypes.array,
     peerBet: PropTypes.array,
+    commonInterests: PropTypes.array,
     blockSpin: PropTypes.array,
 };
 

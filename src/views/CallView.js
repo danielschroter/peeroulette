@@ -94,6 +94,7 @@ function CallView(props) {
                     blockSpin={[]}
                     userBet={[]}
                     peerBet={[]}
+                    commonInterests={[]}
                 />
 
                 {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
