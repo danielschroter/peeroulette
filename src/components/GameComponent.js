@@ -271,8 +271,10 @@ function GameComponent(props) {
                 let thisUserSpinnedWheel = idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer;
                 let peerUserSpinnedWheel = idOfUserSpinnedWheel === props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
 
-                console.warn("block spin")
-                console.warn(props.blockSpin)
+                let blockSpin = message.body[4];
+
+                console.warn("user props spin")
+                console.warn(blockSpin)
 
                 // set other user bet only if message comes from peet
                 if (peerUserSpinnedWheel) {
@@ -283,7 +285,7 @@ function GameComponent(props) {
 
                 // spin wheel only in match of two peers
                 if (thisUserSpinnedWheel || peerUserSpinnedWheel) {
-                    if (!props.blockSpin) {
+                    if (!blockSpin) {
                         setMustspin(true);
                     }
                 }
@@ -312,7 +314,7 @@ function GameComponent(props) {
 
         // store id's of both users to ensure that wheel only spins on the match between both users
         // add other userBet to variables
-        let messageBody = [newPrizeNumber, props.user._id, props.peer, userBet]
+        let messageBody = [newPrizeNumber, props.user._id, props.peer, userBet, props.blockSpin[0]]
 
         const messageObject = {
             body: messageBody,
@@ -377,7 +379,7 @@ function GameComponent(props) {
         }
     };
 
-    const setUserBets = (bet) => {
+    const setPeerBets = (bet) => {
         props.userBets.push(bet);
     };
 
@@ -453,8 +455,7 @@ function GameComponent(props) {
                                                            onClick={(e) => {
                                                                setThisUserBet(data[e.target.value].option);
                                                                setBlockSpin(true);
-                                                               resetPeerBet();
-                                                               setUserBets(data[e.target.value].option)
+                                                               setPeerBets(data[e.target.value].option, true)
                                                                sendMessage(e)
                                     }}>{data[i].option}</button>);
                                 }
