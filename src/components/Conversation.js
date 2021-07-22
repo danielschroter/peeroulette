@@ -18,16 +18,20 @@ function Conversation({conversation, currentUser}) {
 
 	const [chatPartner, setChatPartner] = React.useState("");
 
+
+	const extractPartner = async(partnerId) => {
+		console.log(partnerId);
+		UserService.getUser(partnerId).then(function (userBackend) {
+			console.log(userBackend);
+			setChatPartner(userBackend.username);
+		});
+	};
+
 	useEffect(() => {
 		const partnerId = conversation.members.find((m) => m !== currentUser._id);
 
-        const extractPartner = () => {
-            UserService.getUser(partnerId).then(function (userBackend) {
-                setChatPartner(userBackend.data);
-            });
-        };
 
-		extractPartner();
+		extractPartner(partnerId);
 	}, [currentUser, conversation]);
 
 
@@ -35,7 +39,7 @@ function Conversation({conversation, currentUser}) {
 		<div style={{ marginTop: "150px", marginBottom: "150px" }}>
 			<Container maxWidth="sm">
                     <Typography variant="h4" align="center" gutterBottom>
-						Your Conversation with "{chatPartner.username}"
+						Your Conversation with "{chatPartner}"
 					</Typography>
 			</Container>
 		</div>

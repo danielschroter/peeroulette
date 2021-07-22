@@ -147,28 +147,28 @@ function MessengerView(props) {
 	const reptiles = ["alligator", "snake", "lizard"];
 
 	const [conversations, setConversations] = React.useState([]);
-	const [currentChat, setCurrentChat] = useState(null);
+	const [currentChat, setCurrentChat] = React.useState(null);
 	//const [currentChat, setCurrentChat] = useState("60f7f496708da03d93962301");
-	const [messages, setMessages] = useState([]);
-	const [newMessage, setNewMessage] = useState("");
-	const [arrivalMessage, setArrivalMessage] = useState(null);
-	const [onlineUsers, setOnlineUsers] = useState([]);
+	const [messages, setMessages] = React.useState([]);
+	const [newMessage, setNewMessage] = React.useState("");
+	const [arrivalMessage, setArrivalMessage] = React.useState(null);
+	const [onlineUsers, setOnlineUsers] = React.useState([]);
 	const socket = useRef();
 	const scrollRef = useRef();
 
 	// extract all conversations of user from backend
-	const extractUserConversations = () => {
+	const extractUserConversations = async() => {
 		console.log(user.username);
-		const res = UserService.getUserConversation(user._id);
-		setConversations(res.data);
+		const res = await UserService.getUserConversation(user._id);
+		setConversations(res);
 	};
 
 	// extract all conversations of user from backend
-	const extractMessages = () => {
+	const extractMessages = async() => {
 		if (!props.user) {
 			return;
 		}
-		UserService.getMessage(currentChat?._id).then(function (userBackend) {
+		await UserService.getMessage(currentChat?._id).then(function (userBackend) {
 			setMessages(userBackend.data);
 		});
 	};
@@ -178,7 +178,8 @@ function MessengerView(props) {
 		extractMessages();
 
 		console.log(JSON.stringify(conversations));
-	});
+		console.log("TEst");
+	}, [props.user]);
 
 	// props for all grid items used below in the JSX
 	const girdItemProps = {
