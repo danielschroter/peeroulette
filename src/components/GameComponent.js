@@ -271,11 +271,9 @@ function GameComponent(props) {
                 let thisUserSpinnedWheel = idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer;
                 let peerUserSpinnedWheel = idOfUserSpinnedWheel === props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
 
-                console.warn("received user bet")
-                console.warn(message.body[3])
+                console.warn("block spin")
+                console.warn(props.blockSpin)
 
-                console.warn("message body")
-                console.warn(message.body)
                 // set other user bet only if message comes from peet
                 if (peerUserSpinnedWheel) {
                     setOtherUserBet(message.body[3])
@@ -285,7 +283,7 @@ function GameComponent(props) {
 
                 // spin wheel only in match of two peers
                 if (thisUserSpinnedWheel || peerUserSpinnedWheel) {
-                    if (false) {
+                    if (!props.blockSpin) {
                         setMustspin(true);
                     }
                 }
@@ -348,8 +346,7 @@ function GameComponent(props) {
 
     function handleChange(e) {
         setMessage(otherUsername);
-
-        //setBlockSpin(false);
+        setBlockSpin(false);
         //props.blockSpin = false;
 
         sendMessage(e);
@@ -369,11 +366,14 @@ function GameComponent(props) {
     ];
 
     const setBlockSpin = (bool) => {
-        if(props.gameValues.length < 1) {
-            props.gameValues.push(bool);
-        } else {
-            props.gameValues[0] = bool;
-            //props.gameValues.push(bool);
+        resetBlockSpin();
+        props.blockSpin.push(bool);
+    }
+
+    const resetBlockSpin = () => {
+        let i = 0;
+        for (i; i < props.blockSpin.length; i++) {
+            props.blockSpin.splice(i, 1)
         }
     };
 
@@ -452,7 +452,7 @@ function GameComponent(props) {
                                     dataTable.push(<button className={classes.roundButton} value={i}
                                                            onClick={(e) => {
                                                                setThisUserBet(data[e.target.value].option);
-                                                               //setBlockSpin(true);
+                                                               setBlockSpin(true);
                                                                resetPeerBet();
                                                                setUserBets(data[e.target.value].option)
                                                                sendMessage(e)
@@ -469,7 +469,7 @@ function GameComponent(props) {
     }
 
 // gameValues is Array which stores messages that are sent between users
-// gameValues["blockSpin", ... ]
+// gameValues[ userBets, blockSpin, ... ]
 
 // attributes of props and their type
 GameComponent.propTypes = {
