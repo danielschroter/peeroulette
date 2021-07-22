@@ -201,7 +201,6 @@ function GameComponent(props) {
         if (!props.user) {
             return;
         }
-        console.warn("try to get username")
         setThisUsername(props.user.username)
         setThisUser_id(props.user._id)
 
@@ -273,14 +272,13 @@ function GameComponent(props) {
 
                 let blockSpin = message.body[4];
 
-                console.warn("user props spin")
-                console.warn(blockSpin)
+                console.warn("RECEIVED MESSAGE")
+                console.warn("peer bet")
+                console.warn(message.body[3])
 
                 // set other user bet only if message comes from peet
                 if (peerUserSpinnedWheel) {
                     setOtherUserBet(message.body[3])
-                } else {
-                    resetPeerBet()
                 }
 
                 // spin wheel only in match of two peers
@@ -300,17 +298,20 @@ function GameComponent(props) {
             tmp.push(message.body)
             setMessages(tmp);
             setNewPrizeNumber(message.body[0])
+            setEndSpin(false);
     }
 
     function sendMessage(e) {
         e.preventDefault();
         extractUser();
 
-        let newPrizeNumber = Math.floor(Math.random() * data.length)
+        let newPrizeNumber = Math.floor(Math.random() * data.length);
         console.log(newPrizeNumber)
         setNewPrizeNumber(newPrizeNumber)
 
-        let userBet = props.userBets[0];
+        let userBet = props.userBet[0];
+
+
 
         // store id's of both users to ensure that wheel only spins on the match between both users
         // add other userBet to variables
@@ -349,7 +350,7 @@ function GameComponent(props) {
     function handleChange(e) {
         setMessage(otherUsername);
         setBlockSpin(false);
-        //props.blockSpin = false;
+        setEndSpin(false);
 
         sendMessage(e);
         extractUser();
@@ -379,14 +380,15 @@ function GameComponent(props) {
         }
     };
 
-    const setPeerBets = (bet) => {
-        props.userBets.push(bet);
+    const setPeerBet = (bet) => {
+        resetPeerBet();
+        props.userBet.push(bet);
     };
 
     const resetPeerBet = () => {
         let i = 0;
-        for (i; i < props.userBets.length; i++) {
-            props.userBets.splice(i, 1)
+        for (i; i < props.userBet.length; i++) {
+            props.userBet.splice(i, 1)
         }
     };
 
@@ -433,16 +435,25 @@ function GameComponent(props) {
                     >
                         Spin Wheel
                     </Button>
-                    { !endSpin ? (
-                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Spinned interest:</Typography>
-                        ) : (
+                    { endSpin  ? (
                         <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Spinned interest: {data[newPrizeNumber].option}</Typography>
+                        ) : (
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Spinned interest:</Typography>
                     ) }
-                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Winner: </Typography>
+                    { thisUserBet == data[newPrizeNumber].option && thisUserBet == data[newPrizeNumber].option == otherUserBet && endSpin? (
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>It's a draw! You both win!</Typography>
+                    ) : null }
+                    { thisUserBet == data[newPrizeNumber].option && endSpin ? (
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Winner: {thisUsername}</Typography>
+                    ) : null }
+                    { otherUserBet == data[newPrizeNumber].option && endSpin? (
+                        <Typography variant="h5" style={{"marginTop":"15px", "color":"white"}}>Winner: {otherUsername}</Typography>
+                    ) : null }
+
                 </Paper>
                 <Paper style={{ padding: 20 , "backgroundColor":"green"}}>
-                    <Typography style={{"color":"gold"}}>Your Bet: {thisUserBet} </Typography>
-                    <Typography style={{"color":"gold"}}>Peer Bet: {otherUserBet} </Typography>
+                    <Typography style={{"color":"gold"}}>Bet {thisUsername}: {thisUserBet} </Typography>
+                    <Typography style={{"color":"gold"}}>Bet {otherUsername}: {otherUserBet} </Typography>
 
                     <Table striped bordered hover size="sm">
                         <tbody>
@@ -455,7 +466,7 @@ function GameComponent(props) {
                                                            onClick={(e) => {
                                                                setThisUserBet(data[e.target.value].option);
                                                                setBlockSpin(true);
-                                                               setPeerBets(data[e.target.value].option, true)
+                                                               setPeerBet(data[e.target.value].option, true)
                                                                sendMessage(e)
                                     }}>{data[i].option}</button>);
                                 }
@@ -470,14 +481,15 @@ function GameComponent(props) {
     }
 
 // gameValues is Array which stores messages that are sent between users
-// gameValues[ userBets, blockSpin, ... ]
+// gameValues[ userBet, blockSpin, ... ]
 
 // attributes of props and their type
 GameComponent.propTypes = {
     user: PropTypes.object,
     onGetUser: PropTypes.func,
     gameValues: PropTypes.array,
-    userBets: PropTypes.array,
+    userBet: PropTypes.array,
+    peerBet: PropTypes.array,
     blockSpin: PropTypes.array,
 };
 

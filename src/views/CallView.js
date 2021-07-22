@@ -92,7 +92,8 @@ function CallView(props) {
                     onGetUser={onGetUser}
                     peer={match.params.id}
                     blockSpin={[]}
-                    userBets={[]}
+                    userBet={[]}
+                    peerBet={[]}
                 />
 
                 {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
