@@ -106,17 +106,6 @@ const useStyles = makeStyles((theme) => ({
     saveNameButton: {
         marginRight: theme.spacing(1),
     },
-    cancelPasswordButton: {
-        marginRight: theme.spacing(1),
-        marginLeft:theme.spacing(1),
-    },
-    savePasswordButton: {
-        marginRight: theme.spacing(1),
-    },
-    editPasswordButton: {
-        marginRight: theme.spacing(1),
-        marginLeft: theme.spacing(1),
-    },
     interestsButton: {
         marginTop: theme.spacing(1),
         marginRight: theme.spacing(1),
@@ -179,18 +168,11 @@ function GameComponent(props) {
     const classes = useStyles();
 
     // user data
-    const [otherUser_id, setOtherUser_id] = React.useState("");
     const [thisUser_id, setThisUser_id] = React.useState("");
 
     const [otherUsername, setOtherUsername] = React.useState("");
     const [thisUsername, setThisUsername] = React.useState("");
 
-    const [thisBet, setThisBet] = React.useState("");
-
-
-    const [password, setPassword] = React.useState("");
-    const [password2, setPassword2] = React.useState("");
-    const [city, setCity] = React.useState("");
     const [university, setUniversity] = React.useState("");
     const [organization, setOrganization] = React.useState("");
 
@@ -222,13 +204,10 @@ function GameComponent(props) {
         console.warn("try to get username")
         setThisUsername(props.user.username)
         setThisUser_id(props.user._id)
-        //setBlockSpin(true)
 
             // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
-            setOtherUser_id(userBackend._id)
             setOtherUsername(userBackend.username);
-            setCity(userBackend.city);
             setInterests(userBackend.interests);
             setUniversity(userBackend.university);
             setOrganization(userBackend.organization);
@@ -254,9 +233,6 @@ function GameComponent(props) {
         });
     };
 
-    const [inputText, setInputText] = useState("");
-
-
     // code for socket io
 
     const [yourID, setYourID] = useState();
@@ -264,17 +240,10 @@ function GameComponent(props) {
     const [message, setMessage] = useState([]);
     const [mustspin, setMustspin] = useState(false);
     const [newPrizeNumber, setNewPrizeNumber] = useState(0);
-    const [calculateRound, setCalculateRound] = useState(false);
     const [endSpin, setEndSpin] = useState(false);
-    //const [thisUserBet, setThisUserBet] = useState("");
-    //const [otherUserBet, setOtherUserBet] = useState("");
-    const [spinWheelBool, setSpinWheelBool] = useState(false);
 
     const [thisUserBet, setThisUserBet] = useState("");
     const [otherUserBet, setOtherUserBet] = useState("");
-    const [blockSpin, setBlockSpin] = useState(false);
-
-
 
     const [userColour, setUserColour] = useState("white");
     const white = "white";
@@ -302,10 +271,8 @@ function GameComponent(props) {
                 console.warn("received other userBet")
                 console.warn(message.body[3])
 
-                //console.warn("block spin in USEEFFECT")
-                //console.warn(message.body[3])
-                console.warn("props body DEBUG")
-                console.warn(props.body)
+                console.warn("props game values")
+                console.warn(props.gameValues)
 
                 let thisUserSpinnedWheel = idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer;
                 let peerUserSpinnedWheel = props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
@@ -322,12 +289,10 @@ function GameComponent(props) {
 
     // code for socket io
     function receivedMessage(message) {
-        //if (message.id === thisUser_id || message.id === thisUser_id) {
             let tmp = messages;
             tmp.push(message.body)
             setMessages(tmp);
             setNewPrizeNumber(message.body[0])
-        //}
     }
 
     function sendMessage(e) {
@@ -363,9 +328,7 @@ function GameComponent(props) {
         };
 
         back.username = otherUsername;
-        back.password = bcrypt.hashSync(password, 8);
         back.interests = interests;
-        back.city = city;
         back.university = university;
         back.organization = organization;
 
@@ -374,15 +337,13 @@ function GameComponent(props) {
 
     console.log( interests );
 
-    // delete user profile
-    const onChangeInputText = (e) => {
-        setInputText(e.target.value)
-    };
-
     function handleChange(e) {
         setMessage(otherUsername);
-        sendMessage(e);
+
         setBlockSpin(false);
+        //props.blockSpin = false;
+
+        sendMessage(e);
         extractUser();
     };
 
@@ -397,6 +358,15 @@ function GameComponent(props) {
         "love",
         "life",
     ];
+
+    const setBlockSpin = (bool) => {
+        if(props.gameValues.length < 1) {
+            props.gameValues.push(bool);
+        } else {
+            props.gameValues[0] = bool;
+            //props.gameValues.push(bool);
+        }
+    };
 
 
     // needed for lucky wheel
@@ -461,15 +431,7 @@ function GameComponent(props) {
                                     dataTable.push(<button className={classes.roundButton} value={i}
                                                            onClick={(e) => {
                                                                setThisUserBet(data[e.target.value].option);
-                                                               setBlockSpin(true)
-
-                                                               let tmp = props.body;
-                                                               let tmpBlockSpinWheel = true;
-                                                               props.body.push(tmpBlockSpinWheel);
-
-
-                                                               console.warn("block spin on click")
-                                                               console.warn(blockSpin)
+                                                               setBlockSpin(true);
                                                                sendMessage(e)
                                     }}>{data[i].option}</button>);
                                 }
@@ -483,11 +445,14 @@ function GameComponent(props) {
         );
     }
 
+// gameValues is Array which stores messages that are sent between users
+// gameValues["blockSpin", ... ]
+
 // attributes of props and their type
 GameComponent.propTypes = {
     user: PropTypes.object,
-    body: PropTypes.array,
     onGetUser: PropTypes.func,
+    gameValues: PropTypes.array,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component

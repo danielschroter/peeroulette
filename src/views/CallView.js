@@ -88,8 +88,10 @@ function CallView(props) {
                 <GameComponent
                     user={user}
                     body={[]}
+                    gameValues={[]}
                     onGetUser={onGetUser}
                     peer={match.params.id}
+                    blockSpin={false}
                 />
 
                 {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
