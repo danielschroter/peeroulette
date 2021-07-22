@@ -189,25 +189,28 @@ function PeerInformation(props) {
         }
 
         // UserService.getUser(props.user._id).then(function(userBackend) {
-        UserService.getAvailable(props.user._id, curPage).then(function(userBackend) {
-            set_id(userBackend._id);
-            setUsername(userBackend.username);
-            setCity(userBackend.city);
-            setInterests(userBackend.interests);
-            setUniversity(userBackend.university);
-            setOrganization(userBackend.organization);
+            UserService.getAvailable(props.user._id, curPage).then(function(userBackend) {
+                set_id(userBackend._id);
+                setUsername(userBackend.username);
+                setCity(userBackend.city);
+                setInterests(userBackend.interests);
+                setUniversity(userBackend.university);
+                setOrganization(userBackend.organization);
 
-            if (userBackend.account_owner_of_organization !== undefined) {
-                setIsCorporate(true);
-                UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
-                    setCompname(organizationBackend.company_name);
-                    setDomains(organizationBackend.domains);
-                    setCorporate_id(organizationBackend._id);
-                });
-            } else {
-                setIsCorporate(false);
-            }
-        });
+                if (userBackend.account_owner_of_organization !== undefined) {
+                    setIsCorporate(true);
+                    UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
+                        setCompname(organizationBackend.company_name);
+                        setDomains(organizationBackend.domains);
+                        setCorporate_id(organizationBackend._id);
+                    });
+                } else {
+                    setIsCorporate(false);
+                }
+            }).catch(function(error){
+                  //400+ response codes
+                  setUsername('Nope');
+            });
     };
 
     const extractInterests = () => {
@@ -232,25 +235,34 @@ function PeerInformation(props) {
     };
 
     // creating a object with all relevant data to update a user
-    const packUser = () => {
-        let back = {
-            ...props.user,
-        };
-        back._id = _id;
-        back.username = username;
-        back.password = bcrypt.hashSync(password, 8);
-        back.interests = interests;
-        back.city = city;
-        back.university = university;
-        back.organization = organization;
-
-        return back;
-    };
+    // const packUser = () => {
+    //     let back = {
+    //         ...props.user,
+    //     };
+    //     back._id = _id;
+    //     back.username = username;
+    //     back.password = bcrypt.hashSync(password, 8);
+    //     back.interests = interests;
+    //     back.city = city;
+    //     back.university = university;
+    //     back.organization = organization;
+    //
+    //     return back;
+    // };
     console.log({_id});
+    console.log(username);
 
-    return (
+    if(username == 'Nope'){
+      return (
         <Paper style={{ padding: 20 }}>
-            <Typography variant="h4">{username}</Typography>
+            <Typography variant="h4">No Match found</Typography>
+            <Typography variant="h5">Sorry, we couldn't find a fitting match for you. Please try again later!</Typography>
+        </Paper>
+      );
+    }else{
+      return (
+        <Paper style={{ padding: 20 }}>
+            <Typography variant="h4">{username} </Typography>
             <Typography variant="h5">Information about {username}</Typography>
             <ul>
                 <li>{city}</li>
@@ -258,11 +270,11 @@ function PeerInformation(props) {
                 <li>{organization}</li>
             </ul>
             <Typography variant="h5">Interests</Typography>
-            <ul>
+            {/* <ul>
                 {interests.map(interest => {
                       return <li>{interest}</li>;
                 })}
-            </ul>
+            </ul> */}
             <Button
                 variant="contained"
                 color="primary"
@@ -280,7 +292,8 @@ function PeerInformation(props) {
               Look for a new Match
             </Button>
         </Paper>
-    );
+      );
+    }
 }
 
 // attributes of props and their type
