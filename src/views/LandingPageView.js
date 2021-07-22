@@ -15,7 +15,9 @@ import background from "../assets/bg_1.png";
 import {Slide} from "@material-ui/core";
 import { Link, animateScroll as scroll } from 'react-scroll'
 import {useRef} from "react";
+import CorporatePaperComponent from "../components/CorporatePaperComponent";
 import * as Particles from "particles.js";
+
 
 
 /**
@@ -135,6 +137,8 @@ function LandingPageView(props) {
                 <div ref={informationRef}>
                 <InformationComponent/>
                 </div>
+
+                <CorporatePaperComponent/>
 
 
                 {/*</div>*/}

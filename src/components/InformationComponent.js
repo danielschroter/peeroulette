@@ -16,7 +16,7 @@ root: {
 
 const informations = [
     {
-        title: "Video Macthing",
+        title: "Video Matching",
         imageUrl: zoom_1,
         description:"If you want to get into random Video Chats that share some common interests... Start Matching",
         check: true,
