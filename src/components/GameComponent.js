@@ -268,17 +268,24 @@ function GameComponent(props) {
                 let idOfUserSpinnedWheel = message.body[1];
                 let idOfPeerOfUserSpinnedWheel = message.body[2];
 
-                console.warn("received other userBet")
+                let thisUserSpinnedWheel = idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer;
+                let peerUserSpinnedWheel = idOfUserSpinnedWheel === props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
+
+                console.warn("received user bet")
                 console.warn(message.body[3])
 
-                console.warn("props game values")
-                console.warn(props.gameValues)
+                console.warn("message body")
+                console.warn(message.body)
+                // set other user bet only if message comes from peet
+                if (peerUserSpinnedWheel) {
+                    setOtherUserBet(message.body[3])
+                } else {
+                    resetPeerBet()
+                }
 
-                let thisUserSpinnedWheel = idOfUserSpinnedWheel === props.user._id && idOfPeerOfUserSpinnedWheel === props.peer;
-                let peerUserSpinnedWheel = props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
                 // spin wheel only in match of two peers
                 if (thisUserSpinnedWheel || peerUserSpinnedWheel) {
-                    if (true) {
+                    if (false) {
                         setMustspin(true);
                     }
                 }
@@ -303,9 +310,11 @@ function GameComponent(props) {
         console.log(newPrizeNumber)
         setNewPrizeNumber(newPrizeNumber)
 
+        let userBet = props.userBets[0];
+
         // store id's of both users to ensure that wheel only spins on the match between both users
         // add other userBet to variables
-        let messageBody = [newPrizeNumber, props.user._id, props.peer, thisUserBet]
+        let messageBody = [newPrizeNumber, props.user._id, props.peer, userBet]
 
         const messageObject = {
             body: messageBody,
@@ -340,7 +349,7 @@ function GameComponent(props) {
     function handleChange(e) {
         setMessage(otherUsername);
 
-        setBlockSpin(false);
+        //setBlockSpin(false);
         //props.blockSpin = false;
 
         sendMessage(e);
@@ -367,6 +376,18 @@ function GameComponent(props) {
             //props.gameValues.push(bool);
         }
     };
+
+    const setUserBets = (bet) => {
+        props.userBets.push(bet);
+    };
+
+    const resetPeerBet = () => {
+        let i = 0;
+        for (i; i < props.userBets.length; i++) {
+            props.userBets.splice(i, 1)
+        }
+    };
+
 
 
     // needed for lucky wheel
@@ -431,7 +452,9 @@ function GameComponent(props) {
                                     dataTable.push(<button className={classes.roundButton} value={i}
                                                            onClick={(e) => {
                                                                setThisUserBet(data[e.target.value].option);
-                                                               setBlockSpin(true);
+                                                               //setBlockSpin(true);
+                                                               resetPeerBet();
+                                                               setUserBets(data[e.target.value].option)
                                                                sendMessage(e)
                                     }}>{data[i].option}</button>);
                                 }
@@ -453,6 +476,8 @@ GameComponent.propTypes = {
     user: PropTypes.object,
     onGetUser: PropTypes.func,
     gameValues: PropTypes.array,
+    userBets: PropTypes.array,
+    blockSpin: PropTypes.array,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
