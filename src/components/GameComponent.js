@@ -198,7 +198,7 @@ function GameComponent(props) {
     const [userInterests, setUserInterests] = React.useState([]);
     const [peerInterests, setPeerInterests] = React.useState([]);
     const [commonInterests, setCommonInterests] = useState([]);
-
+    const [wheelInterests, setwheelInterests] = useState([]);
 
     const bcrypt = require("bcryptjs");
 
@@ -208,12 +208,6 @@ function GameComponent(props) {
         }
         setThisUsername(props.user.username)
         setThisUser_id(props.user._id)
-
-        console.warn("USER INTERESTS")
-        console.warn(props.user._id)
-
-        console.warn("PEER INTERESTS")
-        console.warn(props.peer)
 
         // get common interests of both users
         if (props.commonInterests.length === 0) {
@@ -238,19 +232,7 @@ function GameComponent(props) {
             });
         }
 
-        console.warn("USER INTERESTS")
-        console.warn(userInterests)
-
-        console.warn("PEER INTERESTS")
-        console.warn(peerInterests)
-
         extractCommonInterests();
-
-        console.warn("COMMON INTERESTS STATE VARIABLE")
-        console.warn(commonInterests)
-
-        console.warn("COMMON INTERESTS PROPS")
-        console.warn(props.commonInterests)
 
             // UserService.getUser(props.user._id).then(function(userBackend) {
         UserService.getUser(props.peer).then(function(userBackend) {
@@ -280,7 +262,6 @@ function GameComponent(props) {
             let j = 0;
             for (j; j < peerInterests.length; j++) {
                 if (userInterests[i] === peerInterests[j]) {
-                    console.warn("ADDED INTEREST")
                     commonInterests.push(userInterests[i])
                 }
             }
@@ -292,9 +273,96 @@ function GameComponent(props) {
         UserService.getInterests().then(function(interestsBackend) {
             if (interestsBackend[0] !== undefined) {
                 setAllInterests(interestsBackend[0].facebookInterests);
+                console.warn("set all interests backend")
+                //console.warn(interestsBackend[0].facebookInterests)
             }
         });
+
+        //console.warn("inside extract interests")
+        //console.warn(allInterests)
     };
+
+    function duplicateInterest(newInterest, wheelInterests) {
+        let i = 0;
+        for (i; i < wheelInterests.length; i++) {
+            if (wheelInterests[i] === newInterest) {
+                return true
+            }
+        }
+        return false;
+    };
+
+    const data = [
+        { option: wheelInterests[0], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: wheelInterests[1], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: wheelInterests[2], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: wheelInterests[3], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: wheelInterests[4], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: wheelInterests[5], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: wheelInterests[6], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: wheelInterests[7], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: wheelInterests[8], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: wheelInterests[9], style: { backgroundColor: 'black', textColor: 'white' } },
+        { option: wheelInterests[10], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
+        { option: wheelInterests[11], style: { backgroundColor: 'black', textColor: 'white' } },
+    ]
+
+    const extractWheelInterests = () => {
+        console.warn("COMMON INTERESTS")
+        console.warn(commonInterests);
+
+        UserService.getInterests().then(function(interestsBackend) {
+            if (interestsBackend[0] !== undefined) {
+                let allInterestsBackend = interestsBackend[0].facebookInterests;
+                let allWheelInterests = [];
+                {/*
+                let j = 0;
+                console.warn("commoninterests ONLY")
+                console.warn(commonInterests)
+                for (j; j < commonInterests.length; j++) {
+                    console.warn("added common interest")
+                    allWheelInterests.push(commonInterests[j])
+                }
+                */}
+
+                console.warn("AFTER adding commoninterests only ONLY")
+                console.warn(allWheelInterests)
+                let fullInterestsNumber = 12;
+                fullInterestsNumber = fullInterestsNumber - commonInterests.length;
+                let i = 0;
+                for (i; i < fullInterestsNumber; i++) {
+                    if (i < commonInterests.length) {
+                        allWheelInterests.push(commonInterests[i])
+                        console.warn("added interest")
+                        console.warn(commonInterests[i])
+                    } else {
+                        let randomInterestIndex = Math.floor(Math.random() * allInterestsBackend.length);
+                        let newInterest = allInterestsBackend[randomInterestIndex];
+                        //if (!duplicateInterest(newInterest, wheelInterests)) {
+                        if (true) {
+                            allWheelInterests.push(newInterest)
+                        } else {
+                            i--;
+                        }
+                    }
+                }
+                console.warn("Wheel interests")
+                console.warn(allWheelInterests)
+                setwheelInterests(allWheelInterests)
+            }
+        });
+
+
+
+
+        console.warn("WHEEL INTERESTS")
+        console.warn(wheelInterests)
+
+
+    };
+
+    // data lucky wheel
+
 
     // code for socket io
 
@@ -317,8 +385,7 @@ function GameComponent(props) {
         extractUser();
         extractInterests();
 
-
-
+        extractWheelInterests();
 
         // code for socket io
         socketRef.current = io.connect('/');
@@ -337,10 +404,6 @@ function GameComponent(props) {
                 let peerUserSpinnedWheel = idOfUserSpinnedWheel === props.peer && idOfPeerOfUserSpinnedWheel === props.user._id;
 
                 let blockSpin = message.body[4];
-
-                console.warn("RECEIVED MESSAGE")
-                console.warn("peer bet")
-                console.warn(message.body[3])
 
                 // set other user bet only if message comes from peet
                 if (peerUserSpinnedWheel) {
@@ -376,8 +439,6 @@ function GameComponent(props) {
         setNewPrizeNumber(newPrizeNumber)
 
         let userBet = props.userBet[0];
-
-
 
         // store id's of both users to ensure that wheel only spins on the match between both users
         // add other userBet to variables
@@ -458,34 +519,6 @@ function GameComponent(props) {
         }
     };
 
-
-
-    // needed for lucky wheel
-
-    const data = [
-        { option: allInterests[0], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[1], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[2], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[3], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[4], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[5], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[6], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[7], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[8], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[9], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[0], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[1], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[2], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[3], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[4], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[5], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[6], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[7], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[8], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[9], style: { backgroundColor: 'black', textColor: 'white' } },
-        { option: allInterests[0], style: { backgroundColor: '#ED7C31', textColor: 'black' } },
-        { option: allInterests[1], style: { backgroundColor: 'black', textColor: 'white' } },
-    ]
 
         return (
             <div>
