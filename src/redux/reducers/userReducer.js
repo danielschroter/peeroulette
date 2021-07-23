@@ -39,11 +39,12 @@ export default function user(state = getUser(), action) {
         case "CONFIRM_SUCCESS":
             return { user: action.user };
         case "CONFIRM_FAILURE":
-            return { error: action.error };    
+            return { error: action.error };
         case "REGISTER_ORG_SUCCESS" :
             return { user: action.user }
         case "CHANGE_USER_SUCCESS" :
-            return { user: action.user };
+            // return { user: action.user };
+            return state;
         default:
             return state;
     }
