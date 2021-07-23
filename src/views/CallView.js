@@ -10,11 +10,13 @@ import {login, register, changeUser, getUser, deleteUser, deleteOrganization, ch
 import PeerInformation from "../components/PeerInformation";
 import GameComponent from "../components/GameComponent";
 
+import UserService from "../services/UserService";
+
+
 function CallView(props) {
     const user = useSelector((state) => state.user.user);
 
-    useEffect(() => {
-    }, [user, props.history]);
+
 
     const onGetUser = (id) => {
         props.dispatch(getUser(id));
@@ -24,6 +26,11 @@ function CallView(props) {
     const [name, setName] = useState('')
     const [call, setCall] = useState(false)
     const [password, setPassword] = useState('')
+    const [allInterests, setAllInterests] = React.useState([]);
+
+
+    useEffect(() => {
+    }, [user, props.history]);
 
     const handleClick = event => {
         event.preventDefault()
@@ -70,7 +77,19 @@ function CallView(props) {
             GENERATE_ROOMNAMES_ON_WELCOME_PAGE: false,
         },
     };
+
     const { loading, error, jitsi } = useJitsi(jitsiConfig);
+
+    const extractAllInterests = () => {
+        UserService.getInterests().then(function(interestsBackend) {
+            if (interestsBackend[0] !== undefined) {
+                //setAllInterests(interestsBackend[0].facebookInterests);
+                return interestsBackend[0].facebookInterests;
+            }
+        });
+    };
+
+    const tmpInterests = extractAllInterests();
 
     return (
         //<Grid
@@ -95,6 +114,7 @@ function CallView(props) {
                     userBet={[]}
                     peerBet={[]}
                     commonInterests={[]}
+                    allFaceboookInterests={[]}
                 />
 
                 {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}

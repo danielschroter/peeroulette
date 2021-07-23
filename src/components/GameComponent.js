@@ -272,14 +272,9 @@ function GameComponent(props) {
     const extractInterests = () => {
         UserService.getInterests().then(function(interestsBackend) {
             if (interestsBackend[0] !== undefined) {
-                setAllInterests(interestsBackend[0].facebookInterests);
-                console.warn("set all interests backend")
-                //console.warn(interestsBackend[0].facebookInterests)
+                setAllInterests(interestsBackend[0].facebookInterests)
             }
         });
-
-        //console.warn("inside extract interests")
-        //console.warn(allInterests)
     };
 
     function duplicateInterest(newInterest, wheelInterests) {
@@ -308,31 +303,108 @@ function GameComponent(props) {
     ]
 
     const extractWheelInterests = () => {
-        console.warn("COMMON INTERESTS")
-        console.warn(commonInterests);
+        //console.warn("COMMON INTERESTS")
+        //console.warn(commonInterests);
+
+        UserService.getInterests().then(function(interestsBackend) {
+            if (interestsBackend[0] !== undefined) {
+                let allInterests = interestsBackend[0].facebookInterests;
+                setAllInterests(allInterests)
+                let i = 0;
+                for (i; i < allInterests.length; i++) {
+                    props.allFaceboookInterests.push(allInterests[i])
+                }
+            }
+        });
+        console.warn("PROPS ALL FACEBOOK INTERESTS")
+        console.warn(props.allFaceboookInterests)
+
+        {/*
+        console.warn("ALL INTERESTS DEBUG")
+        console.warn(props.allInterests)
+
+        if (props.allInterests !== undefined) {
+            let allInterestsBackend = props.allInterests;
+            let allWheelInterests = [];
+            let j = 0;
+
+            console.warn("wheel interests should be empty")
+            console.warn(allWheelInterests)
+
+            console.warn("commoninterests ONLY")
+            console.warn(commonInterests)
+            for (j; j < commonInterests.length; j++) {
+                console.warn("added common interest")
+                allWheelInterests.push(commonInterests[j])
+            }
+            console.warn("wheel interests after adding common interests")
+            console.warn(allWheelInterests)
+
+            let fullInterestsNumber = 12 - commonInterests.length;
+            let i = 0;
+            for (i; i < fullInterestsNumber; i++) {
+                if (i < commonInterests.length) {
+                    allWheelInterests.push(commonInterests[i])
+                    console.warn("added interest")
+                    console.warn(commonInterests[i])
+                } else {
+                    let randomInterestIndex = Math.floor(Math.random() * allInterestsBackend.length);
+                    let newInterest = allInterestsBackend[randomInterestIndex];
+                    //if (!duplicateInterest(newInterest, wheelInterests)) {
+                    if (true) {
+                        allWheelInterests.push(newInterest)
+                    } else {
+                        i--;
+                    }
+                }
+            }
+            console.warn("Wheel interests")
+            console.warn(allWheelInterests)
+            setwheelInterests(allWheelInterests)
+        }
+            UserService.getInterests().then(function(interestsBackend) {
+            if (interestsBackend[0] !== undefined) {
+                setAllInterests(interestsBackend[0].facebookInterests[i])
+                let i = 0;
+                for (i; i < interestsBackend[0].facebookInterests.length; i++) {
+                    props.allInterests.push(interestsBackend[0].facebookInterests[i])
+                }
+            }
+        });
+        */}
+
+        //extractInterests();
+
+
+
+        //console.warn("PROPS ALL INTERESTS DEBUG HANS")
+        //console.warn(props.allInterests)
+        //let interests = props.allInterests;
+        //console.warn(interests)
+
 
         UserService.getInterests().then(function(interestsBackend) {
             if (interestsBackend[0] !== undefined) {
                 let allInterestsBackend = interestsBackend[0].facebookInterests;
-                let allWheelInterests = [];
-                {/*
+                let allInterestsWheel = []
                 let j = 0;
-                console.warn("commoninterests ONLY")
-                console.warn(commonInterests)
-                for (j; j < commonInterests.length; j++) {
-                    console.warn("added common interest")
-                    allWheelInterests.push(commonInterests[j])
-                }
-                */}
+                console.warn("wheel interests should be empty")
+                console.warn(allInterestsWheel)
 
-                console.warn("AFTER adding commoninterests only ONLY")
-                console.warn(allWheelInterests)
+                //console.warn("commoninterests ONLY")
+                //console.warn(commonInterests)
+                for (j; j < commonInterests.length; j++) {
+                    allInterestsWheel.push(commonInterests[j])
+                }
+                console.warn("wheel interests after adding common interests")
+                console.warn(allInterestsWheel)
+
                 let fullInterestsNumber = 12;
                 fullInterestsNumber = fullInterestsNumber - commonInterests.length;
                 let i = 0;
                 for (i; i < fullInterestsNumber; i++) {
                     if (i < commonInterests.length) {
-                        allWheelInterests.push(commonInterests[i])
+                        allInterestsWheel.push(commonInterests[i])
                         console.warn("added interest")
                         console.warn(commonInterests[i])
                     } else {
@@ -340,25 +412,20 @@ function GameComponent(props) {
                         let newInterest = allInterestsBackend[randomInterestIndex];
                         //if (!duplicateInterest(newInterest, wheelInterests)) {
                         if (true) {
-                            allWheelInterests.push(newInterest)
+                            allInterestsWheel.push(newInterest)
                         } else {
                             i--;
                         }
                     }
                 }
                 console.warn("Wheel interests")
-                console.warn(allWheelInterests)
-                setwheelInterests(allWheelInterests)
+                console.warn(allInterestsWheel)
+                setwheelInterests(allInterestsWheel)
             }
         });
 
-
-
-
         console.warn("WHEEL INTERESTS")
         console.warn(wheelInterests)
-
-
     };
 
     // data lucky wheel
@@ -609,6 +676,7 @@ GameComponent.propTypes = {
     peerBet: PropTypes.array,
     commonInterests: PropTypes.array,
     blockSpin: PropTypes.array,
+    allFaceboookInterests: PropTypes.array,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
