@@ -13,11 +13,11 @@ import {useState} from "react";
 import InformationComponent from "../components/InformationComponent";
 import background from "../assets/bg_1.png";
 import {Slide} from "@material-ui/core";
-import { Link, animateScroll as scroll } from 'react-scroll'
+import {Link, animateScroll as scroll} from 'react-scroll'
 import {useRef} from "react";
 import CorporatePaperComponent from "../components/CorporatePaperComponent";
 import * as Particles from "particles.js";
-
+import ParticleBackground from "../components/ParticleBackground";
 
 
 /**
@@ -63,10 +63,9 @@ const useStyles = makeStyles((theme) => ({
         color: "#fafafa",
         fontSize: "3rem",
     },
-    extraSpace:{
+    extraSpace: {
         height: "100vh",
     }
-
 
 
 }))
@@ -84,58 +83,66 @@ function LandingPageView(props) {
     })
 
     function handleBackClick() {
-        informationRef.current.scrollIntoView({ behavior: 'smooth' })
+        informationRef.current.scrollIntoView({behavior: 'smooth'})
     }
 
     return (
         // if no movies are loaded, the above useEffect should be triggered
         <div className={classes.root} id="landingHeader">
             <div className={classes.backCover}>
-                {/*<Particles></Particles>*/}
-                {/*<div id="particles-js">*/}
-
-
-                <CssBaseline/>
-
-                <Slide direction="up" in={checked}
-                       {...(checked ? {timeout: 800} : {})}
-                       collapsedHeight={20}
+                <ParticleBackground></ParticleBackground>
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                    }}
                 >
-                    <div className={classes.content}>
-                        {/*<div className={classes.content} style={{'marginTop': '150px', 'marginBottom': '150px'}}>*/}
+                    {/*<Particles></Particles>*/}
+                    {/*<div id="particles-js">*/}
+
+
+                    <CssBaseline/>
+
+                    <Slide direction="up" in={checked}
+                           {...(checked ? {timeout: 800} : {})}
+                           collapsedHeight={20}
+                    >
+                        <div className={classes.content}>
+                            {/*<div className={classes.content} style={{'marginTop': '150px', 'marginBottom': '150px'}}>*/}
 
                             <div>
-                            <Typography variant="h2" align="center" gutterBottom>
-                                Welcome to<br/> <span className={classes.colorTextAccent}>peer</span>oulette.
-                            </Typography>
+                                <Typography variant="h2" align="center" gutterBottom>
+                                    Welcome to<br/> <span className={classes.colorTextAccent}>peer</span>oulette.
+                                </Typography>
 
-                            <div style={{flex: 1}}>
-                                <Button size="large" variant="outlined" color="primary" href="/movies">
-                                    Look at some Movies
-                                </Button>
-                                <Button size="large" variant="outlined" color="primary" href="/corporate">
-                                    Corporates
-                                </Button>
+                                <div style={{flex: 1}}>
+                                    <Button size="large" variant="outlined" color="primary" href="/movies">
+                                        Look at some Movies
+                                    </Button>
+                                    <Button size="large" variant="outlined" color="primary" href="/corporate">
+                                        Corporates
+                                    </Button>
+                                </div>
+
+                                <Link to="section1" smooth={true} spy={true} duration={500}
+                                >
+                                    <IconButton onClick={handleBackClick}>
+                                        <ExpandMoreIcon className={classes.goDown}/>
+                                    </IconButton>
+                                </Link>
+
                             </div>
 
-                            <Link to="section1" smooth={true} spy={true} duration={500}
-                                    >
-                            <IconButton onClick={handleBackClick}>
-                                <ExpandMoreIcon className={classes.goDown}/>
-                            </IconButton>
-                            </Link>
 
-                            </div>
-
-
-
-
-
-                    </div>
-                </Slide>
+                        </div>
+                    </Slide>
+                </div>
 
                 <div ref={informationRef}>
-                <InformationComponent/>
+                    <InformationComponent/>
                 </div>
 
                 <CorporatePaperComponent/>

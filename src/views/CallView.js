@@ -5,6 +5,7 @@ import {connect, useSelector} from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, IconButton, Toolbar, Typography, Container, Grid, Button, Paper } from "@material-ui/core";
 import { Jutsu, useJitsi }  from 'react-jutsu'
+import ParticleBackground from "../components/ParticleBackground";
 
 import {login, register, changeUser, getUser, deleteUser, deleteOrganization, changeOrganization, registerOrganization} from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
@@ -80,6 +81,17 @@ function CallView(props) {
          //   style={{height:"100%"}}
          //   spacing="2"
         //>
+        <div>
+        <ParticleBackground></ParticleBackground>
+    <div
+        style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+        }}
+    >
 
         <Grid container spacing={3} style={{height:"100%", padding: 20}}>
             <Grid item xs>
@@ -107,6 +119,8 @@ function CallView(props) {
                 />
             </Grid>
         </Grid>
+        </div>
+        </div>
     );
 }
 

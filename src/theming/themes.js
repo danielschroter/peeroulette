@@ -21,8 +21,8 @@ const appThemeOptions = {
                 dark: "#c51162",
             },
             background: {
-                paper: "#fff",
-                default: "#fafafa",
+                paper: 'rgb(255,255,255)',
+                default: "#424242",
                 landingPage: "#424242",
             },
         },
