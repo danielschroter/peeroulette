@@ -13,34 +13,33 @@ const useStyles = makeStyles((theme) => ({
 		margin: "auto",
 	},
 }));
-function Conversation({conversation, currentUser}) {
+function Conversation({ conversation, currentUser }) {
 	const classes = useStyles();
 
 	const [chatPartner, setChatPartner] = React.useState("");
 
-
-	const extractPartner = async(partnerId) => {
-		console.log(partnerId);
-		UserService.getUser(partnerId).then(function (userBackend) {
-			console.log(userBackend);
-			setChatPartner(userBackend.username);
-		});
+	const extractPartner = async (partnerId) => {
+		try {
+			UserService.getUser(partnerId).then(function (userBackend) {
+				setChatPartner(userBackend.username);
+			});
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	useEffect(() => {
 		const partnerId = conversation.members.find((m) => m !== currentUser._id);
 
-
 		extractPartner(partnerId);
 	}, [currentUser, conversation]);
 
-
 	return (
-		<div style={{ marginTop: "150px", marginBottom: "150px" }}>
+		<div>
 			<Container maxWidth="sm">
-                    <Typography variant="h4" align="center" gutterBottom>
-						Your Conversation with "{chatPartner}"
-					</Typography>
+				<Typography variant="h4" align="center" gutterBottom>
+					Your Conversation with "{chatPartner}"
+				</Typography>
 			</Container>
 		</div>
 	);

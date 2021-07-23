@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { withRouter } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 
-//import MessengerComponent from "../components/MessengerComponent";
 import Conversation from "../components/Conversation";
+import Message from "../components/Message";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
@@ -148,7 +148,6 @@ function MessengerView(props) {
 
 	const [conversations, setConversations] = React.useState([]);
 	const [currentChat, setCurrentChat] = React.useState(null);
-	//const [currentChat, setCurrentChat] = useState("60f7f496708da03d93962301");
 	const [messages, setMessages] = React.useState([]);
 	const [newMessage, setNewMessage] = React.useState("");
 	const [arrivalMessage, setArrivalMessage] = React.useState(null);
@@ -157,29 +156,68 @@ function MessengerView(props) {
 	const scrollRef = useRef();
 
 	// extract all conversations of user from backend
-	const extractUserConversations = async() => {
-		console.log(user.username);
-		const res = await UserService.getUserConversation(user._id);
-		setConversations(res);
+	const extractUserConversations = async () => {
+		try {
+			const res = await UserService.getUserConversation(user._id);
+			setConversations(res);
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
-	// extract all conversations of user from backend
-	const extractMessages = async() => {
-		if (!props.user) {
-			return;
+	// extract all messages of currentChat from backend
+	const extractMessages = async () => {
+		try {
+			const res = await UserService.getMessage(currentChat._id);
+			setMessages(res);
+		} catch (err) {
+			console.log(err);
 		}
-		await UserService.getMessage(currentChat?._id).then(function (userBackend) {
-			setMessages(userBackend.data);
-		});
+	};
+
+	// handleSubmit for sending a new message
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		const message = {
+			sender: user._id,
+			text: newMessage,
+			conversationId: currentChat._id,
+		};
+
+		const receiverId = currentChat.members.find(
+			(member) => member !== user._id
+		);
+
+		// socket.current.emit("sendMessage", {
+		//   senderId: user._id,
+		//   receiverId,
+		//   text: newMessage,
+		// });
+
+		try {
+			const res = await UserService.addMessage(
+				message.conversationId,
+				message.sender,
+				message.text
+			);
+			setMessages([...messages, res]);
+			setNewMessage("");
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	useEffect(() => {
 		extractUserConversations();
-		extractMessages();
+	}, [user._id]);
 
-		console.log(JSON.stringify(conversations));
-		console.log("TEst");
-	}, [props.user]);
+	useEffect(() => {
+		extractMessages();
+	}, [currentChat]);
+
+	// useEffect(() => {
+	// 	scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+	// }, [messages]);
 
 	// props for all grid items used below in the JSX
 	const girdItemProps = {
@@ -213,23 +251,60 @@ function MessengerView(props) {
 				/>
 			</div>
 
-			{/*  */}
 			<Grid container>
-				{/* Menu*/}
+				{/* Conversations*/}
 				<Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-					<DetailsArea title="Conversations:" />
-					<div>
-						{conversations.map((c) => (
-							<div onClick={() => setCurrentChat(c)}>
-								<Conversation conversation={c} currentUser={user} />
+					<DetailsArea
+						title="Conversations:"
+						content={
+							<div className={classes.userDataFont}>
+								{conversations.map((c) => (
+									<div onClick={() => setCurrentChat(c)}>
+										<Conversation conversation={c} currentUser={user} />
+									</div>
+								))}
 							</div>
-						))}
-					</div>
+						}
+					/>
 				</Grid>
-				{/* Box*/}
+
+				{/* Chatbox*/}
 				<Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-					<DetailsArea title="Box" />
+					<DetailsArea
+						title="Chatbox:"
+						content={
+							<div className={classes.userDataFont}>
+								{currentChat ? (
+									<>
+										<div>
+											{messages.map((m) => (
+												<div ref={scrollRef}>
+													<Message message={m} own={m.sender === user._id} />
+												</div>
+											))}
+										</div>
+										<div>
+											<textarea
+												placeholder="write something..."
+												onChange={(e) => setNewMessage(e.target.value)}
+												value={newMessage}
+											></textarea>
+											<button
+												className="chatSubmitButton"
+												onClick={handleSubmit}
+											>
+												Send
+											</button>
+										</div>
+									</>
+								) : (
+									<span>Open a conversation to start a chat.</span>
+								)}
+							</div>
+						}
+					/>
 				</Grid>
+
 				{/* Online*/}
 				<Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
 					<DetailsArea title="Online" />
