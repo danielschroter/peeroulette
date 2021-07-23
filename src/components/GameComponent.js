@@ -332,27 +332,28 @@ function GameComponent(props) {
         console.warn("COMMON INDEX")
         console.warn(commonInterests)
 
-        setWheelInterests(commonInterests)
+        //setWheelInterests(commonInterests)
 
-        wheelInterests.push("Hans")
-
+        {/*
         let tmpWheelInterests = commonInterests;
         let j = 0;
         for (j; j < (tmpWheelInterests.length - commonInterests.length; j++) {
             console.warn("added common interest")
             tmpWheelInterests.push(commonInterests[j])
         }
-        console.warn(tmpWheelInterests);
-        setWheelInterests(tmpWheelInterests)
+        */}
+
+        //console.warn(tmpWheelInterests);
+        //setWheelInterests(tmpWheelInterests)
 
 
 
 
         // setwheelInterests(commonInterests)
-        if (false) {
+        if (true) {
 
         let allInterestsBackend = props.allFaceboookInterests;
-        let tmpWheelInterests = commonInterests;
+        let tmpWheelInterests = [];
 
         console.warn("wheel interests should be empty")
         console.warn(tmpWheelInterests)
