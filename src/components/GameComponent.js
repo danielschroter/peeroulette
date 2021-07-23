@@ -198,7 +198,8 @@ function GameComponent(props) {
     const [userInterests, setUserInterests] = React.useState([]);
     const [peerInterests, setPeerInterests] = React.useState([]);
     const [commonInterests, setCommonInterests] = useState([]);
-    const [wheelInterests, setwheelInterests] = useState([]);
+    const [commonIndex, setCommonIndex] = useState([]);
+    const [wheelInterests, setWheelInterests] = useState([]);
 
     const bcrypt = require("bcryptjs");
 
@@ -256,17 +257,26 @@ function GameComponent(props) {
 
     const extractCommonInterests = () => {
         let commonInterests = [];
-
+        let commonInterestsIndex = []
         let i = 0;
         for (i; i < userInterests.length; i++) {
             let j = 0;
             for (j; j < peerInterests.length; j++) {
                 if (userInterests[i] === peerInterests[j]) {
                     commonInterests.push(userInterests[i])
+                    var commonIndex = props.allFaceboookInterests.indexOf(userInterests[i]);
+                    commonInterestsIndex.push(commonIndex)
+                    console.warn("interest in loop")
+                    console.warn(userInterests[i])
+                    console.warn("index in loop")
+                    console.warn(commonIndex)
                 }
             }
         }
         setCommonInterests(commonInterests);
+        console.warn("IN EXTRACT COMMON INTERSTS INDEX")
+        console.warn(commonInterestsIndex)
+        setCommonIndex(commonInterestsIndex)
     };
 
     const extractInterests = () => {
@@ -319,113 +329,68 @@ function GameComponent(props) {
         console.warn("PROPS ALL FACEBOOK INTERESTS")
         console.warn(props.allFaceboookInterests)
 
-        {/*
-        console.warn("ALL INTERESTS DEBUG")
-        console.warn(props.allInterests)
+        console.warn("COMMON INDEX")
+        console.warn(commonInterests)
 
-        if (props.allInterests !== undefined) {
-            let allInterestsBackend = props.allInterests;
-            let allWheelInterests = [];
-            let j = 0;
+        setWheelInterests(commonInterests)
 
-            console.warn("wheel interests should be empty")
-            console.warn(allWheelInterests)
+        wheelInterests.push("Hans")
 
-            console.warn("commoninterests ONLY")
-            console.warn(commonInterests)
-            for (j; j < commonInterests.length; j++) {
-                console.warn("added common interest")
-                allWheelInterests.push(commonInterests[j])
-            }
-            console.warn("wheel interests after adding common interests")
-            console.warn(allWheelInterests)
-
-            let fullInterestsNumber = 12 - commonInterests.length;
-            let i = 0;
-            for (i; i < fullInterestsNumber; i++) {
-                if (i < commonInterests.length) {
-                    allWheelInterests.push(commonInterests[i])
-                    console.warn("added interest")
-                    console.warn(commonInterests[i])
-                } else {
-                    let randomInterestIndex = Math.floor(Math.random() * allInterestsBackend.length);
-                    let newInterest = allInterestsBackend[randomInterestIndex];
-                    //if (!duplicateInterest(newInterest, wheelInterests)) {
-                    if (true) {
-                        allWheelInterests.push(newInterest)
-                    } else {
-                        i--;
-                    }
-                }
-            }
-            console.warn("Wheel interests")
-            console.warn(allWheelInterests)
-            setwheelInterests(allWheelInterests)
+        let tmpWheelInterests = commonInterests;
+        let j = 0;
+        for (j; j < (tmpWheelInterests.length - commonInterests.length; j++) {
+            console.warn("added common interest")
+            tmpWheelInterests.push(commonInterests[j])
         }
-            UserService.getInterests().then(function(interestsBackend) {
+        console.warn(tmpWheelInterests);
+        setWheelInterests(tmpWheelInterests)
+
+
+
+
+        // setwheelInterests(commonInterests)
+        if (false) {
+
+        let allInterestsBackend = props.allFaceboookInterests;
+        let tmpWheelInterests = commonInterests;
+
+        console.warn("wheel interests should be empty")
+        console.warn(tmpWheelInterests)
+
+        console.warn("commoninterests ONLY")
+        console.warn(commonInterests)
+        let j = 0;
+        for (j; j < commonInterests.length; j++) {
+            console.warn("added common interest")
+            tmpWheelInterests.push(commonInterests[j])
+        }
+        console.warn("wheel interests after adding common interests")
+        console.warn(tmpWheelInterests)
+
+        let fullInterestsNumber = 12 - commonInterests.length;
+        let i = 0;
+        for (i; i < fullInterestsNumber; i++) {
+            let randomInterestIndex = Math.floor(Math.random() * allInterestsBackend.length);
+            let newInterest = allInterestsBackend[randomInterestIndex];
+            //if (!duplicateInterest(newInterest, wheelInterests)) {
+            if (true) {
+                tmpWheelInterests.push(newInterest)
+            } else {
+                i--;
+            }
+        }
+        console.warn("Wheel interests")
+        console.warn(tmpWheelInterests)
+        setWheelInterests(tmpWheelInterests)
+        }
+
+        {/*
+         UserService.getInterests().then(function(interestsBackend) {
             if (interestsBackend[0] !== undefined) {
-                setAllInterests(interestsBackend[0].facebookInterests[i])
-                let i = 0;
-                for (i; i < interestsBackend[0].facebookInterests.length; i++) {
-                    props.allInterests.push(interestsBackend[0].facebookInterests[i])
-                }
+                setAllInterests(interestsBackend[0].facebookInterests)
             }
         });
         */}
-
-        //extractInterests();
-
-
-
-        //console.warn("PROPS ALL INTERESTS DEBUG HANS")
-        //console.warn(props.allInterests)
-        //let interests = props.allInterests;
-        //console.warn(interests)
-
-
-        UserService.getInterests().then(function(interestsBackend) {
-            if (interestsBackend[0] !== undefined) {
-                let allInterestsBackend = interestsBackend[0].facebookInterests;
-                let allInterestsWheel = []
-                let j = 0;
-                console.warn("wheel interests should be empty")
-                console.warn(allInterestsWheel)
-
-                //console.warn("commoninterests ONLY")
-                //console.warn(commonInterests)
-                for (j; j < commonInterests.length; j++) {
-                    allInterestsWheel.push(commonInterests[j])
-                }
-                console.warn("wheel interests after adding common interests")
-                console.warn(allInterestsWheel)
-
-                let fullInterestsNumber = 12;
-                fullInterestsNumber = fullInterestsNumber - commonInterests.length;
-                let i = 0;
-                for (i; i < fullInterestsNumber; i++) {
-                    if (i < commonInterests.length) {
-                        allInterestsWheel.push(commonInterests[i])
-                        console.warn("added interest")
-                        console.warn(commonInterests[i])
-                    } else {
-                        let randomInterestIndex = Math.floor(Math.random() * allInterestsBackend.length);
-                        let newInterest = allInterestsBackend[randomInterestIndex];
-                        //if (!duplicateInterest(newInterest, wheelInterests)) {
-                        if (true) {
-                            allInterestsWheel.push(newInterest)
-                        } else {
-                            i--;
-                        }
-                    }
-                }
-                console.warn("Wheel interests")
-                console.warn(allInterestsWheel)
-                setwheelInterests(allInterestsWheel)
-            }
-        });
-
-        console.warn("WHEEL INTERESTS")
-        console.warn(wheelInterests)
     };
 
     // data lucky wheel
