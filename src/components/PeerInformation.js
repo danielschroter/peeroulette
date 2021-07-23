@@ -216,11 +216,11 @@ function PeerInformation(props) {
         });
     };
 
-    useEffect(() => {
-        extractUser();
-        extractInterests();
-
-    }, [props.user]);
+    // useEffect(() => {
+    //     extractUser();
+    //     extractInterests();
+    //
+    // }, [props.user]);
 
     // props for all grid items used below in the JSX
     const girdItemProps = {

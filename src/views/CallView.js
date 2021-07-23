@@ -8,7 +8,7 @@ import { Jutsu, useJitsi }  from 'react-jutsu'
 
 import {login, register, changeUser, getUser, deleteUser, deleteOrganization, changeOrganization, registerOrganization} from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
-import GameComponent from "../components/GameComponent";
+import GameComponent_old from "../components/GameComponent";
 
 import UserService from "../services/UserService";
 
@@ -104,7 +104,7 @@ function CallView(props) {
         <Grid container spacing={3} style={{height:"100%", padding: 20}}>
             <Grid item xs>
                 <Typography variant="h4">Break the ice with Peeroulette!</Typography>
-                <GameComponent
+                <GameComponent_old
                     user={user}
                     body={[]}
                     gameValues={[]}
