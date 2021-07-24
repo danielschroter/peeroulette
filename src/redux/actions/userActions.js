@@ -52,8 +52,8 @@ export function register(
   compname,
   domains
 ) {
-  function onSuccess(user) {
-    return { type: "REGISTER_SUCCESS", user: user };
+  function onSuccess(message) {
+    return { type: "REGISTER_SUCCESS", message: message };
   }
   function onFailure(error) {
     return { type: "REGISTER_FAILURE", error: error };
@@ -69,7 +69,7 @@ export function register(
         compname,
         domains
       );
-      dispatch(onSuccess(resp.user));
+      dispatch(onSuccess(resp.message));
     } catch (e) {
       dispatch(onFailure(e));
     }
@@ -225,8 +225,8 @@ export function changeOrganization(changedOrganization) {
 }
 
 export function registerOrganization(user_id, compname, domains) {
-    function onSuccess(user) {
-        return { type: "REGISTER_ORGANIZATION_SUCCESS", user: user};
+    function onSuccess(organization) {
+        return { type: "REGISTER_ORGANIZATION_SUCCESS", organization: organization};
     }
     function onFailure(error) {
         return { type: "REGISTER_ORGANIZATION_FAILURE", error: error };
@@ -235,7 +235,7 @@ export function registerOrganization(user_id, compname, domains) {
     return async (dispatch) => {
         try {
             let resp = await UserService.registerOrganization(user_id, compname, domains);
-            dispatch(onSuccess(resp.user));
+            dispatch(onSuccess(resp.organization));
         } catch (e) {
             dispatch(onFailure(e));
         }

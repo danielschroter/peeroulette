@@ -33,13 +33,18 @@ export default function user(state = getUser(), action) {
         case "LOGOUT":
             return {};
         case "REGISTER_SUCCESS":
-            return { user: action.user };
+            return { message: action.message };
         case "REGISTER_FAILURE":
+            return { error: action.error };
+        case "CONFIRM_SUCCESS":
+            return { user: action.user };
+        case "CONFIRM_FAILURE":
             return { error: action.error };
         case "REGISTER_ORG_SUCCESS" :
             return { user: action.user }
         case "CHANGE_USER_SUCCESS" :
-            return { user: action.user };
+            // return { user: action.user };
+            return state;
         default:
             return state;
     }
