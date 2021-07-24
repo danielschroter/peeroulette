@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Route , withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Button,
@@ -154,6 +155,7 @@ function PeerInformation(props) {
     // user data
     const [_id, set_id] = React.useState("");
     const [username, setUsername] = React.useState("");
+    const [matchedCount, setMatchedCount] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
     const [city, setCity] = React.useState("");
@@ -192,8 +194,9 @@ function PeerInformation(props) {
             UserService.getAvailable(props.user._id, curPage).then(function(userBackend) {
                 set_id(userBackend._id);
                 setUsername(userBackend.username);
+                setMatchedCount(userBackend.matchedCount);
                 setCity(userBackend.city);
-                setInterests(userBackend.interests);
+                // setInterests(userBackend.interests);
                 setUniversity(userBackend.university);
                 setOrganization(userBackend.organization);
 
@@ -213,44 +216,30 @@ function PeerInformation(props) {
             });
     };
 
-    const extractInterests = () => {
-        UserService.getInterests().then(function(interestsBackend) {
-            if (interestsBackend[0] !== undefined) {
-                setAllInterests(interestsBackend[0].facebookInterests);
-            }
-        });
-    };
+    // const extractInterests = () => {
+    //     UserService.getInterests().then(function(interestsBackend) {
+    //         if (interestsBackend[0] !== undefined) {
+    //             setAllInterests(interestsBackend[0].facebookInterests);
+    //         }
+    //     });
+    // };
 
     useEffect(() => {
         extractUser();
-        extractInterests();
+        // extractInterests();
         // console.log(props);
     }, [props.user]);
 
 
     // props for all grid items used below in the JSX
-    const girdItemProps = {
-        item: true,
-        className: classes.padding,
-    };
-
-    // creating a object with all relevant data to update a user
-    // const packUser = () => {
-    //     let back = {
-    //         ...props.user,
-    //     };
-    //     back._id = _id;
-    //     back.username = username;
-    //     back.password = bcrypt.hashSync(password, 8);
-    //     back.interests = interests;
-    //     back.city = city;
-    //     back.university = university;
-    //     back.organization = organization;
-    //
-    //     return back;
+    // const girdItemProps = {
+    //     item: true,
+    //     className: classes.padding,
     // };
+
     console.log({_id});
     console.log(username);
+    console.log(props);
 
     if(username == 'Nope'){
       return (
@@ -263,14 +252,15 @@ function PeerInformation(props) {
       return (
         <Paper style={{ padding: 20 }}>
             <Typography variant="h4">{username} </Typography>
+            <Typography><strong variant="h5">Common Interests: {matchedCount}</strong></Typography>
             <Typography variant="h5">Information about {username}</Typography>
             <ul>
                 <li>{city}</li>
                 <li>{university}</li>
                 <li>{organization}</li>
             </ul>
-            <Typography variant="h5">Interests</Typography>
-            {/* <ul>
+            {/*<Typography variant="h5">Interests</Typography>
+            <ul>
                 {interests.map(interest => {
                       return <li>{interest}</li>;
                 })}
@@ -279,7 +269,7 @@ function PeerInformation(props) {
                 variant="contained"
                 color="primary"
                 className={classes.deleteProfileButton}
-                onClick={() => { window.location.href = "/call/"+_id; }}
+                onClick={() => props.history.push("/call/"+_id)}
             >
               Start call
             </Button>
@@ -287,7 +277,8 @@ function PeerInformation(props) {
                 variant="contained"
                 color="primary"
                 className={classes.deleteProfileButton}
-                onClick={() => { window.location.href = "/wait/"+(curPage+1); }}
+                // onClick={() => { window.location.href = "/wait/"+(curPage+1); }}
+                onClick={() => props.history.push("/wait/"+(curPage+1))}
             >
               Look for a new Match
             </Button>
@@ -303,4 +294,4 @@ PeerInformation.propTypes = {
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
-export default PeerInformation;
+export default withRouter(PeerInformation);
