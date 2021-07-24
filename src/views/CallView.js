@@ -138,11 +138,7 @@ function CallView(props) {
                             user={user}
                             onGetUser={onGetUser}
                             peer={match.params.id}
-                            // onUpdateUser={onUpdateUser}
-                            // onUpdateOrganization={onUpdateOrganization}
-                            // onRegisterOrganization={onRegisterOrganization}
-                            // onDeleteUser={onDeleteUser}
-                            // onDeleteOrganization={onDeleteOrganization}
+
                         />
                         <GameComponent
                             user={user}
@@ -154,31 +150,6 @@ function CallView(props) {
 
                 </Grid>
 
-
-                {/*<Grid container spacing={3} style={{height:"100%", padding: 20}}>*/}
-                {/*    <Grid item xs>*/}
-                {/*        <Typography variant="h4">Break the ice with Peeroulette!</Typography>*/}
-                {/*
-
-        {/*        /!*<Paper style={{ padding: 20 }}>xs</Paper>*!/*/}
-                {/*    </Grid>*/}
-
-                {/*    <Grid item xs={6} style={{height:"100%"}}>*/}
-                {/*        <Typography variant="h4">Say hello :-)</Typography>*/}
-                {/*        <Paper style={{height:"100%", padding: 20 }}>*/}
-                {/*            <div style={{height:"100%"}}>*/}
-                {/*                /!*{error && <p>{error}</p>}*!/*/}
-                {/*                <div  style={{height:"100%"}} id={jitsiConfig.parentNode} />*/}
-                {/*                /!*<Typography variant="h1">Jitsi</Typography>*!/*/}
-                {/*            </div>*/}
-                {/*        </Paper>*/}
-                {/*        <PeerInformation*/}
-                {/*            user={user}*/}
-                {/*            onGetUser={onGetUser}*/}
-                {/*            peer={match.params.id}*/}
-                {/*        />*/}
-                {/*    </Grid>*/}
-                {/*</Grid>*/}
             </div>
         </div>
     );
