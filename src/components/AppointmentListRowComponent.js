@@ -27,37 +27,14 @@ import Link from "react-router-dom/Link";
 // and you can access the global theme of the application
 
 const useStyles = makeStyles((theme) => ({
-    movieListRoot: {
-        padding: theme.spacing(2),
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    movieListHeader: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
-        maxWidth: "1000px",
-    },
-    headerDivider: {
-        margin: theme.spacing(2),
-    },
-    addMovieButton: {
-        margin: theme.spacing(2),
-    },
-    movieListPaper: {
-        width: "1000px",
-    },
-    image: {
-        borderRadius: theme.shape.borderRadius,
-        boxShadow: theme.shadows[2],
-    },
+
     row: {
         display: "flex",
         justifyContent: "center",
+    },
+    appointmentRowText: {
+        fontSize: "1rem",
+        fontWeight: "bold",
     }
 }));
 
@@ -70,6 +47,27 @@ function AppointmentListRowComponent(props) {
     // with this you can access the above defiend style classes
     const classes = useStyles();
 
+    const convertDate = (date) => {
+        const elems = date.split("-");
+        const year = elems[0];
+        const month = elems[1];
+
+        const help = elems[2].split("T");
+        const day = help[0];
+
+        const times = help[1].split(":");
+        const hours = times[0];
+        var pm = "";
+        if(hours.charAt(0) == "1"){
+            pm = "pm";
+        }else{
+            pm = "am";
+        }
+        const minutes = times[1];
+
+        return day + "-" + month + "-" + year + ", " + hours.charAt(1) + ":" + minutes + " " + pm
+    }
+
     return (
 
         <Box pt={3}>
@@ -77,25 +75,24 @@ function AppointmentListRowComponent(props) {
                 <Box p={3}>
                     <Grid container>
                         <Grid item xs={2}>
-
-                            {props.elem.title}
-
+                            <Typography className={classes.appointmentRowText}>{props.elem.title}</Typography>
                         </Grid>
                         <Grid item xs={5}>
-                            {props.elem.interests.map(i => <span>{i} </span>)}
+                            <Typography className={classes.appointmentRowText}>{props.elem.interests.map(i => <span>{i} </span>)}</Typography>
                         </Grid>
                         <Grid item xs={2}>
-                            {props.elem.startDate}
+                            <Typography className={classes.appointmentRowText}>{props.elem.startDate ? (<div>{convertDate(props.elem.startDate)}</div>) : null} </Typography>
                         </Grid>
                         <Grid item xs={2}>
-                            {props.elem.endDate}
+                            <Typography className={classes.appointmentRowText}>{props.elem.endDate ? (<div>{convertDate(props.elem.endDate)}</div>) : null} </Typography>
                         </Grid>
                         <Grid item xs={1}>
                             {
                                 props.elem.link ?
                                     (
-                                        <Button variant="outlined" color="primary" href={props.elem.link.split("3000")[1]}>Join</Button>
-                                    ):
+                                        <Button variant="contained" color="primary"
+                                                href={props.elem.link.split("3000")[1]}>Join</Button>
+                                    ) :
                                     null
                             }
                         </Grid>

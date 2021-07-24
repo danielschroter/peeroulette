@@ -282,7 +282,7 @@ class MyCalendarComponent extends React.PureComponent {
         if (added) {
             try {
                 added["user"] = this.state.user._id;
-                added["link"] = "localhost:3000/call/" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                added["link"] = "localhost:3000/group/" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                 const response = await AppointmentService.createAppointment(added);
                 app = response.map(this.mapAppointmentData)[0];
             } catch (e) {

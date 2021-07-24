@@ -8,6 +8,7 @@ import CallView from "./views/CallView";
 import WaitingView from "./views/WaitingView";
 import EditProfileView from "./views/EditProfileView";
 import ConfirmView from "./views/ConfirmView";
+import GroupCallView from "./views/GroupCallView";
 
 // routes within the movie database example app
 // used for routing
@@ -56,6 +57,10 @@ const routes = [
   {
       path: "/call/:id",
       component: CallView,
+  },
+  {
+    path: "/group/:id",
+    component: GroupCallView,
   },
   {
       path: "/wait/:page",
