@@ -62,13 +62,25 @@ function IcebreakerQuestionComponent(props) {
     const [icebreakerQuestions, setIcebreakerQuestions] = React.useState([""]);
 
 
+    const socket = useRef();
+
     const handleChange = async () => {
-        if (questionIndex === icebreakerQuestions.length-1) {
-            setQuestionIndex(0)
-        } else {
-            let newIndex = questionIndex + 1;
-            setQuestionIndex(newIndex)
+        let newIndex = 0;
+        if (questionIndex !== icebreakerQuestions.length-1) {
+            newIndex = questionIndex + 1
         }
+        setQuestionIndex(newIndex)
+
+        sendMessage("send question index",
+            {index: newIndex, receiverId: props.peer});
+    }
+
+    const sendMessage = async (label, messageBody) => {
+        const myObj = {
+            body: messageBody,
+            id: props.user._id,
+        };
+        socket.current.emit(label, myObj);
     }
 
     const extractIcebreakerQuestions = async () => {
@@ -81,10 +93,26 @@ function IcebreakerQuestionComponent(props) {
         console.warn("peer: " + props.peer)
     }
 
-
     useEffect(() => {
         extractIcebreakerQuestions();
+
+        socket.current = io("/");
+
+        socket.current.emit("addUser", props.user._id);
+
+    }, [props.user]);
+
+
+
+    useEffect(() => {
+        socket.current.on("send question index", message => {
+            console.log("Question has been sent" + message);
+            setQuestionIndex((message.body.index))
+            console.warn(message.body.index)
+        });
+
     }, []);
+
 
     return (
         <div>

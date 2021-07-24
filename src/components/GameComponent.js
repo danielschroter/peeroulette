@@ -166,6 +166,7 @@ function GameComponent(props) {
             setOtherUserBet("");
             setThisUserBet("");
         })
+        
         socket.current.on("startedSpin", message => {
             console.log("Spinning was started" + message);
             setSpinVariables(message.body.newPrizeNumber);
@@ -176,7 +177,6 @@ function GameComponent(props) {
             console.log("Bet has been Set" + message);
             setOtherUserBet(message.body.bet);
         })
-
 
     }, []);
 
