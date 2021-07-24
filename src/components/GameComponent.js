@@ -30,9 +30,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
     roundButton: {
-        backgroundColor: "#04AA6D",
+        backgroundColor: "#111111",
         border: "none",
-        color: "gold",
+        color: "#fff",
         padding: "20px",
         textAlign: "center",
         textDecoration: "none",
@@ -49,11 +49,8 @@ const useStyles = makeStyles((theme) => ({
 function GameComponent(props) {
     const classes = useStyles();
 
-    const [interestsUserA, setInterestUserA] = React.useState([]);
-    const [interestsUserB, setInterestUserB] = React.useState([]);
     const [otherUsername, setOtherUsername] = React.useState("");
     const [commonInterests, setCommonInterests] = React.useState([]);
-    const [allInterests, setAllInterests] = React.useState([]);
 
     const [wheelInterests, setWheelInterests] = React.useState([
         {option: "Business", style: {backgroundColor: '#ED7C31', textColor: 'black'}},
@@ -74,31 +71,12 @@ function GameComponent(props) {
     const [thisUserBet, setThisUserBet] = React.useState("");
     const [otherUserBet, setOtherUserBet] = React.useState("");
 
-    const [messages, setMessages] = React.useState([]);
     const [mustspin, setMustspin] = React.useState(false);
     const [newPrizeNumber, setNewPrizeNumber] = React.useState(0);
     const [endSpin, setEndSpin] = React.useState(false);
-    // const [blockSpin, setBlockSpin] = React.useState(true);
-
-
-    // const data = [
-    //     {option: wheelInterests[0], style: {backgroundColor: '#ED7C31', textColor: 'black'}},
-    //     {option: wheelInterests[1], style: {backgroundColor: 'black', textColor: 'white'}},
-    //     {option: wheelInterests[2], style: {backgroundColor: '#ED7C31', textColor: 'black'}},
-    //     {option: wheelInterests[3], style: {backgroundColor: 'black', textColor: 'white'}},
-    //     {option: wheelInterests[4], style: {backgroundColor: '#ED7C31', textColor: 'black'}},
-    //     {option: wheelInterests[5], style: {backgroundColor: 'black', textColor: 'white'}},
-    //     {option: wheelInterests[6], style: {backgroundColor: '#ED7C31', textColor: 'black'}},
-    //     {option: wheelInterests[7], style: {backgroundColor: 'black', textColor: 'white'}},
-    //     {option: wheelInterests[8], style: {backgroundColor: '#ED7C31', textColor: 'black'}},
-    //     {option: wheelInterests[9], style: {backgroundColor: 'black', textColor: 'white'}},
-    //     {option: wheelInterests[10], style: {backgroundColor: '#ED7C31', textColor: 'black'}},
-    //     {option: wheelInterests[11], style: {backgroundColor: 'black', textColor: 'white'}},
-    // ];
 
 
     const socket = useRef();
-    // socket.current = io.connect('/');
 
 
     const createWheelInterests = async (comInts, allInts) => {
@@ -127,19 +105,6 @@ function GameComponent(props) {
         return data;
     }
 
-    // const receiveMessage = async () => {
-    //
-    //     socket.current.on("startSpin", (message) => {
-    //         let tmp = messages;
-    //         tmp.push(message.body)
-    //         console.log(message);
-    //         setMessages(tmp);
-    //         setNewPrizeNumber(message.body[0])
-    //         setEndSpin(false);
-    //     });
-    //
-    // }
-
 
     const sendMessage = async (label, messageBody) => {
 
@@ -157,8 +122,6 @@ function GameComponent(props) {
         }
         let userA = await UserService.getUser(props.user._id);
         let userB = await UserService.getUser(props.peer);
-        setInterestUserA(userA.interests);
-        setInterestUserB(userB.interests);
         setOtherUsername(userB.username);
 
         var a = userA.interests;
@@ -171,9 +134,6 @@ function GameComponent(props) {
 
         let allInts = await UserService.getInterests();
         allInts = allInts[0].facebookInterests;
-
-        setAllInterests(allInts);
-
 
         console.log("This are common interests", commonInterests);
 
@@ -225,35 +185,6 @@ function GameComponent(props) {
     }, [props.user])
 
 
-    // const handleOnComplete = (value) => {
-    //     console.log(value);
-    // };
-    //
-    //
-    // const setBlockSpin = (bool) => {
-    //     resetBlockSpin();
-    //     props.blockSpin.push(bool);
-    // }
-    //
-    // const resetBlockSpin = () => {
-    //     let i = 0;
-    //     for (i; i < props.blockSpin.length; i++) {
-    //         props.blockSpin.splice(i, 1)
-    //     }
-    // };
-    //
-    // const setPeerBet = (bet) => {
-    //     resetPeerBet();
-    //     props.userBet.push(bet);
-    // };
-    //
-    // const resetPeerBet = () => {
-    //     let i = 0;
-    //     for (i; i < props.userBet.length; i++) {
-    //         props.userBet.splice(i, 1)
-    //     }
-    // };
-
     const calculateNewPrice = async () => {
         let randomInterestIndex = Math.floor(Math.random() * commonInterests.length);
         console.log(randomInterestIndex);
@@ -267,13 +198,9 @@ function GameComponent(props) {
     }
 
     const onTableClick = async (e) => {
-        console.log(e);
-        console.log("Getting in here");
-        console.log(e.target.value);
         console.log(wheelInterests[e.target.value].option);
         setThisUserBet(wheelInterests[e.target.value].option);
-        //
-        //
+
         sendMessage("setBet", {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
     }
 
@@ -318,27 +245,6 @@ function GameComponent(props) {
 
                     <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>Spin the wheel to find out
                         which one!</Typography>
-                    {/*{wheelInterests && endSpin ? (*/}
-                    {/*    <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>The winner is:*/}
-                    {/*        {wheelInterests[newPrizeNumber].option == thisUserBet ? (*/}
-                    {/*            <div>*/}
-                    {/*                {wheelInterests[newPrizeNumber].option == otherUserBet ? (*/}
-                    {/*                    <span>You both won...</span>*/}
-                    {/*                ) : <span>{props.user.username}</span>}*/}
-                    {/*            </div>*/}
-                    {/*        ) : (<div>{wheelInterests[newPrizeNumber].option == otherUserBet ? (*/}
-                    {/*            <span>{otherUsername}</span>*/}
-                    {/*        ) : (<span> None of you seems lucky, Try again... </span>)*/}
-
-                    {/*        }*/}
-                    {/*        </div>)*/}
-
-
-                    {/*        }</Typography>*/}
-                    {/*) : (*/}
-                    {/*    <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>The winner is:*/}
-                    {/*    </Typography>*/}
-                    {/*)}*/}
                     {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && thisUserBet == wheelInterests[newPrizeNumber].option == otherUserBet && endSpin ? (
                         <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>It's a draw! You both
                             win!</Typography>
@@ -354,9 +260,13 @@ function GameComponent(props) {
                                     style={{"marginTop": "15px", "color": "white"}}>Winner: {otherUsername}</Typography>
                     ) : null}
                 </Paper>
-                <Paper style={{padding: 20, "backgroundColor": "green"}}>
-                    <Typography style={{"color": "gold"}}>Bet {props.user.username}: {thisUserBet} </Typography>
-                    <Typography style={{"color": "gold"}}>Bet {otherUsername}: {otherUserBet} </Typography>
+                <Paper style={{padding: 20, "backgroundColor": "#ED7C31"}}>
+                    <Typography style={{
+                        "color": "black",
+                        fontSize: "1.1rem"
+                    }}>Bet {props.user.username}: {thisUserBet} </Typography>
+                    <Typography
+                        style={{"color": "black", fontSize: "1.1rem"}}>Bet {otherUsername}: {otherUserBet} </Typography>
                     <Table striped bordered hover size="sm">
                         <tbody>
                         <tr>
@@ -376,8 +286,6 @@ function GameComponent(props) {
                     </Table>
                 </Paper>
 
-
-                {/*</Paper>*/}
             </div>
 
 
