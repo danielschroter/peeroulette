@@ -172,13 +172,13 @@ function NewCallComponent(props) {
   const [university, setUniversity] = React.useState("");
   const [organization, setOrganization] = React.useState("");
 
-  const extractUser = () => {
+  const extractUser = async () => {
       if (!props.user) {
           return;
       }
 
       // UserService.getUser(props.user._id).then(function(userBackend) {
-          UserService.getAvailable(props.user._id, page).then(function(userBackend) {
+          await UserService.getAvailable(props.user._id, page).then(function(userBackend) {
               set_id(userBackend._id);
               setUsername(userBackend.username);
               setMatchedCount(userBackend.matchedCount);
@@ -193,10 +193,16 @@ function NewCallComponent(props) {
           });
   };
 
+  // const addMatch = () => {
+  //   props.onMatch(_id);
+  // }
+
   // const curPage = props.page;
 
   useEffect(() => {
       extractUser();
+
+      // addMatch();
       // extractInterests();
       // console.log(props);
   }, [props.user, page]);
@@ -230,6 +236,7 @@ function NewCallComponent(props) {
                   <div style={{height:"100%"}}>
                     <CallView
                       id = {_id}
+                      page = {page}
                     />
                   </div>
               </Paper>
@@ -244,8 +251,7 @@ function NewCallComponent(props) {
                 // onClick={() => { window.location.href = "/wait/"+(curPage+1); }}
                 onClick={() => setPage(page + 1)}
               >
-              Look
-              for a new Match
+              Look for a new Match
               </Button>
             </Paper>
           </Grid>

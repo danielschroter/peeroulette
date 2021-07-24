@@ -23,13 +23,13 @@ function TryOutView(props) {
       props.dispatch();
   };
 
-  const onRegister = (
+  const onRegister = async(
     username
   ) => {
-    props.dispatch(
+    await props.dispatch(
       tryregister(username)
     );
-    props.dispatch(
+    await props.dispatch(
       trylogin(username)
     );
   };
