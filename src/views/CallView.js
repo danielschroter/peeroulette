@@ -19,7 +19,7 @@ import {
 } from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
 import GameComponent from "../components/GameComponent";
-import IcebreakerComponent from "../components/IcebreakerComponent";
+import IcebreakerQuestionComponent from "../components/IcebreakerQuestionComponent";
 
 import UserService from "../services/UserService";
 
@@ -130,7 +130,11 @@ function CallView(props) {
                         alignItems: "center"
                     }}>*/}
                         <div>
-                            <IcebreakerComponent/>
+                            <IcebreakerQuestionComponent
+                                questionTitle={"Icebreaker Questions"}
+                                user={user}
+                                peer={match.params.id}
+                            />
                         </div>
                         {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
                     </Grid>
@@ -148,7 +152,6 @@ function CallView(props) {
                             user={user}
                             onGetUser={onGetUser}
                             peer={match.params.id}
-
                         />
                         <GameComponent
                             user={user}

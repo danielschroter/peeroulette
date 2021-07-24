@@ -59,15 +59,29 @@ function IcebreakerQuestionComponent(props) {
     const classes = useStyles();
 
     const [questionIndex, setQuestionIndex] = React.useState(0);
+    const [icebreakerQuestions, setIcebreakerQuestions] = React.useState([""]);
 
-    useEffect(() => {
-
-    }, [questionIndex]);
 
     const handleChange = async () => {
-        let newIndex = Math.floor(Math.random() * props.icebreakerQuestions.length);
-        setQuestionIndex(newIndex)
+        if (questionIndex === icebreakerQuestions.length-1) {
+            setQuestionIndex(0)
+        } else {
+            let newIndex = questionIndex + 1;
+            setQuestionIndex(newIndex)
+        }
     }
+
+    const extractIcebreakerQuestions = async () => {
+        let icebreakerQuestions = await UserService.getIcebreakerQuestions();
+
+        if (icebreakerQuestions !== undefined) {
+            setIcebreakerQuestions(icebreakerQuestions[0].icebreakerQuestions)
+        }
+    }
+
+    useEffect(() => {
+        extractIcebreakerQuestions();
+    }, []);
 
     return (
         <div>
@@ -83,7 +97,7 @@ function IcebreakerQuestionComponent(props) {
                 padding: 20, "backgroundColor": "rgba(0,0,0,0)",
             }}>
                 <Typography variant="h5" style={{"color": "white"}}>
-                    {props.icebreakerQuestions[questionIndex]}
+                    {icebreakerQuestions[questionIndex]}
                 </Typography>
             </Paper>
 
@@ -106,8 +120,8 @@ function IcebreakerQuestionComponent(props) {
 
 // attributes of props and their type
 IcebreakerQuestionComponent.propTypes = {
-    icebreakerQuestions: PropTypes.array,
     questionTitle: PropTypes.string,
+    user: PropTypes.object,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
