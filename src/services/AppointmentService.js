@@ -22,7 +22,7 @@ export default class AppointmentService {
     static getRecommendedAppointments(id) {
         return new Promise((resolve, reject) => {
             HttpService.post(
-                `${AppointmentService.baseUrl()}/getRecommendations`,
+                `${AppointmentService.baseURL()}/getRecommendations`,
                 {
                     id: id,
                 },

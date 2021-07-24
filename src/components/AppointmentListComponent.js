@@ -21,6 +21,7 @@ import AppointmentService from "../services/AppointmentService";
 import Box from "@material-ui/core/Box";
 import AppointmentListRowComponent from "./AppointmentListRowComponent";
 import AppointmentListRowHeaderComponent from "./AppointmentListRowHeaderComponent";
+import Grid from "@material-ui/core/Grid";
 
 // a material ui function. With this way of styling you have the style classes of this component in one place
 // and you can access the global theme of the application
@@ -39,12 +40,22 @@ function AppointmentListComponent(props) {
     const [orderBy, setOrderBy] = React.useState();
     const [order, setOrder] = React.useState();
     const [appointments, setAppointments] = React.useState([]);
+    const [noRecommendations, setNoRecommendations] = React.useState(false);
 
     const extractAppointments = async() => {
-        let ret = await AppointmentService.getAppointments(props.user._id);
-        let apps = ret.appointments;
-        let mapping = ret.mapping;
-        setAppointments(apps);
+        try{
+            let ret = await AppointmentService.getRecommendedAppointments(props.user._id);
+            let apps = ret.appointments;
+            let mapping = ret.mapping;
+            setAppointments(apps);
+            setNoRecommendations(false);
+        }catch(e){
+            console.log(e);
+            if (e == "None Available"){
+                setNoRecommendations(true);
+            }
+        }
+
     }
 
     useEffect(()=>{
@@ -59,9 +70,19 @@ function AppointmentListComponent(props) {
     return (
         <div>
             <AppointmentListRowHeaderComponent/>
-            {appointments.map(elem => <AppointmentListRowComponent elem={elem}/>)}
+            {noRecommendations ?
+                (<div><Box pt={3}>
+                    <Paper style={{backgroundColor: "rgba(255,255,255,0.79)"}}>
+                        <Box p={3}>
+                            <Typography> Unfortunately it seems that there are no upcomming talks matching your interests.. You may want to check the calendar on the right :)</Typography>
+                        </Box>
+                    </Paper>
+                </Box></div>)
+                :
+                <div>{appointments.map(elem => <AppointmentListRowComponent elem={elem}/>)}</div>}
+
         </div>
-    )
+    );
 }
 
 // attributes of props and their type
