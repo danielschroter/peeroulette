@@ -29,6 +29,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        backgroundColor: 'rgba(0,0,0,0)',
+    },
     roundButton: {
         backgroundColor: "#111111",
         border: "none",
@@ -207,8 +210,8 @@ function GameComponent(props) {
 
     return (
         <div>
-            <Paper style={{
-                padding: 20, "backgroundColor": "#484848",
+            <Paper elevation={0} style={{
+                padding: 20, "backgroundColor": "rgba(0,0,0,0)",
                 display: "flex", justifyContent: "center", alignItems: "center"
             }}>
                 <Wheel
@@ -225,7 +228,7 @@ function GameComponent(props) {
             </Paper>
 
             <div>
-                <Paper style={{padding: 20, "backgroundColor": "#484848"}}>
+                <Paper elevation={0} style={{padding: 20, "backgroundColor": "rgba(0,0,0,0)"}}>
                     <Button
                         onClick={sendClickToSpin}
                         variant="contained"

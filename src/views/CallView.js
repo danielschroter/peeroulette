@@ -1,22 +1,30 @@
-import React, { useState, useEffect } from 'react'
-import { withRouter } from "react-router-dom";
+import React, {useState, useEffect} from 'react'
+import {withRouter} from "react-router-dom";
 import {connect, useSelector} from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, IconButton, Toolbar, Typography, Container, Grid, Button, Paper } from "@material-ui/core";
-import { Jutsu, useJitsi }  from 'react-jutsu'
+import {makeStyles} from "@material-ui/core/styles";
+import {AppBar, IconButton, Toolbar, Typography, Container, Grid, Button, Paper} from "@material-ui/core";
+import {Jutsu, useJitsi} from 'react-jutsu'
 import ParticleBackground from "../components/ParticleBackground";
 
-import {login, register, changeUser, getUser, deleteUser, deleteOrganization, changeOrganization, registerOrganization} from "../redux/actions";
+import {
+    login,
+    register,
+    changeUser,
+    getUser,
+    deleteUser,
+    deleteOrganization,
+    changeOrganization,
+    registerOrganization
+} from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
-import GameComponent_old from "../components/GameComponent";
+import GameComponent from "../components/GameComponent";
 
 import UserService from "../services/UserService";
 
 
 function CallView(props) {
     const user = useSelector((state) => state.user.user);
-
 
 
     const onGetUser = (id) => {
@@ -27,7 +35,6 @@ function CallView(props) {
     const [name, setName] = useState('')
     const [call, setCall] = useState(false)
     const [password, setPassword] = useState('')
-    const [allInterests, setAllInterests] = React.useState([]);
 
 
     useEffect(() => {
@@ -38,7 +45,7 @@ function CallView(props) {
         if (room && name) setCall(true)
     }
 
-    let { match } = props;
+    let {match} = props;
     console.log(match);
 
     let roomArray = [user._id, match.params.id];
@@ -79,10 +86,10 @@ function CallView(props) {
         },
     };
 
-    const { loading, error, jitsi } = useJitsi(jitsiConfig);
+    const {loading, error, jitsi} = useJitsi(jitsiConfig);
 
     const extractAllInterests = () => {
-        UserService.getInterests().then(function(interestsBackend) {
+        UserService.getInterests().then(function (interestsBackend) {
             if (interestsBackend[0] !== undefined) {
                 //setAllInterests(interestsBackend[0].facebookInterests);
                 return interestsBackend[0].facebookInterests;
@@ -94,61 +101,85 @@ function CallView(props) {
 
     return (
         //<Grid
-         //   container
-         //   direction="row"
-         //   justifyContent="center"
-         //   alignItems="flex-start"
-         //   style={{height:"100%"}}
-         //   spacing="2"
+        //   container
+        //   direction="row"
+        //   justifyContent="center"
+        //   alignItems="flex-start"
+        //   style={{height:"100%"}}
+        //   spacing="2"
         //>
         <div>
-        <ParticleBackground></ParticleBackground>
-    <div
-        style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-        }}
-    >
+            <ParticleBackground></ParticleBackground>
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                }}
+            >
 
-        <Grid container spacing={3} style={{height:"100%", padding: 20}}>
-            <Grid item xs>
-                <Typography variant="h4">Break the ice with Peeroulette!</Typography>
-                <GameComponent_old
-                    user={user}
-                    body={[]}
-                    gameValues={[]}
-                    onGetUser={onGetUser}
-                    peer={match.params.id}
-                    blockSpin={[]}
-                    userBet={[]}
-                    peerBet={[]}
-                    commonInterests={[]}
-                    allFaceboookInterests={[]}
-                />
+                <Grid container spacing={3} style={{height: "100%", padding: 20}}>
+                    <Grid item xs>
+                        {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
+                    </Grid>
+                    <Grid item xs={6} style={{height: "100%"}}>
+                        <Paper style={{height: "100%", padding: 20}}>
+                            <div style={{height: "100%"}}>
+                                {/*{error && <p>{error}</p>}*/}
+                                <div style={{height: "100%"}} id={jitsiConfig.parentNode}/>
+                                {/*<Typography variant="h1">Jitsi</Typography>*/}
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs>
+                        <PeerInformation
+                            user={user}
+                            onGetUser={onGetUser}
+                            peer={match.params.id}
+                            // onUpdateUser={onUpdateUser}
+                            // onUpdateOrganization={onUpdateOrganization}
+                            // onRegisterOrganization={onRegisterOrganization}
+                            // onDeleteUser={onDeleteUser}
+                            // onDeleteOrganization={onDeleteOrganization}
+                        />
+                        <GameComponent
+                            user={user}
+                            onGetUser={onGetUser}
+                            peer={match.params.id}
+                        />
+                    </Grid>
 
-                {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
-            </Grid>
 
-            <Grid item xs={6} style={{height:"100%"}}>
-                <Typography variant="h4">Say hello :-)</Typography>
-                <Paper style={{height:"100%", padding: 20 }}>
-                    <div style={{height:"100%"}}>
-                        {/*{error && <p>{error}</p>}*/}
-                        <div  style={{height:"100%"}} id={jitsiConfig.parentNode} />
-                        {/*<Typography variant="h1">Jitsi</Typography>*/}
-                    </div>
-                </Paper>
-                <PeerInformation
-                    user={user}
-                    onGetUser={onGetUser}
-                    peer={match.params.id}
-                />
-            </Grid>
-        </Grid>
-        </div>
+                </Grid>
+
+
+                {/*<Grid container spacing={3} style={{height:"100%", padding: 20}}>*/}
+                {/*    <Grid item xs>*/}
+                {/*        <Typography variant="h4">Break the ice with Peeroulette!</Typography>*/}
+                {/*
+
+        {/*        /!*<Paper style={{ padding: 20 }}>xs</Paper>*!/*/}
+                {/*    </Grid>*/}
+
+                {/*    <Grid item xs={6} style={{height:"100%"}}>*/}
+                {/*        <Typography variant="h4">Say hello :-)</Typography>*/}
+                {/*        <Paper style={{height:"100%", padding: 20 }}>*/}
+                {/*            <div style={{height:"100%"}}>*/}
+                {/*                /!*{error && <p>{error}</p>}*!/*/}
+                {/*                <div  style={{height:"100%"}} id={jitsiConfig.parentNode} />*/}
+                {/*                /!*<Typography variant="h1">Jitsi</Typography>*!/*/}
+                {/*            </div>*/}
+                {/*        </Paper>*/}
+                {/*        <PeerInformation*/}
+                {/*            user={user}*/}
+                {/*            onGetUser={onGetUser}*/}
+                {/*            peer={match.params.id}*/}
+                {/*        />*/}
+                {/*    </Grid>*/}
+                {/*</Grid>*/}
+            </div>
         </div>
     );
 }
