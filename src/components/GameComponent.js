@@ -157,25 +157,37 @@ function GameComponent(props) {
         setMustspin(true);
     }
 
+    function senderReceiverUserPeerCheck (senderId, receiverId) {
+        return ((senderId === props.peer && receiverId === props.user._id) ||
+        (senderId === props.user._id && receiverId === props.peer));
+    }
+
+
     useEffect(() => {
         socket.current = io("/");
 
         socket.current.on("wheelInitialised", body => {
             console.log("received data for interestWheel" + body);
             setWheelInterests(body.body.data);
-            setOtherUserBet("");
-            setThisUserBet("");
+                setOtherUserBet("");
+                setThisUserBet("");
         })
         
         socket.current.on("startedSpin", message => {
             console.log("Spinning was started" + message);
-            setSpinVariables(message.body.newPrizeNumber);
-
+            if (senderReceiverUserPeerCheck(message.id, message.body.receiverId)) {
+                setSpinVariables(message.body.newPrizeNumber);
+            }
         })
 
         socket.current.on("betWasSet", message => {
             console.log("Bet has been Set" + message);
-            setOtherUserBet(message.body.bet);
+            console.warn(message.body);
+            console.warn(message);
+
+            if (senderReceiverUserPeerCheck(message.id, message.body.receiverId)) {
+                setOtherUserBet(message.body.bet);
+            }
         })
 
     }, []);
@@ -200,13 +212,12 @@ function GameComponent(props) {
     const sendClickToSpin = async () => {
         let newPrice = await calculateNewPrice();
         setSpinVariables(newPrice);
-        sendMessage("startSpinning", {newPrizeNumber: newPrice, senderId: props.user._id, receiverId: props.peer})
+        sendMessage("startSpinning", {newPrizeNumber: newPrice, receiverId: props.peer})
     }
 
     const onTableClick = async (e) => {
         console.log(wheelInterests[e.target.value].option);
         setThisUserBet(wheelInterests[e.target.value].option);
-
         sendMessage("setBet", {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
     }
 
