@@ -55,9 +55,7 @@ function AppointmentListComponent(props) {
                 setNoRecommendations(true);
             }
         }
-
     }
-
     useEffect(()=>{
 
         extractAppointments();

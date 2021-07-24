@@ -36,6 +36,23 @@ export default class AppointmentService {
         });
     }
 
+    static getAppointment(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${AppointmentService.baseURL()}/getAppointment`,
+                {
+                    id: id,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static updateAppointment(appointment) {
         return new Promise((resolve, reject) => {
             console.warn(`${this.baseURL()}/${appointment.id}`)

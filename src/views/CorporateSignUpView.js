@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 
 import CorporateFilterEmployeeComponent from "../components/CorporateFilterEmployeeComponent";
 import {switchEmployeeFilter} from "../redux/actions";
+import AppointmentSearchComponent from "../components/AppointmentSearchComponent";
 
 import Box from "@material-ui/core/Box";
 
@@ -108,6 +109,27 @@ function CorporateSignUpView(props) {
                             <Typography variant="body1" align="center" paragraph>
                                 Interact with your peers in exciting group talks....
                             </Typography>
+                            <div>
+                                <Grid
+                                container
+                                direction="row"
+                                // justifyContent="space-evenly"
+                                alignItems="center"
+                                alignContent="space-around"
+                                spacing={0}
+                                >
+                                    <Grid item xs={11}>
+                                        <AppointmentSearchComponent></AppointmentSearchComponent>
+                                    </Grid>
+                                    <Grid item xs={1}>
+
+                                        <Button variant="contained" color="primary" size="large">Search</Button>
+
+                                    </Grid>
+                                </Grid>
+
+
+                            </div>
                         </Box>
 
                         <Box pt={10}>
@@ -119,25 +141,23 @@ function CorporateSignUpView(props) {
                                 spacing={5}
                             >
 
-                                    <Grid item xs={6}>
-                                        <Typography variant="h5" align="center" gutterBottom>
-                                            Our Recommendations
-                                        </Typography>
-                                        <Typography>Our Recommendation based on your Interests</Typography>
-                                        <AppointmentListComponent user={user}/>
-                                    </Grid>
-
-
-
+                                <Grid item xs={6}>
+                                    <Typography variant="h5" align="center" gutterBottom>
+                                        Our Recommendations
+                                    </Typography>
+                                    <Typography>Our Recommendation based on your Interests</Typography>
+                                    <AppointmentListComponent user={user}/>
+                                </Grid>
 
 
                                 <Grid item xs={6}>
                                     <Typography variant="h5" align="center" gutterBottom>
                                         Event Calendar
                                     </Typography>
-                                    <Typography> You can simply adjust edit your appointments by clicking...</Typography>
+                                    <Typography> You can simply adjust edit your appointments by
+                                        clicking...</Typography>
                                     <Box pt={3}>
-                                    <MyCalendarComponent user={user}/>
+                                        <MyCalendarComponent user={user}/>
                                     </Box>
                                 </Grid>
 
