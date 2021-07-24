@@ -200,6 +200,9 @@ function PeerInformation(props) {
                 setUniversity(userBackend.university);
                 setOrganization(userBackend.organization);
 
+                console.log("BACKEND:");
+                console.log(userBackend);
+
                 if (userBackend.account_owner_of_organization !== undefined) {
                     setIsCorporate(true);
                     UserService.getOrganization(userBackend.account_owner_of_organization).then(function(organizationBackend) {
@@ -213,6 +216,7 @@ function PeerInformation(props) {
             }).catch(function(error){
                   //400+ response codes
                   setUsername('Nope');
+                  console.log("No Match");
             });
     };
 

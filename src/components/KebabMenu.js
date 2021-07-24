@@ -96,7 +96,7 @@ function KebabMenu(props) {
                         {user.user.username}
                     </MenuItem>,
                     <Divider key="divider" />,
-                    <MenuItem key="user"
+                    <MenuItem key="match"
                               className={classes.menuitem}
                               onClick={onClickCall}
                     >
@@ -106,7 +106,7 @@ function KebabMenu(props) {
                         {/* user.user.username */}
                         Get a new Match
                     </MenuItem>,
-                    <Divider key="divider" />,
+                    <Divider key="divider2" />,
                       <MenuItem
                           key="logout"
                           onClick={onClickLogout}
