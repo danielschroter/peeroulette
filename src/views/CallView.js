@@ -123,31 +123,6 @@ function CallView(props) {
 
                 <Grid container spacing={3} style={{height: "100%", padding: 20}}>
                     <Grid item xs>
-                        {/*}
-                        style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>*/}
-                        <div>
-                            <IcebreakerQuestionComponent
-                                questionTitle={"Icebreaker Questions"}
-                                user={user}
-                                peer={match.params.id}
-                            />
-                        </div>
-                        {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
-                    </Grid>
-                    <Grid item xs={6} style={{height: "100%"}}>
-                        <Paper style={{height: "100%", padding: 20}}>
-                            <div style={{height: "100%"}}>
-                                {/*{error && <p>{error}</p>}*/}
-                                <div style={{height: "100%"}} id={jitsiConfig.parentNode}/>
-                                {/*<Typography variant="h1">Jitsi</Typography>*/}
-                            </div>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs>
                         <PeerInformation
                             user={user}
                             onGetUser={onGetUser}
@@ -159,8 +134,29 @@ function CallView(props) {
                             peer={match.params.id}
                         />
                     </Grid>
+                    <Grid item xs={6} style={{height: "100%"}}>
+                        <Paper style={{height: "100%", padding: 20}}>
+                            <div style={{height: "100%"}}>
+                                {/*{error && <p>{error}</p>}*/}
+                                <div style={{height: "100%"}} id={jitsiConfig.parentNode}/>
+                                {/*<Typography variant="h1">Jitsi</Typography>*/}
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs>
+                        {/*}
+                        style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>*/}
+                        <IcebreakerQuestionComponent
+                            questionTitle={"Icebreaker Questions"}
+                            user={user}
+                            peer={match.params.id}
+                        />
+                    </Grid>
                 </Grid>
-
             </div>
         </div>
     );

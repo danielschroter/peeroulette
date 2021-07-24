@@ -1,12 +1,4 @@
 import React, {useState, useEffect, useRef, Component} from "react";
-// needed in tutorial
-import io from "socket.io-client";
-
-// needed for wheel
-import {Wheel} from 'react-custom-roulette'
-
-// needed for table
-import Table from 'react-bootstrap/Table'
 
 import {makeStyles} from "@material-ui/core/styles";
 import {
@@ -16,16 +8,9 @@ import {
     Typography,
     Paper,
 } from "@material-ui/core";
-import CustomTextField from "./CustomTextField";
-import DetailsArea from "./DetailsArea";
 import PropTypes from "prop-types";
 import UserService from "../services/UserService";
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
 // needed to rescale the wheel
 import AutoScale from 'react-auto-scale';
@@ -61,26 +46,9 @@ function IcebreakerQuestionComponent(props) {
     const [questionIndex, setQuestionIndex] = React.useState(0);
     const [icebreakerQuestions, setIcebreakerQuestions] = React.useState([""]);
 
-
-    const socket = useRef();
-
     const handleChange = async () => {
-        let newIndex = 0;
-        if (questionIndex !== icebreakerQuestions.length-1) {
-            newIndex = questionIndex + 1
-        }
+        let newIndex = Math.floor(Math.random() * icebreakerQuestions.length);
         setQuestionIndex(newIndex)
-
-        sendMessage("send question index",
-            {index: newIndex, receiverId: props.peer});
-    }
-
-    const sendMessage = async (label, messageBody) => {
-        const myObj = {
-            body: messageBody,
-            id: props.user._id,
-        };
-        socket.current.emit(label, myObj);
     }
 
     const extractIcebreakerQuestions = async () => {
@@ -89,29 +57,11 @@ function IcebreakerQuestionComponent(props) {
         if (icebreakerQuestions !== undefined) {
             setIcebreakerQuestions(icebreakerQuestions[0].icebreakerQuestions)
         }
-        console.warn("user: " + props.user._id)
-        console.warn("peer: " + props.peer)
     }
 
     useEffect(() => {
         extractIcebreakerQuestions();
-
-        socket.current = io("/");
-
-        socket.current.emit("addUser", props.user._id);
-
     }, [props.user]);
-
-
-
-    useEffect(() => {
-        socket.current.on("send question index", message => {
-            console.log("Question has been sent" + message);
-            setQuestionIndex((message.body.index))
-            console.warn(message.body.index)
-        });
-
-    }, []);
 
 
     return (
