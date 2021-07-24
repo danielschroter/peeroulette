@@ -219,6 +219,12 @@ function EditProfileComponent(props) {
             setCity(userBackend.city);
             setInterests(userBackend.interests);
             setUniversity(userBackend.university);
+
+            if(userBackend.organization !== undefined){
+                UserService.getOrganization(userBackend.organization).then(function (organizationBackend) {
+                    setOrganization(organizationBackend.company_name)
+                })
+            }
             setOrganization(userBackend.organization);
 
             if (userBackend.account_owner_of_organization !== undefined) {
@@ -944,21 +950,21 @@ function EditProfileComponent(props) {
                                             <div>
                                                 <div style={{"display": "flex"}}>
                                                     <p className={classes.userDataFont}>Organization:</p>
-                                                    <Button
-                                                        className={classes.cancelNameButton}
-                                                        onClick={onCancelOrganization}
-                                                    > Cancel
-                                                    </Button>
-                                                    <Button
-                                                        className={classes.saveNameButton}
-                                                        onClick={onUpdateUser}
-                                                    > Save
-                                                    </Button>
+                                                    {/*<Button*/}
+                                                    {/*    className={classes.cancelNameButton}*/}
+                                                    {/*    onClick={onCancelOrganization}*/}
+                                                    {/*> Cancel*/}
+                                                    {/*</Button>*/}
+                                                    {/*<Button*/}
+                                                    {/*    className={classes.saveNameButton}*/}
+                                                    {/*    onClick={onUpdateUser}*/}
+                                                    {/*> Save*/}
+                                                    {/*</Button>*/}
                                                 </div>
                                                 <div>
                                                     <TextField
                                                         fullWidth
-                                                        value={organization}
+                                                        value={<span>You belong to the company: {organization} </span>}
                                                         onChange={onChangeOrganization}
                                                     />
                                                 </div>
@@ -967,13 +973,13 @@ function EditProfileComponent(props) {
                                             <div>
                                                 <div style={{"display": "flex"}}>
                                                     <p className={classes.userDataFont}>Organization:</p>
-                                                    <Button
-                                                        className={classes.editNameButton}
-                                                        onClick={(e) => setEditOrganization(true)}
-                                                    > Edit
-                                                    </Button>
+                                                    {/*<Button*/}
+                                                    {/*    className={classes.editNameButton}*/}
+                                                    {/*    onClick={(e) => setEditOrganization(true)}*/}
+                                                    {/*> Edit*/}
+                                                    {/*</Button>*/}
                                                 </div>
-                                                <p>{organization}</p>
+                                                <p>You belong to the company: {organization}</p>
                                             </div>
                                         )}
                                     </div>
