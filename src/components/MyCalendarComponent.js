@@ -340,46 +340,49 @@ export default class MyCalendarComponent extends React.PureComponent {
         ));
 
         return (
-            <Paper>
-                <Scheduler
-                    data={data}
-                    height={660}
-                >
-                    <ViewState
-                        currentDate={currentDate}
-                        onCurrentDateChange={this.currentDataChange}
-                    />
-                    <EditingState
-                        onCommitChanges={this.commitChanges}
-                        addedAppointment={addedAppointment}
-                        onAddedAppointmentChange={this.changeAddedAppointment}
-                        appointmentChanges={appointmentChanges}
-                        onAppointmentChangesChange={this.changeAppointmentChanges}
-                        editingAppointment={editingAppointment}
-                        onEditingAppointmentChange={this.changeEditingAppointment}
-                    />
-                    <WeekView
-                        startDayHour={0}
-                        endDayHour={24}
-                    />
-                    <Toolbar/>
-                    <DateNavigator/>
-                    <AllDayPanel/>
-                    <TodayButton/>
-                    <EditRecurrenceMenu/>
-                    <ConfirmationDialog/>
-                    <Appointments/>
-                    <AppointmentTooltip
-                        contentComponent={Content}
-                        showOpenButton
-                        showDeleteButton
-                    />
-                    <AppointmentForm
-                    basicLayoutComponent={BasicLayout}
-                    textEditorComponent={TextEditor}
-                    messages={messages}/>
-                </Scheduler>
-            </Paper>
+            <div >
+                <Paper >
+                    <Scheduler
+                        data={data}
+                        height={660}
+                    >
+                        <ViewState
+                            currentDate={currentDate}
+                            onCurrentDateChange={this.currentDataChange}
+                        />
+                        <EditingState
+                            onCommitChanges={this.commitChanges}
+                            addedAppointment={addedAppointment}
+                            onAddedAppointmentChange={this.changeAddedAppointment}
+                            appointmentChanges={appointmentChanges}
+                            onAppointmentChangesChange={this.changeAppointmentChanges}
+                            editingAppointment={editingAppointment}
+                            onEditingAppointmentChange={this.changeEditingAppointment}
+                        />
+                        <WeekView
+                            startDayHour={0}
+                            endDayHour={24}
+                        />
+                        <Toolbar/>
+                        <DateNavigator/>
+                        <AllDayPanel/>
+                        <TodayButton/>
+                        <EditRecurrenceMenu/>
+                        <ConfirmationDialog/>
+                        <Appointments/>
+                        <AppointmentTooltip
+                            contentComponent={Content}
+                            showOpenButton
+                            showDeleteButton
+                        />
+                        <AppointmentForm
+                            basicLayoutComponent={BasicLayout}
+                            textEditorComponent={TextEditor}
+                            messages={messages}/>
+                    </Scheduler>
+                </Paper>
+
+            </div>
         );
     }
 }

@@ -19,6 +19,20 @@ export default class AppointmentService {
         });
     }
 
+    static getRecommendedAppointments(user_id) {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                `${AppointmentService.baseURL()}/getAppointments`,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static updateAppointment(appointment) {
         return new Promise((resolve, reject) => {
             console.warn(`${this.baseURL()}/${appointment.id}`)
