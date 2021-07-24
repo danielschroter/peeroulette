@@ -69,7 +69,7 @@ function KebabMenu(props) {
         // close this menu
         props.onClose();
         // navigate to the edit profile page
-        props.history.push("/wait");
+        props.history.push("/nc");
     };
 
     return (
@@ -100,10 +100,6 @@ function KebabMenu(props) {
                               className={classes.menuitem}
                               onClick={onClickCall}
                     >
-                        {/*<Avatar className={classes.avatar}>
-                            {user.user.username ? user.user.username[0] : ""}
-                        </Avatar>*/}
-                        {/* user.user.username */}
                         Get a new Match
                     </MenuItem>,
                     <Divider key="divider2" />,

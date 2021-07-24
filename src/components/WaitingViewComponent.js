@@ -220,26 +220,11 @@ function PeerInformation(props) {
             });
     };
 
-    // const extractInterests = () => {
-    //     UserService.getInterests().then(function(interestsBackend) {
-    //         if (interestsBackend[0] !== undefined) {
-    //             setAllInterests(interestsBackend[0].facebookInterests);
-    //         }
-    //     });
-    // };
-
     useEffect(() => {
         extractUser();
         // extractInterests();
         // console.log(props);
     }, [props.user]);
-
-
-    // props for all grid items used below in the JSX
-    // const girdItemProps = {
-    //     item: true,
-    //     className: classes.padding,
-    // };
 
     console.log({_id});
     console.log(username);

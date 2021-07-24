@@ -5,6 +5,7 @@ import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import CorporateSignUpView from "./views/CorporateSignUpView";
 import CallView from "./views/CallView";
+import NewCallView from "./views/NewCallView";
 import WaitingView from "./views/WaitingView";
 import EditProfileView from "./views/EditProfileView";
 import ConfirmView from "./views/ConfirmView";
@@ -64,6 +65,10 @@ const routes = [
   {
       path: "/wait",
       component: WaitingView,
+  },
+  {
+      path: "/nc",
+      component: NewCallView,
   },
 ];
 
