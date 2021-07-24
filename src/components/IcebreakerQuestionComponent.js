@@ -77,7 +77,10 @@ function IcebreakerQuestionComponent(props) {
         if (icebreakerQuestions !== undefined) {
             setIcebreakerQuestions(icebreakerQuestions[0].icebreakerQuestions)
         }
+        console.warn("user: " + props.user._id)
+        console.warn("peer: " + props.peer)
     }
+
 
     useEffect(() => {
         extractIcebreakerQuestions();
@@ -121,6 +124,7 @@ function IcebreakerQuestionComponent(props) {
 // attributes of props and their type
 IcebreakerQuestionComponent.propTypes = {
     questionTitle: PropTypes.string,
+    user: PropTypes.object,
     user: PropTypes.object,
 };
 
