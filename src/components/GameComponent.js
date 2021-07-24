@@ -272,12 +272,8 @@ function GameComponent(props) {
                         ) : null}
                     </Paper>
                     <Paper style={{padding: 20, "backgroundColor": "#ED7C31"}}>
-                        <Typography style={{
-                            "color": "black",
-                            fontSize: "1.1rem"
-                        }}>Bet {props.user.username}: {thisUserBet} </Typography>
-                        <Typography
-                            style={{"color": "black", fontSize: "1.1rem"}}>Bet {otherUsername}: {otherUserBet} </Typography>
+                        <Typography style={{"color": "black", "fontSize": "20px"}}>Bet {props.user.username}: {thisUserBet} </Typography>
+                        <Typography style={{"color": "black", "fontSize": "20px"}}>Bet {otherUsername}: {otherUserBet} </Typography>
                         <Table striped bordered hover size="sm">
                             <tbody>
                             <tr>
@@ -285,9 +281,10 @@ function GameComponent(props) {
                                     let i = 0;
                                     let dataTable = [];
                                     for (i; i < wheelInterests.length; i++) {
-                                        dataTable.push(<button className={classes.roundButton} value={i}
-                                                               onClick={
-                                                                   (e) => onTableClick(e)}
+                                        dataTable.push(<button
+                                            className={classes.roundButton} value={i}
+                                            style={{"fontSize":"17px"}}
+                                            onClick={(e) => onTableClick(e)}
                                         >{wheelInterests[i].option}</button>);
                                     }
                                     return dataTable;

@@ -103,7 +103,7 @@ function IcebreakerQuestionComponent(props) {
 IcebreakerQuestionComponent.propTypes = {
     questionTitle: PropTypes.string,
     user: PropTypes.object,
-    user: PropTypes.object,
+    peer: PropTypes.object,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component

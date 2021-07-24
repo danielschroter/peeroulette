@@ -66,7 +66,7 @@ function PeerInformation(props) {
             <Paper elevation={0} style={{ padding: 20, color:"#ffff", backgroundColor:'rgba(0,0,0,0)'}}>
                 {/*<Typography variant="h4">{username}</Typography>*/}
                 <Typography variant="h5">Information about {username}</Typography>
-                <ul>
+                <ul style={{"fontSize":"17px"}}>
                     <li>{city}</li>
                     <li>{university}</li>
                     <li>{organization}</li>
