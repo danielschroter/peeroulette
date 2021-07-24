@@ -211,16 +211,14 @@ function GameComponent(props) {
         let newPrice = await calculateNewPrice();
         setSpinVariables(newPrice);
         sendMessage("startSpinning",
-            {newPrizeNumber: newPrice, receiverId: props.peer,
-                peerId: props.peer, userId: props.user._id})
+            {newPrizeNumber: newPrice, receiverId: props.peer})
     }
 
     const onTableClick = async (e) => {
         console.log(wheelInterests[e.target.value].option);
         setThisUserBet(wheelInterests[e.target.value].option);
         sendMessage("setBet",
-            {bet: wheelInterests[e.target.value].option, receiverId: props.peer,
-                peerId: props.peer, userId: props.user._id});
+            {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
     }
 
     {/*
