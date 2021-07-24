@@ -195,9 +195,7 @@ function GameComponent(props) {
 
     useEffect(() => {
         extractData();
-
         socket.current.emit("addUser", props.user._id);
-
         console.log("Data is Extracted and Variables are Set");
 
     }, [props.user])
@@ -212,13 +210,17 @@ function GameComponent(props) {
     const sendClickToSpin = async () => {
         let newPrice = await calculateNewPrice();
         setSpinVariables(newPrice);
-        sendMessage("startSpinning", {newPrizeNumber: newPrice, receiverId: props.peer})
+        sendMessage("startSpinning",
+            {newPrizeNumber: newPrice, receiverId: props.peer,
+                peerId: props.peer, userId: props.user._id})
     }
 
     const onTableClick = async (e) => {
         console.log(wheelInterests[e.target.value].option);
         setThisUserBet(wheelInterests[e.target.value].option);
-        sendMessage("setBet", {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
+        sendMessage("setBet",
+            {bet: wheelInterests[e.target.value].option, receiverId: props.peer,
+                peerId: props.peer, userId: props.user._id});
     }
 
     {/*
