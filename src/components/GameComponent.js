@@ -27,6 +27,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+// needed to rescale the wheel
+import AutoScale from 'react-auto-scale';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -207,92 +210,87 @@ function GameComponent(props) {
         sendMessage("setBet", {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
     }
 
-
     return (
         <div>
-            <Paper elevation={0} style={{
-                padding: 20, "backgroundColor": "rgba(0,0,0,0)",
-                display: "flex", justifyContent: "center", alignItems: "center"
-            }}>
-                <Wheel
-                    mustStartSpinning={mustspin}
-                    prizeNumber={newPrizeNumber}
-                    data={wheelInterests}
-                    backgroundColors={['#3e3e3e', '#df3428']}
-                    textColors={['#ffffff']}
-                    onStopSpinning={() => {
-                        setMustspin(false)
-                        setEndSpin(true)
-                    }}
-                />
-            </Paper>
-
+                <Paper elevation={0} style={{
+                    padding: 20, "backgroundColor": "rgba(0,0,0,0)",
+                    display: "flex", justifyContent: "center", alignItems: "center"
+                }}>
+                    <Wheel
+                        mustStartSpinning={mustspin}
+                        prizeNumber={newPrizeNumber}
+                        data={wheelInterests}
+                        backgroundColors={['#3e3e3e', '#df3428']}
+                        textColors={['#ffffff']}
+                        onStopSpinning={() => {
+                            setMustspin(false)
+                            setEndSpin(true)
+                        }}
+                    />
+                </Paper>
             <div>
                 <Paper elevation={0} style={{padding: 20, "backgroundColor": "rgba(0,0,0,0)"}}>
-                    <Button
-                        onClick={sendClickToSpin}
-                        variant="contained"
-                        color="primary"
-                        className={classes.deleteProfileButton}
-                        style={{"backgroundColor": "#ED7C31"}}
-                    >
-                        Spin Wheel
-                    </Button>
-                    {commonInterests.length === 1 ? (
-                        <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
-                            have {commonInterests.length} common interest.</Typography>
-                    ) : (
-                        <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
-                            have {commonInterests.length} common interests!</Typography>
-                    )}
+                        <Button
+                            onClick={sendClickToSpin}
+                            variant="contained"
+                            color="primary"
+                            className={classes.deleteProfileButton}
+                            style={{"backgroundColor": "#ED7C31"}}
+                        >
+                            Spin Wheel
+                        </Button>
+                        {commonInterests.length === 1 ? (
+                            <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
+                                have {commonInterests.length} common interest.</Typography>
+                        ) : (
+                            <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
+                                have {commonInterests.length} common interests!</Typography>
+                        )}
 
-                    <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>Spin the wheel to find out
-                        which one!</Typography>
-                    {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && thisUserBet == wheelInterests[newPrizeNumber].option == otherUserBet && endSpin ? (
-                        <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>It's a draw! You both
-                            win!</Typography>
-                    ) : null}
-                    {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
-                        <Typography variant="h5" style={{
-                            "marginTop": "15px",
-                            "color": "white"
-                        }}>Winner: {props.user.username}</Typography>
-                    ) : null}
-                    {wheelInterests && otherUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
-                        <Typography variant="h5"
-                                    style={{"marginTop": "15px", "color": "white"}}>Winner: {otherUsername}</Typography>
-                    ) : null}
-                </Paper>
-                <Paper style={{padding: 20, "backgroundColor": "#ED7C31"}}>
-                    <Typography style={{
-                        "color": "black",
-                        fontSize: "1.1rem"
-                    }}>Bet {props.user.username}: {thisUserBet} </Typography>
-                    <Typography
-                        style={{"color": "black", fontSize: "1.1rem"}}>Bet {otherUsername}: {otherUserBet} </Typography>
-                    <Table striped bordered hover size="sm">
-                        <tbody>
-                        <tr>
-                            {(() => {
-                                let i = 0;
-                                let dataTable = [];
-                                for (i; i < wheelInterests.length; i++) {
-                                    dataTable.push(<button className={classes.roundButton} value={i}
-                                                           onClick={
-                                                               (e) => onTableClick(e)}
-                                    >{wheelInterests[i].option}</button>);
-                                }
-                                return dataTable;
-                            })()}
-                        </tr>
-                        </tbody>
-                    </Table>
-                </Paper>
-
+                        <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>Spin the wheel to find out
+                            which one!</Typography>
+                        {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && thisUserBet == wheelInterests[newPrizeNumber].option == otherUserBet && endSpin ? (
+                            <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>It's a draw! You both
+                                win!</Typography>
+                        ) : null}
+                        {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
+                            <Typography variant="h5" style={{
+                                "marginTop": "15px",
+                                "color": "white"
+                            }}>Winner: {props.user.username}</Typography>
+                        ) : null}
+                        {wheelInterests && otherUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
+                            <Typography variant="h5"
+                                        style={{"marginTop": "15px", "color": "white"}}>Winner: {otherUsername}</Typography>
+                        ) : null}
+                    </Paper>
+                    <Paper style={{padding: 20, "backgroundColor": "#ED7C31"}}>
+                        <Typography style={{
+                            "color": "black",
+                            fontSize: "1.1rem"
+                        }}>Bet {props.user.username}: {thisUserBet} </Typography>
+                        <Typography
+                            style={{"color": "black", fontSize: "1.1rem"}}>Bet {otherUsername}: {otherUserBet} </Typography>
+                        <Table striped bordered hover size="sm">
+                            <tbody>
+                            <tr>
+                                {(() => {
+                                    let i = 0;
+                                    let dataTable = [];
+                                    for (i; i < wheelInterests.length; i++) {
+                                        dataTable.push(<button className={classes.roundButton} value={i}
+                                                               onClick={
+                                                                   (e) => onTableClick(e)}
+                                        >{wheelInterests[i].option}</button>);
+                                    }
+                                    return dataTable;
+                                })()}
+                            </tr>
+                            </tbody>
+                        </Table>
+                    </Paper>
             </div>
-
-
-        </div>
+</div>
     );
 }
 
