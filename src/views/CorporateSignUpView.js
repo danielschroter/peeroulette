@@ -123,6 +123,7 @@ function CorporateSignUpView(props) {
                                         <Typography variant="h5" align="center" gutterBottom>
                                             Our Recommendations
                                         </Typography>
+                                        <Typography>Our Recommendation based on your Interests</Typography>
                                         <AppointmentListComponent user={user}/>
                                     </Grid>
 

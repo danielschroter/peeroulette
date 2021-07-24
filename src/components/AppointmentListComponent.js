@@ -20,38 +20,11 @@ import {useEffect} from "react";
 import AppointmentService from "../services/AppointmentService";
 import Box from "@material-ui/core/Box";
 import AppointmentListRowComponent from "./AppointmentListRowComponent";
+import AppointmentListRowHeaderComponent from "./AppointmentListRowHeaderComponent";
 
 // a material ui function. With this way of styling you have the style classes of this component in one place
 // and you can access the global theme of the application
 const useStyles = makeStyles((theme) => ({
-    movieListRoot: {
-        padding: theme.spacing(2),
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    movieListHeader: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
-        maxWidth: "1000px",
-    },
-    headerDivider: {
-        margin: theme.spacing(2),
-    },
-    addMovieButton: {
-        margin: theme.spacing(2),
-    },
-    movieListPaper: {
-        width: "1000px",
-    },
-    image: {
-        borderRadius: theme.shape.borderRadius,
-        boxShadow: theme.shadows[2],
-    },
 }));
 
 
@@ -68,7 +41,7 @@ function AppointmentListComponent(props) {
     const [appointments, setAppointments] = React.useState([]);
 
     const extractAppointments = async() => {
-        let ret = await AppointmentService.getAppointments();
+        let ret = await AppointmentService.getAppointments(props.user._id);
         let apps = ret.appointments;
         let mapping = ret.mapping;
         setAppointments(apps);
@@ -85,9 +58,8 @@ function AppointmentListComponent(props) {
 
     return (
         <div>
-            <Typography>Our Recommendation based on your Interests</Typography>
+            <AppointmentListRowHeaderComponent/>
             {appointments.map(elem => <AppointmentListRowComponent elem={elem}/>)}
-
         </div>
     )
 }
