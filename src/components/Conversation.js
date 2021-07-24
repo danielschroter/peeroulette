@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Typography, Container } from "@material-ui/core";
+import { Button, Typography, Container, Avatar } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import UserService from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
-	loginButtons: {
-		display: "flex",
-		justifyContent: "space-between",
-	},
-	loginButton: {
-		margin: "auto",
+	avatar: {
+		marginRight: theme.spacing(1),
 	},
 }));
 function Conversation({ conversation, currentUser }) {
@@ -37,8 +33,11 @@ function Conversation({ conversation, currentUser }) {
 	return (
 		<div>
 			<Container maxWidth="sm">
-				<Typography variant="h4" align="center" gutterBottom>
-					Your Conversation with "{chatPartner}"
+				<Typography variant="h6" align="left" gutterBottom>
+					<Avatar className={classes.avatar}>
+						{chatPartner ? chatPartner[0] : ""}
+					</Avatar>
+					{chatPartner}
 				</Typography>
 			</Container>
 		</div>

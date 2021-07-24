@@ -4,6 +4,7 @@ import { connect, useSelector } from "react-redux";
 
 import Conversation from "../components/Conversation";
 import Message from "../components/Message";
+import LastMatches from "../components/LastMatches";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
@@ -11,8 +12,9 @@ import CustomTextField from "../components/CustomTextField";
 import DetailsArea from "../components/DetailsArea";
 import PropTypes from "prop-types";
 import UserService from "../services/UserService";
+import MatchService from "../services/MatchService";
 
-//import { io } from "socket.io";
+import { io } from "socket.io-client";
 
 const useStyles = makeStyles((theme) => ({
 	flexCol: {
@@ -45,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
 	maxWidth: {
 		width: "100%",
 		maxWidth: "1500px",
+	},
+	maxHight: {
+		height: "10%",
 	},
 	pageArea: {
 		paddingBottom: theme.spacing(2),
@@ -144,14 +149,14 @@ const useStyles = makeStyles((theme) => ({
 function MessengerView(props) {
 	const user = useSelector((state) => state.user.user);
 	const classes = useStyles();
-	const reptiles = ["alligator", "snake", "lizard"];
 
 	const [conversations, setConversations] = React.useState([]);
 	const [currentChat, setCurrentChat] = React.useState(null);
+	const [onlineUsers, setOnlineUsers] = React.useState([]);
 	const [messages, setMessages] = React.useState([]);
 	const [newMessage, setNewMessage] = React.useState("");
 	const [arrivalMessage, setArrivalMessage] = React.useState(null);
-	const [onlineUsers, setOnlineUsers] = React.useState([]);
+	const [lastMatches, setLastMatches] = React.useState([]);
 	const socket = useRef();
 	const scrollRef = useRef();
 
@@ -168,8 +173,18 @@ function MessengerView(props) {
 	// extract all messages of currentChat from backend
 	const extractMessages = async () => {
 		try {
-			const res = await UserService.getMessage(currentChat._id);
+			const res = await UserService.getMessage(currentChat?._id);
 			setMessages(res);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	// extract all last matches of user
+	const extractMatches = async () => {
+		try {
+			const res = await MatchService.getLastMatches(user._id);
+			setLastMatches(res);
 		} catch (err) {
 			console.log(err);
 		}
@@ -188,11 +203,11 @@ function MessengerView(props) {
 			(member) => member !== user._id
 		);
 
-		// socket.current.emit("sendMessage", {
-		//   senderId: user._id,
-		//   receiverId,
-		//   text: newMessage,
-		// });
+		socket.current.emit("sendMessage", {
+			senderId: user._id,
+			receiverId,
+			text: newMessage,
+		});
 
 		try {
 			const res = await UserService.addMessage(
@@ -209,11 +224,42 @@ function MessengerView(props) {
 
 	useEffect(() => {
 		extractUserConversations();
-	}, [user._id]);
+	}, [user._id, currentChat]);
 
 	useEffect(() => {
 		extractMessages();
 	}, [currentChat]);
+
+	useEffect(() => {
+		extractMatches();
+	}, [user._id]);
+
+	// Socket useEffects
+	useEffect(() => {
+		socket.current = io("/");
+		socket.current.on("getMessage", (data) => {
+			setArrivalMessage({
+				sender: data.senderId,
+				text: data.text,
+				createdAt: Date.now(),
+			});
+		});
+	}, []);
+
+	// Socket useEffects
+	useEffect(() => {
+		arrivalMessage &&
+			currentChat?.members.includes(arrivalMessage.sender) &&
+			setMessages((prev) => [...prev, arrivalMessage]);
+	}, [arrivalMessage, currentChat]);
+
+	// Socket useEffects
+	useEffect(() => {
+		socket.current.emit("addUser", user._id);
+		socket.current.on("getUsers", (users) => {
+			setOnlineUsers(users);
+		});
+	}, [user]);
 
 	// useEffect(() => {
 	// 	scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -236,7 +282,9 @@ function MessengerView(props) {
 				" " +
 				classes.flex +
 				" " +
-				classes.maxWidth
+				classes.maxWidth +
+				" " +
+				classes.maxHight
 			}
 		>
 			{/* Title */}
@@ -255,7 +303,7 @@ function MessengerView(props) {
 				{/* Conversations*/}
 				<Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
 					<DetailsArea
-						title="Conversations:"
+						title="Open Conversations:"
 						content={
 							<div className={classes.userDataFont}>
 								{conversations.map((c) => (
@@ -305,9 +353,24 @@ function MessengerView(props) {
 					/>
 				</Grid>
 
-				{/* Online*/}
+				{/* Last Matches of user*/}
 				<Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-					<DetailsArea title="Online" />
+					<DetailsArea
+						title="Your Last Matches:"
+						content={
+							<div className={classes.userDataFont}>
+								{lastMatches.map((m) => (
+									<div>
+										<LastMatches
+											lastMatch={m}
+											currentId={user._id}
+											setCurrentChat={setCurrentChat}
+										/>
+									</div>
+								))}
+							</div>
+						}
+					/>
 				</Grid>
 			</Grid>
 		</div>

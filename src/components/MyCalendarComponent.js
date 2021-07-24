@@ -187,7 +187,7 @@ export default class MyCalendarComponent extends React.PureComponent {
         super(props);
         this.state = {
             data: [],
-            currentDate: '2021-07-13',
+            currentDate: '2021-07-27',
             addedAppointment: {},
             appointmentChanges: {},
             editingAppointment: undefined,
@@ -221,8 +221,17 @@ export default class MyCalendarComponent extends React.PureComponent {
 
         let res_mapped = apps.map(this.mapAppointmentData, mapping);
 
+        let newDate = new Date()
+        let date = await newDate.getDate();
+        let month = await newDate.getMonth() + 1;
+        let year = await newDate.getFullYear();
+
+        let nDate = ""+year+"-"+month+"-"+date;
+
+        console.log(" date: " + date);
+
         let allInterests = await MatchService.getInterests()
-        this.setState({data: res_mapped, mapping: mapping, allInterests: allInterests[0].facebookInterests});
+        this.setState({data: res_mapped, mapping: mapping, allInterests: allInterests[0].facebookInterests, currentDate: nDate});
     }
 
 
