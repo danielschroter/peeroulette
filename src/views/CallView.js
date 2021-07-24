@@ -19,6 +19,7 @@ import {
 } from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
 import GameComponent from "../components/GameComponent";
+import IcebreakerComponent from "../components/IcebreakerComponent";
 
 import UserService from "../services/UserService";
 
@@ -122,6 +123,15 @@ function CallView(props) {
 
                 <Grid container spacing={3} style={{height: "100%", padding: 20}}>
                     <Grid item xs>
+                        {/*}
+                        style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>*/}
+                        <div>
+                            <IcebreakerComponent/>
+                        </div>
                         {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
                     </Grid>
                     <Grid item xs={6} style={{height: "100%"}}>
@@ -146,8 +156,6 @@ function CallView(props) {
                             peer={match.params.id}
                         />
                     </Grid>
-
-
                 </Grid>
 
             </div>

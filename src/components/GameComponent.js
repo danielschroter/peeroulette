@@ -210,24 +210,31 @@ function GameComponent(props) {
         sendMessage("setBet", {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
     }
 
+    {/*
+        <AutoScale maxWidth={800} maxHeight={400} maxScale={3}>
+            <div className="myContent">Example</div>
+        </AutoScale>
+    */}
+
+
     return (
         <div>
-                <Paper elevation={0} style={{
-                    padding: 20, "backgroundColor": "rgba(0,0,0,0)",
-                    display: "flex", justifyContent: "center", alignItems: "center"
-                }}>
-                    <Wheel
-                        mustStartSpinning={mustspin}
-                        prizeNumber={newPrizeNumber}
-                        data={wheelInterests}
-                        backgroundColors={['#3e3e3e', '#df3428']}
-                        textColors={['#ffffff']}
-                        onStopSpinning={() => {
-                            setMustspin(false)
-                            setEndSpin(true)
-                        }}
-                    />
-                </Paper>
+            <Paper elevation={0} style={{
+                padding: 20, "backgroundColor": "rgba(0,0,0,0)",
+                display: "flex", justifyContent: "center", alignItems: "center"
+            }}>
+                <Wheel
+                    mustStartSpinning={mustspin}
+                    prizeNumber={newPrizeNumber}
+                    data={wheelInterests}
+                    backgroundColors={['#3e3e3e', '#df3428']}
+                    textColors={['#ffffff']}
+                    onStopSpinning={() => {
+                        setMustspin(false)
+                        setEndSpin(true)
+                    }}
+                />
+            </Paper>
             <div>
                 <Paper elevation={0} style={{padding: 20, "backgroundColor": "rgba(0,0,0,0)"}}>
                         <Button
