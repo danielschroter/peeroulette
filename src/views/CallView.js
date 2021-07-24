@@ -1,19 +1,31 @@
-import React, { useState, useEffect } from 'react'
-import { withRouter } from "react-router-dom";
+import React, {useState, useEffect} from 'react'
+import {withRouter} from "react-router-dom";
 import {connect, useSelector} from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, IconButton, Toolbar, Typography, Container, Grid, Button, Paper } from "@material-ui/core";
-import { Jutsu, useJitsi }  from 'react-jutsu'
+import {makeStyles} from "@material-ui/core/styles";
+import {AppBar, IconButton, Toolbar, Typography, Container, Grid, Button, Paper} from "@material-ui/core";
+import {Jutsu, useJitsi} from 'react-jutsu'
+import ParticleBackground from "../components/ParticleBackground";
 
-import {login, register, changeUser, getUser, deleteUser, deleteOrganization, changeOrganization, registerOrganization} from "../redux/actions";
+import {
+    login,
+    register,
+    changeUser,
+    getUser,
+    deleteUser,
+    deleteOrganization,
+    changeOrganization,
+    registerOrganization
+} from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
+import GameComponent from "../components/GameComponent";
+
+import UserService from "../services/UserService";
+
 
 function CallView(props) {
     const user = useSelector((state) => state.user.user);
 
-    useEffect(() => {
-    }, [user, props.history]);
 
     const onGetUser = (id) => {
         props.dispatch(getUser(id));
@@ -24,12 +36,16 @@ function CallView(props) {
     const [call, setCall] = useState(false)
     const [password, setPassword] = useState('')
 
+
+    useEffect(() => {
+    }, [user, props.history]);
+
     const handleClick = event => {
         event.preventDefault()
         if (room && name) setCall(true)
     }
 
-    let { match } = props;
+    let {match} = props;
     console.log(match);
 
     let roomArray = [user._id, match.params.id];
@@ -69,44 +85,73 @@ function CallView(props) {
             GENERATE_ROOMNAMES_ON_WELCOME_PAGE: false,
         },
     };
-    const { loading, error, jitsi } = useJitsi(jitsiConfig);
+
+    const {loading, error, jitsi} = useJitsi(jitsiConfig);
+
+    const extractAllInterests = () => {
+        UserService.getInterests().then(function (interestsBackend) {
+            if (interestsBackend[0] !== undefined) {
+                //setAllInterests(interestsBackend[0].facebookInterests);
+                return interestsBackend[0].facebookInterests;
+            }
+        });
+    };
+
+    const tmpInterests = extractAllInterests();
 
     return (
         //<Grid
-         //   container
-         //   direction="row"
-         //   justifyContent="center"
-         //   alignItems="flex-start"
-         //   style={{height:"100%"}}
-         //   spacing="2"
+        //   container
+        //   direction="row"
+        //   justifyContent="center"
+        //   alignItems="flex-start"
+        //   style={{height:"100%"}}
+        //   spacing="2"
         //>
+        <div>
+            <ParticleBackground></ParticleBackground>
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                }}
+            >
 
-        <Grid container spacing={3} style={{height:"100%", padding: 20}}>
-            <Grid item xs>
-                {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
-            </Grid>
-            <Grid item xs={6} style={{height:"100%"}}>
-                <Paper style={{height:"100%", padding: 20 }}>
-                    <div style={{height:"100%"}}>
-                        {/*{error && <p>{error}</p>}*/}
-                        <div  style={{height:"100%"}} id={jitsiConfig.parentNode} />
-                        {/*<Typography variant="h1">Jitsi</Typography>*/}
-                    </div>
-                </Paper>
-            </Grid>
-            <Grid item xs>
-                <PeerInformation
-                    user={user}
-                    onGetUser={onGetUser}
-                    peer={match.params.id}
-                    // onUpdateUser={onUpdateUser}
-                    // onUpdateOrganization={onUpdateOrganization}
-                    // onRegisterOrganization={onRegisterOrganization}
-                    // onDeleteUser={onDeleteUser}
-                    // onDeleteOrganization={onDeleteOrganization}
-                />
-            </Grid>
-        </Grid>
+                <Grid container spacing={3} style={{height: "100%", padding: 20}}>
+                    <Grid item xs>
+                        {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
+                    </Grid>
+                    <Grid item xs={6} style={{height: "100%"}}>
+                        <Paper style={{height: "100%", padding: 20}}>
+                            <div style={{height: "100%"}}>
+                                {/*{error && <p>{error}</p>}*/}
+                                <div style={{height: "100%"}} id={jitsiConfig.parentNode}/>
+                                {/*<Typography variant="h1">Jitsi</Typography>*/}
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs>
+                        <PeerInformation
+                            user={user}
+                            onGetUser={onGetUser}
+                            peer={match.params.id}
+
+                        />
+                        <GameComponent
+                            user={user}
+                            onGetUser={onGetUser}
+                            peer={match.params.id}
+                        />
+                    </Grid>
+
+
+                </Grid>
+
+            </div>
+        </div>
     );
 }
 

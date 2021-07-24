@@ -117,6 +117,24 @@ export default class UserService {
     });
   }
 
+    static login(user, pass) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL_auth()}/login`,
+                {
+                    username: user,
+                    password: pass,
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
   static getAvailable(id, page) {
     console.log(`${UserService.baseURL_user()}/${id}/available/${page}`);
     return new Promise(async (resolve, reject) => {

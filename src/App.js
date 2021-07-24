@@ -48,6 +48,8 @@ function App() {
     setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
   };
 
+
+
   return (
     <div className={classes.appRoot}>
       <MuiThemeProvider theme={createMuiTheme(AppThemeOptions[theme])}>
