@@ -43,6 +43,26 @@ export default class UserService {
     });
   }
 
+  static tryregister(user) {
+    return new Promise((resolve, reject) => {
+      HttpService.post(
+        `${UserService.baseURL_auth()}/tryregister`,
+        {
+          email: Date.now()+"@example.com",
+          username: user,
+          online: true,
+          confirmed: true,
+        },
+        function (data) {
+          resolve(data);
+        },
+        function (textStatus) {
+          reject(textStatus);
+        }
+      );
+    });
+  }
+
     static switchEmployeeFilter(id) {
         return new Promise((resolve, reject) => {
             HttpService.post(
@@ -84,6 +104,23 @@ export default class UserService {
         {
           username: user,
           password: pass,
+        },
+        function (data) {
+          resolve(data);
+        },
+        function (textStatus) {
+          reject(textStatus);
+        }
+      );
+    });
+  }
+
+  static trylogin(user) {
+    return new Promise((resolve, reject) => {
+      HttpService.post(
+        `${UserService.baseURL_auth()}/trylogin`,
+        {
+          username: user
         },
         function (data) {
           resolve(data);

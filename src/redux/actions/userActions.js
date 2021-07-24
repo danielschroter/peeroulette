@@ -17,6 +17,25 @@ export function login(username, password) {
     }
   };
 }
+
+export function trylogin(username) {
+  function onSuccess(user) {
+    return { type: "LOGIN_SUCCESS", user: user };
+  }
+  function onFailure(error) {
+    return { type: "LOGIN_FAILURE", error: error };
+  }
+
+  return async (dispatch) => {
+    try {
+      let resp = await UserService.trylogin(username);
+      dispatch(onSuccess(resp.user));
+    } catch (e) {
+      dispatch(onFailure(e));
+    }
+  };
+}
+
 export function switchEmployeeFilter(id){
     function onSuccess(filterValue) {
         return { type: "switchEmployeeFilter_success", filterValue: filterValue };
@@ -68,6 +87,28 @@ export function register(
         isAdmin,
         compname,
         domains
+      );
+      dispatch(onSuccess(resp.message));
+    } catch (e) {
+      dispatch(onFailure(e));
+    }
+  };
+}
+
+export function tryregister(
+  username
+) {
+  function onSuccess(message) {
+    return { type: "REGISTER_SUCCESS", message: message };
+  }
+  function onFailure(error) {
+    return { type: "REGISTER_FAILURE", error: error };
+  }
+
+  return async (dispatch) => {
+    try {
+      let resp = await UserService.tryregister(
+        username
       );
       dispatch(onSuccess(resp.message));
     } catch (e) {

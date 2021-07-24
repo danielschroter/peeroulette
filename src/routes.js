@@ -1,6 +1,7 @@
 import MovieListView from "./views/MovieListView";
 import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
+import TryOutView from "./views/TryOutView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import CorporateSignUpView from "./views/CorporateSignUpView";
@@ -36,6 +37,10 @@ const routes = [
   {
     path: "/register",
     component: SignUpView,
+  },
+  {
+    path: "/tryout",
+    component: TryOutView,
   },
   {
     path: "/edit",
