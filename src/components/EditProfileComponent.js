@@ -1007,10 +1007,6 @@ function EditProfileComponent(props) {
                                             <Grid>
                                                 <CorporateFilterEmployeeComponent user={props.user}/>
                                             </Grid></Grid>
-                                        {/*<div className={classes.signUpRow}>*/}
-                                        {/*    */}
-                                        {/*    <p className={classes.userDataFont}>As Member of an organization you cannot open a Corporate Account</p>*/}
-                                        {/*</div>*/}
                                         {!isCorporate ? (<div></div>
                                     ) : (
                                         <div className={classes.signUpRow}>
