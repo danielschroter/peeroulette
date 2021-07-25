@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, Component} from "react";
+import React, {useState, useEffect, useRef} from "react";
 // needed in tutorial
 import io from "socket.io-client";
 
@@ -11,21 +11,11 @@ import Table from 'react-bootstrap/Table'
 import {makeStyles} from "@material-ui/core/styles";
 import {
     Button,
-    TextField,
-    Grid,
     Typography,
     Paper,
 } from "@material-ui/core";
-import CustomTextField from "./CustomTextField";
-import DetailsArea from "./DetailsArea";
 import PropTypes from "prop-types";
 import UserService from "../services/UserService";
-
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
 // needed to rescale the wheel
 import AutoScale from 'react-auto-scale';
@@ -158,10 +148,9 @@ function GameComponent(props) {
     }
 
     function senderReceiverUserPeerCheck (senderId, receiverId) {
-        return ((senderId === props.peer && receiverId === props.user._id) ||
-        (senderId === props.user._id && receiverId === props.peer));
+        return ((senderId == props.peer && receiverId == props.user._id) ||
+        (senderId == props.user._id && receiverId == props.peer));
     }
-
 
     useEffect(() => {
         socket.current = io("/");
@@ -257,7 +246,7 @@ function GameComponent(props) {
                         >
                             Spin Wheel
                         </Button>
-                        {commonInterests.length === 1 ? (
+                        {commonInterests.length == 1 ? (
                             <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
                                 have {commonInterests.length} common interest.</Typography>
                         ) : (
@@ -267,17 +256,17 @@ function GameComponent(props) {
 
                         <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>Spin the wheel to find out
                             which one!</Typography>
-                        {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && thisUserBet == wheelInterests[newPrizeNumber].option == otherUserBet && endSpin ? (
-                            <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>It's a draw! You both
+                        {thisUserBet == wheelInterests[newPrizeNumber].option && otherUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
+                            <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>Winner: It's a draw! You both
                                 win!</Typography>
                         ) : null}
-                        {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
+                        {thisUserBet == wheelInterests[newPrizeNumber].option && otherUserBet !== wheelInterests[newPrizeNumber].option && endSpin ? (
                             <Typography variant="h5" style={{
                                 "marginTop": "15px",
                                 "color": "white"
                             }}>Winner: {props.user.username}</Typography>
                         ) : null}
-                        {wheelInterests && otherUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
+                        {otherUserBet == wheelInterests[newPrizeNumber].option && thisUserBet !== wheelInterests[newPrizeNumber].option && endSpin ? (
                             <Typography variant="h5"
                                         style={{"marginTop": "15px", "color": "white"}}>Winner: {otherUsername}</Typography>
                         ) : null}
