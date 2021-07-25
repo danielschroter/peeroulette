@@ -10,6 +10,7 @@ import NewCallView from "./views/NewCallView";
 import WaitingView from "./views/WaitingView";
 import EditProfileView from "./views/EditProfileView";
 import ConfirmView from "./views/ConfirmView";
+import MessengerView from "./views/MessengerView";
 
 // routes within the movie database example app
 // used for routing
@@ -74,6 +75,10 @@ const routes = [
   {
       path: "/nc",
       component: NewCallView,
+  },
+  {
+    path: "/messenger",
+    component: MessengerView,
   },
 ];
 
