@@ -17,6 +17,10 @@ export default class UserService {
         return "http://localhost:4000/interests";
     }
 
+    static baseURL_match() {
+      return "http://localhost:4000/match";
+  }
+
   static register(email, user, pass, isAdmin, compname, domains) {
     return new Promise((resolve, reject) => {
       HttpService.post(
@@ -212,5 +216,42 @@ export default class UserService {
                 }
             );
         });
+    }
+
+    static deleteMatch(matchId) {
+      return new Promise((resolve, reject) => {
+        HttpService.remove(
+          `${UserService.baseURL_match()}/${matchId}`,
+          function (data) {
+            if (data.message !== undefined) {
+              resolve(data.message);
+            } else {
+              reject("Error while deleting match");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
+    }
+
+    // Get last matches of user for Messenger View
+    static getLastMatches(userId) {
+      return new Promise(async (resolve, reject) => {
+        HttpService.get(
+          `${UserService.baseURL_match()}/last/${userId}`,
+          function (data) {
+            if (data !== undefined || Object.keys(data).length !== 0) {
+              resolve(data);
+            } else {
+              reject("Error while retrieving last matches of user");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
     }
 }

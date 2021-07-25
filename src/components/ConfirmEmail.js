@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
 	loginButton: {
 		margin: "auto",
 	},
+	confirmText: {
+		color: "#fff"
+	}
 }));
 function ConfirmEmail(props) {
 	const classes = useStyles();
@@ -22,15 +25,15 @@ function ConfirmEmail(props) {
 	// get user_id OR domain_id + domain_name from URL "/confirm/:id/:domain"
 	const { id, domain } = useParams();
 
-	const extractUser = () => {
-		UserService.getUser(id).then(function (userBackend) {
+	const extractUser = async () => {
+		props.OnConfirm(id);
+		await UserService.getUser(id).then(function (userBackend) {
 			setUsername(userBackend.username);
 			setConfirmation(userBackend.confirmed);
 		});
 	};
 
 	useEffect(() => {
-		props.OnConfirm(id);
 		extractUser();
 	});
 
@@ -44,21 +47,21 @@ function ConfirmEmail(props) {
 			<Container maxWidth="sm">
 				{!domain ? (
 					!username ? (
-						<Typography variant="h4" align="center" gutterBottom>
+						<Typography className={classes.confirmText} variant="h4" align="center" gutterBottom>
 							No user found for confirmation. Check your confirmation link!
 						</Typography>
 					) : confirmation ? (
-						<Typography variant="h4" align="center" gutterBottom>
+						<Typography className={classes.confirmText} variant="h4" align="center" gutterBottom>
 							Email confirmation for user "{username}" was successful. You now
 							can log in!
 						</Typography>
 					) : (
-						<Typography variant="h4" align="center" gutterBottom>
+						<Typography className={classes.confirmText} variant="h4" align="center" gutterBottom>
 							Email confirmation for user "{username}" failed.
 						</Typography>
 					)
 				) : (
-					<Typography variant="h4" align="center" gutterBottom>
+					<Typography className={classes.confirmText} variant="h4" align="center" gutterBottom>
 						Email confirmation for domain: "{domain}" was successful.
 					</Typography>
 				)}
