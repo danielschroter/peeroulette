@@ -18,21 +18,18 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function LastMatches({ lastMatch, currentId, setCurrentChat, setLastMatches, setMatchesUpdated }) {
+function LastMatches({
+	lastMatch,
+	currentId,
+	setCurrentChat,
+	setLastMatches,
+	setMatchesUpdated,
+}) {
 	const classes = useStyles();
 
 	const [matchName, setMatchName] = React.useState("");
 	const [matchUserId, setMatchUserId] = React.useState("");
 	const [matchDeleted, setMatchDeleted] = React.useState(false);
-
-	// const extractMatches = async () => {
-	// 	try {
-	// 		const res = await MatchService.getLastMatches(currentId);
-	// 		setLastMatches(res);
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
 
 	const extractMatchingPartner = async () => {
 		if (lastMatch.usera === currentId) {
@@ -53,10 +50,6 @@ function LastMatches({ lastMatch, currentId, setCurrentChat, setLastMatches, set
 			}
 		}
 	};
-
-	// useEffect(() => {
-	// 	extractMatches();
-	// }, [currentId]);
 
 	useEffect(() => {
 		extractMatchingPartner();
@@ -80,12 +73,6 @@ function LastMatches({ lastMatch, currentId, setCurrentChat, setLastMatches, set
 	const handleDelete = async (lastMatch) => {
 		try {
 			await MatchService.deleteMatch(lastMatch._id);
-		} catch (err) {
-			console.log(err);
-		}
-		try {
-			const res = await MatchService.getLastMatches(currentId);
-			setLastMatches(res);
 			setMatchesUpdated(true);
 		} catch (err) {
 			console.log(err);
@@ -95,7 +82,12 @@ function LastMatches({ lastMatch, currentId, setCurrentChat, setLastMatches, set
 	return (
 		<div>
 			<Container maxWidth="sm">
-				<Typography variant="h6" align="left" gutterBottom>
+				<Typography
+					style={{ fontSize: "1.1rem", fontWeight: "bold" }}
+					variant="h6"
+					align="left"
+					gutterBottom
+				>
 					<div onClick={() => handleClick(currentId, matchUserId)}>
 						<Avatar className={classes.avatar}>
 							{matchName ? matchName[0] : ""}
@@ -103,16 +95,16 @@ function LastMatches({ lastMatch, currentId, setCurrentChat, setLastMatches, set
 						{matchName} {format(lastMatch.createdAt)}
 					</div>
 					<div>
-					<Button
-                            onClick={() => handleDelete(lastMatch)}
-                            variant="contained"
-                            color="primary"
-                            className={classes.deleteMatchButton}
-                        >
-                            Delete
-                    </Button>
+						<Button
+							onClick={() => handleDelete(lastMatch)}
+							variant="contained"
+							color="primary"
+							size="small"
+							className={classes.deleteMatchButton}
+						>
+							Delete
+						</Button>
 					</div>
-					
 				</Typography>
 			</Container>
 		</div>
