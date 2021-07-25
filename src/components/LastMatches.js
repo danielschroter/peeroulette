@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function LastMatches({ lastMatch, currentId, setCurrentChat }) {
+function LastMatches({ lastMatch, currentId, setCurrentChat, setLastMatches, setMatchesUpdated }) {
 	const classes = useStyles();
 
 	const [matchName, setMatchName] = React.useState("");
@@ -64,6 +64,12 @@ function LastMatches({ lastMatch, currentId, setCurrentChat }) {
 
 	const handleClick = async (currentId, matchID) => {
 		try {
+			const res = await UserService.getConversation(matchID, currentId);
+			setCurrentChat(res);
+		} catch (err) {
+			console.log(err);
+		}
+		try {
 			const res = await UserService.addConversation(matchID, currentId);
 			setCurrentChat(res);
 		} catch (err) {
@@ -74,7 +80,13 @@ function LastMatches({ lastMatch, currentId, setCurrentChat }) {
 	const handleDelete = async (lastMatch) => {
 		try {
 			await MatchService.deleteMatch(lastMatch._id);
-			setMatchDeleted(true);
+		} catch (err) {
+			console.log(err);
+		}
+		try {
+			const res = await MatchService.getLastMatches(currentId);
+			setLastMatches(res);
+			setMatchesUpdated(true);
 		} catch (err) {
 			console.log(err);
 		}
@@ -97,7 +109,7 @@ function LastMatches({ lastMatch, currentId, setCurrentChat }) {
                             color="primary"
                             className={classes.deleteMatchButton}
                         >
-                            Delete Match
+                            Delete
                     </Button>
 					</div>
 					

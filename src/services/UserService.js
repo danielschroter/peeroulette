@@ -419,6 +419,24 @@ export default class UserService {
       });
     }
 
+    static deleteConversation(id) {
+      return new Promise((resolve, reject) => {
+        HttpService.remove(
+          `${UserService.baseURL_conversation()}/${id}`,
+          function (data) {
+            if (data.message !== undefined) {
+              resolve(data.message);
+            } else {
+              reject("Error while deleting conversation");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
+    }
+
     static addMessage(conversationId, sender, text) {
       return new Promise((resolve, reject) => {
         HttpService.post(

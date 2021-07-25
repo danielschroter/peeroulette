@@ -22,15 +22,15 @@ function ConfirmEmail(props) {
 	// get user_id OR domain_id + domain_name from URL "/confirm/:id/:domain"
 	const { id, domain } = useParams();
 
-	const extractUser = () => {
-		UserService.getUser(id).then(function (userBackend) {
+	const extractUser = async () => {
+		props.OnConfirm(id);
+		await UserService.getUser(id).then(function (userBackend) {
 			setUsername(userBackend.username);
 			setConfirmation(userBackend.confirmed);
 		});
 	};
 
 	useEffect(() => {
-		props.OnConfirm(id);
 		extractUser();
 	});
 

@@ -157,6 +157,7 @@ function MessengerView(props) {
 	const [newMessage, setNewMessage] = React.useState("");
 	const [arrivalMessage, setArrivalMessage] = React.useState(null);
 	const [lastMatches, setLastMatches] = React.useState([]);
+	const [matchesUpdated, setMatchesUpdated] = React.useState(false);
 	const socket = useRef();
 	const scrollRef = useRef();
 
@@ -232,7 +233,8 @@ function MessengerView(props) {
 
 	useEffect(() => {
 		extractMatches();
-	}, [user._id]);
+		setMatchesUpdated(false);
+	}, [user._id, matchesUpdated]);
 
 	// Socket useEffects
 	useEffect(() => {
@@ -308,7 +310,7 @@ function MessengerView(props) {
 							<div className={classes.userDataFont}>
 								{conversations.map((c) => (
 									<div onClick={() => setCurrentChat(c)}>
-										<Conversation conversation={c} currentUser={user} />
+										<Conversation conversation={c} currentUser={user} setConversations={setConversations} />
 									</div>
 								))}
 							</div>
@@ -365,6 +367,8 @@ function MessengerView(props) {
 											lastMatch={m}
 											currentId={user._id}
 											setCurrentChat={setCurrentChat}
+											setLastMatches={setLastMatches}
+											setMatchesUpdated={setMatchesUpdated}
 										/>
 									</div>
 								))}

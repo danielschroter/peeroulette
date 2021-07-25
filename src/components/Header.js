@@ -8,6 +8,7 @@ import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
+import MessageIcon from "@material-ui/icons/Message";
 
 import KebabMenu from "./KebabMenu";
 
@@ -57,6 +58,9 @@ function Header(props) {
                 >
                     peeroulette
                 </Typography>
+                <IconButton href="/messenger" color="inherit">
+                    <MessageIcon />
+                </IconButton>
                 <IconButton onClick={onClickGithub} color="inherit">
                     <GitHubIcon />
                 </IconButton>
