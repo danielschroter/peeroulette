@@ -4,12 +4,13 @@ import SignUpView from "./views/SignUpView";
 import TryOutView from "./views/TryOutView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
-import CorporateSignUpView from "./views/CorporateSignUpView";
+import EventView from "./views/EventView";
 import CallView from "./views/CallView";
 import WaitingView from "./views/WaitingView";
 import LobbyView from "./views/LobbyView";
 import EditProfileView from "./views/EditProfileView";
 import ConfirmView from "./views/ConfirmView";
+import GroupCallView from "./views/GroupCallView";
 import MessengerView from "./views/MessengerView";
 
 // routes within the movie database example app
@@ -22,8 +23,8 @@ const routes = [
     exact: true,
   },
   {
-    path: "/corporate",
-    component: CorporateSignUpView,
+    path: "/events",
+    component: EventView,
     exact: true,
   },
   {
@@ -63,6 +64,10 @@ const routes = [
   {
       path: "/call/:id",
       component: CallView,
+  },
+  {
+    path: "/group/:id",
+    component: GroupCallView,
   },
   {
       path: "/wait/:page",

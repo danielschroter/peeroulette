@@ -18,16 +18,32 @@ const useStyles = makeStyles((theme) => ({
 function Message({ message, own }) {
 	const classes = useStyles();
 
+	const [senderName, setSenderName] = React.useState("");
+
+	const extractMessageSender = async () => {
+		
+			try {
+				const res = await UserService.getUser(message.sender);
+				setSenderName(res.username);
+			} catch (err) {
+				console.log(err);
+			}
+	};
+
+	useEffect(() => {
+		extractMessageSender();
+	});
+
 	return (
 		<div>
 			{own ? (
 				<div>
-					<div>Me: {message.text}</div>
+					<div>Me ({senderName}): {message.text}</div>
 					<div>{format(message.createdAt)}</div>
 				</div>
 			) : (
 				<div>
-					<div>Partner: {message.text}</div>
+					<div>Peer ({senderName}): {message.text}</div>
 					<div>{format(message.createdAt)}</div>
 				</div>
 			)}

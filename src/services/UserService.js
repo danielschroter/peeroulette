@@ -17,6 +17,10 @@ export default class UserService {
         return "http://localhost:4000/interests";
     }
 
+    static baseURL_icebreakerQuestions() {
+        return "http://localhost:4000/ice_questions";
+    }
+
     static baseURL_domain() {
         return "http://localhost:4000/domain";
     }
@@ -385,6 +389,20 @@ export default class UserService {
         });
     }
 
+    static getIcebreakerQuestions() {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                this.baseURL_icebreakerQuestions(),
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static getDomains() {
         return new Promise(async (resolve, reject) => {
             HttpService.get(
@@ -479,6 +497,24 @@ export default class UserService {
               resolve(data);
             } else {
               reject("Error while retrieving conversation of two user");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
+    }
+
+    static deleteConversation(id) {
+      return new Promise((resolve, reject) => {
+        HttpService.remove(
+          `${UserService.baseURL_conversation()}/${id}`,
+          function (data) {
+            if (data.message !== undefined) {
+              resolve(data.message);
+            } else {
+              reject("Error while deleting conversation");
             }
           },
           function (textStatus) {
