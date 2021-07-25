@@ -292,15 +292,7 @@ function MessengerView(props) {
 		>
 			{/* Title */}
 			<div className={classes.pageArea + " " + classes.title}>
-				<CustomTextField
-					value={"Messenger"}
-					style={{color: "#fff"}}
-					furtherProps={{
-						fullWidth: true,
-					}}
-					align="center"
-					variant="h2"
-				/>
+				<Typography align="center" variant="h3" style={{color:"#fff"}}>Messenger</Typography>
 			</div>
 
 			<Grid container>

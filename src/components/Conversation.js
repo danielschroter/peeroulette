@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography, Container, Avatar } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import UserService from "../services/UserService";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
 	avatar: {
@@ -53,22 +55,45 @@ function Conversation({ conversation, currentUser, setConversations }) {
 	return (
 		<div>
 			<Container maxWidth="sm">
-				<Typography variant="h6" align="left" gutterBottom>
-					<Avatar className={classes.avatar}>
-						{chatPartner ? chatPartner[0] : ""}
-					</Avatar>
-					{chatPartner}
-					<div>
-					<Button
-                            onClick={() => handleDelete(conversation)}
-                            variant="contained"
-                            color="primary"
-                            className={classes.deleteConversationButton}
-                        >
-                            Delete
-                    </Button>
-					</div>
-				</Typography>
+				<div style={{display:"flex"}}>
+					{/*<Paper>*/}
+					<Grid
+						container
+						direction="row"
+						// justifyContent="space-evenly"
+						alignItems="center"
+						alignContent="space-around"
+						spacing={0}
+					>
+						<Grid xs={1}>
+							<Avatar className={classes.avatar}>
+								{chatPartner ? chatPartner[0] : ""}
+							</Avatar>
+						</Grid>
+						<Grid xs={1}
+							  // alignItems="flex-start"
+						>
+							<Typography style={{fontSize:"1.1rem", fontWeight:"bold"}}>&nbsp;{chatPartner}</Typography>
+						</Grid>
+						<Grid xs={4}>
+							<span></span>
+						</Grid>
+						<Grid xs={4}>
+							<Button
+								onClick={() => handleDelete(conversation)}
+								variant="contained"
+								color="primary"
+								size="small"
+								className={classes.deleteConversationButton}
+							>
+								Delete
+							</Button>
+						</Grid>
+					</Grid>
+					{/*</Paper>*/}
+
+				</div>
+
 			</Container>
 		</div>
 	);
