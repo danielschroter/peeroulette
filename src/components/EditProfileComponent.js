@@ -220,7 +220,7 @@ function EditProfileComponent(props) {
             setInterests(userBackend.interests);
             setUniversity(userBackend.university);
 
-            if(userBackend.organization !== undefined){
+            if (userBackend.organization !== undefined) {
                 UserService.getOrganization(userBackend.organization).then(function (organizationBackend) {
                     setOrganization(organizationBackend.company_name)
                 })
@@ -286,8 +286,8 @@ function EditProfileComponent(props) {
         back.interests = interests;
         back.city = city;
         back.university = university;
-        back.organization = organization;
-
+        // back.organization = organization;
+        //
         return back;
     };
 
@@ -690,84 +690,119 @@ function EditProfileComponent(props) {
         >
 
 
+            {/* Admin Buttons */}
+            <div
+                className={
+                    classes.flexRow +
+                    " " +
+                    classes.flexEnd +
+                    " " +
+                    classes.barMinHeight
+                }
+            >
 
-                {/* Admin Buttons */}
-                <div
-                    className={
-                        classes.flexRow +
-                        " " +
-                        classes.flexEnd +
-                        " " +
-                        classes.barMinHeight
-                    }
-                >
-
-                    {/* Delete Buttons */}
-                    <React.Fragment>
-                        <Button
-                            onClick={(e) => setAltertDeleteProfileOpen(true)}
-                            variant="contained"
-                            color="primary"
-                            className={classes.deleteProfileButton}
-                        >
-                            Delete Profile
-                        </Button>
-                        <Dialog
-                            open={alertDeleteProfileOpen}
-                            close={(e) => setAltertDeleteProfileOpen(false)}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                        >
-                            <DialogTitle
-                                id="alert-dialog-title">{"Are you sure you want to delete your profile?"}</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                    Deleting your profile will permanently remove it.
-                                    If you have a corporate account, this will also be permanently removed.
-                                    After succesful deletion you will be redirected to the Peeroulette-Landing-Page.
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={(e) => setAltertDeleteProfileOpen(false)} color="primary">
-                                    No
-                                </Button>
-                                <Button onClick={onDeleteProfile} color="primary" autoFocus href="/">
-                                    Yes
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                    </React.Fragment>
-                </div>
-
+                {/* Delete Buttons */}
+                <React.Fragment>
+                    <Button
+                        onClick={(e) => setAltertDeleteProfileOpen(true)}
+                        variant="contained"
+                        color="primary"
+                        className={classes.deleteProfileButton}
+                    >
+                        Delete Profile
+                    </Button>
+                    <Dialog
+                        open={alertDeleteProfileOpen}
+                        close={(e) => setAltertDeleteProfileOpen(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle
+                            id="alert-dialog-title">{"Are you sure you want to delete your profile?"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Deleting your profile will permanently remove it.
+                                If you have a corporate account, this will also be permanently removed.
+                                After succesful deletion you will be redirected to the Peeroulette-Landing-Page.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={(e) => setAltertDeleteProfileOpen(false)} color="primary">
+                                No
+                            </Button>
+                            <Button onClick={onDeleteProfile} color="primary" autoFocus href="/">
+                                Yes
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </React.Fragment>
+            </div>
 
 
-                {/* User Title */}
-                <div className={classes.pageArea + " " + classes.title}>
-                    <CustomTextField
-                        value={"Edit Your Profile"}
-                        furtherProps={{
-                            fullWidth: true,
-                        }}
-                        align="center"
-                        variant="h2"
-                    />
-                </div>
+            {/* User Title */}
+            <div className={classes.pageArea + " " + classes.title}>
+                <CustomTextField
+                    value={"Edit Your Profile"}
+                    furtherProps={{
+                        fullWidth: true,
+                    }}
+                    align="center"
+                    variant="h2"
+                />
+            </div>
 
-                {/* More detail data of the movie, grouped in DetailsArea.js for a consistent look */}
-                <Grid container>
-                    {/* Name & Email Address */}
-                    <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-                        <DetailsArea
-                            title="Name & Password"
-                            content={
-                                <div className={classes.signUpRow}>
-                                    {editUsername ? (
+            {/* More detail data of the movie, grouped in DetailsArea.js for a consistent look */}
+            <Grid container>
+                {/* Name & Email Address */}
+                <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
+                    <DetailsArea
+                        title="Name & Password"
+                        content={
+                            <div className={classes.signUpRow}>
+                                {editUsername ? (
+                                    <div>
+                                        <div style={{"display": "flex"}}>
+                                            <p className={classes.userDataFont}>Name:</p>
+                                            <Button
+                                                className={classes.cancelNameButton}
+                                                onClick={onCancelUsername}
+                                            > Cancel
+                                            </Button>
+                                            <Button
+                                                className={classes.saveNameButton}
+                                                onClick={onUpdateUser}
+                                            > Save
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <TextField
+                                                fullWidth
+                                                value={username}
+                                                onChange={onChangeUsername}
+                                            />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div style={{"display": "flex"}}>
+                                            <p className={classes.userDataFont}>Name:</p>
+                                            <Button
+                                                className={classes.editNameButton}
+                                                onClick={(e) => setEditUsername(true)}
+                                            > Edit
+                                            </Button>
+                                        </div>
+                                        <p>{username}</p>
+                                    </div>
+                                )}
+                                <div>
+                                    {editPassword ? (
                                         <div>
                                             <div style={{"display": "flex"}}>
-                                                <p className={classes.userDataFont}>Name:</p>
+                                                <p className={classes.userDataFont}>Password:</p>
                                                 <Button
                                                     className={classes.cancelNameButton}
-                                                    onClick={onCancelUsername}
+                                                    onClick={onCancelPassword}
                                                 > Cancel
                                                 </Button>
                                                 <Button
@@ -779,512 +814,479 @@ function EditProfileComponent(props) {
                                             <div>
                                                 <TextField
                                                     fullWidth
-                                                    value={username}
-                                                    onChange={onChangeUsername}
+                                                    label="Set New Password"
+                                                    value={password}
+                                                    error={registerError !== ""}
+                                                    onBlur={onBlurPassword}
+                                                    onChange={onChangePassword}
+                                                    type="password"
+                                                />
+                                                <TextField
+                                                    fullWidth
+                                                    label="Repeat New Password"
+                                                    value={password2}
+                                                    error={registerError !== ""}
+                                                    onBlur={onBlurPassword}
+                                                    onChange={onChangePassword2}
+                                                    type="password"
                                                 />
                                             </div>
                                         </div>
                                     ) : (
                                         <div>
                                             <div style={{"display": "flex"}}>
-                                                <p className={classes.userDataFont}>Name:</p>
+                                                <p className={classes.userDataFont}>Password:</p>
                                                 <Button
                                                     className={classes.editNameButton}
-                                                    onClick={(e) => setEditUsername(true)}
+                                                    onClick={(e) => setEditPassword(true)}
                                                 > Edit
                                                 </Button>
                                             </div>
-                                            <p>{username}</p>
+                                            <p style={{"fontStyle": "italic"}}>Password top secret</p>
+                                            <p style={{
+                                                "fontStyle": "italic",
+                                                "marginTop": "30px",
+                                                "marginBottom": "43px"
+                                            }}>Password top secret</p>
                                         </div>
                                     )}
-                                    <div>
-                                        {editPassword ? (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>Password:</p>
-                                                    <Button
-                                                        className={classes.cancelNameButton}
-                                                        onClick={onCancelPassword}
-                                                    > Cancel
-                                                    </Button>
-                                                    <Button
-                                                        className={classes.saveNameButton}
-                                                        onClick={onUpdateUser}
-                                                    > Save
-                                                    </Button>
-                                                </div>
-                                                <div>
-                                                    <TextField
-                                                        fullWidth
-                                                        label="Set New Password"
-                                                        value={password}
-                                                        error={registerError !== ""}
-                                                        onBlur={onBlurPassword}
-                                                        onChange={onChangePassword}
-                                                        type="password"
-                                                    />
-                                                    <TextField
-                                                        fullWidth
-                                                        label="Repeat New Password"
-                                                        value={password2}
-                                                        error={registerError !== ""}
-                                                        onBlur={onBlurPassword}
-                                                        onChange={onChangePassword2}
-                                                        type="password"
-                                                    />
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>Password:</p>
-                                                    <Button
-                                                        className={classes.editNameButton}
-                                                        onClick={(e) => setEditPassword(true)}
-                                                    > Edit
-                                                    </Button>
-                                                </div>
-                                                <p style={{"fontStyle": "italic"}}>Password top secret</p>
-                                                <p style={{
-                                                    "fontStyle": "italic",
-                                                    "marginTop": "30px",
-                                                    "marginBottom": "43px"
-                                                }}>Password top secret</p>
-                                            </div>
-                                        )}
-                                        {registerError !== "" ? (
-                                            <div className={classes.signUpRow}>
-                                                <Typography color="error">{registerError}</Typography>
-                                            </div>
-                                        ) : null}
-                                    </div>
-                                </div>
-                            }
-                        />
-                    </Grid>
-
-                    {/* City, University, Organization */}
-                    <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-                        <DetailsArea
-                            title="City, Organization & University"
-                            content={
-                                <div>
-                                    <div>
-                                        {editCity ? (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>City:</p>
-                                                    <Button
-                                                        className={classes.cancelNameButton}
-                                                        onClick={onCancelCity}
-                                                    > Cancel
-                                                    </Button>
-                                                    <Button
-                                                        className={classes.saveNameButton}
-                                                        onClick={onUpdateUser}
-                                                    > Save
-                                                    </Button>
-                                                </div>
-                                                <div>
-                                                    <TextField
-                                                        fullWidth
-                                                        value={city}
-                                                        onChange={onChangeCity}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>City:</p>
-                                                    <Button
-                                                        className={classes.editNameButton}
-                                                        onClick={(e) => setEditCity(true)}
-                                                    > Edit
-                                                    </Button>
-                                                </div>
-                                                <p>{city}</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div>
-                                        {editUniversity ? (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>University:</p>
-                                                    <Button
-                                                        className={classes.cancelNameButton}
-                                                        onClick={onCancelUniversity}
-                                                    > Cancel
-                                                    </Button>
-                                                    <Button
-                                                        className={classes.saveNameButton}
-                                                        onClick={onUpdateUser}
-                                                    > Save
-                                                    </Button>
-                                                </div>
-                                                <div>
-                                                    <TextField
-                                                        fullWidth
-                                                        value={university}
-                                                        onChange={onChangeUniversity}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>University:</p>
-                                                    <Button
-                                                        className={classes.editNameButton}
-                                                        onClick={(e) => setEditUniversity(true)}
-                                                    > Edit
-                                                    </Button>
-                                                </div>
-                                                <p>{university}</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div>
-                                        {editOrganization ? (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>Organization:</p>
-                                                    {/*<Button*/}
-                                                    {/*    className={classes.cancelNameButton}*/}
-                                                    {/*    onClick={onCancelOrganization}*/}
-                                                    {/*> Cancel*/}
-                                                    {/*</Button>*/}
-                                                    {/*<Button*/}
-                                                    {/*    className={classes.saveNameButton}*/}
-                                                    {/*    onClick={onUpdateUser}*/}
-                                                    {/*> Save*/}
-                                                    {/*</Button>*/}
-                                                </div>
-                                                <div>
-                                                    <TextField
-                                                        fullWidth
-                                                        value={<span>You belong to the company: {organization} </span>}
-                                                        onChange={onChangeOrganization}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>Organization:</p>
-                                                    {/*<Button*/}
-                                                    {/*    className={classes.editNameButton}*/}
-                                                    {/*    onClick={(e) => setEditOrganization(true)}*/}
-                                                    {/*> Edit*/}
-                                                    {/*</Button>*/}
-                                                </div>
-                                                <p>You belong to the company: {organization}</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            }
-                        />
-                    </Grid>
-
-                    {/* Corporate Accounts */}
-                    <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-                        <DetailsArea
-                            title="Corporate Account"
-                            content={
-                                <div>
-                                    {!isCorporate ? (
+                                    {registerError !== "" ? (
                                         <div className={classes.signUpRow}>
-                                            <p className={classes.userDataFont}>Sign up for a corporate Account!</p>
-                                            <div className={classes.signUpRow}>
-                                                <TextField
-                                                    label="Company Name"
-                                                    fullWidth
-                                                    value={compname}
-                                                    onChange={onChangeCompnameSignUp}
-                                                    onBlur={onBlurCompname}
-                                                    error={registerDomainsError !== ""}
-                                                />
-                                            </div>
-                                            <div className={classes.signUpRow}>
-                                                <TextField
-                                                    label="Domains"
-                                                    fullWidth
-                                                    onChange={onChangeDomainsSignUp}
-                                                    value={registerDomains}
-                                                    onBlur={onBlurDomains}
-                                                    error={registerDomainsError === "Type in a correct domain address."}
-                                                />
-                                            </div>
-                                            <div
-                                                className={classes.signUpRow + " " + classes.signUpButtons}
-                                            >
+                                            <Typography color="error">{registerError}</Typography>
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+                        }
+                    />
+                </Grid>
+
+                {/* City, University, Organization */}
+                <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
+                    <DetailsArea
+                        title="City, Organization & University"
+                        content={
+                            <div>
+                                <div>
+                                    {editCity ? (
+                                        <div>
+                                            <div style={{"display": "flex"}}>
+                                                <p className={classes.userDataFont}>City:</p>
                                                 <Button
-                                                    className={classes.signUpButton}
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={onRegisterSignUp}
-                                                    disabled={registerDomainsError !== ""}
-                                                >
-                                                    Register
+                                                    className={classes.cancelNameButton}
+                                                    onClick={onCancelCity}
+                                                > Cancel
                                                 </Button>
-                                                {registerDomainsError !== "" ? (
-                                                    <div className={classes.signUpRow}>
-                                                        <Typography color="error">{registerDomainsError}</Typography>
+                                                <Button
+                                                    className={classes.saveNameButton}
+                                                    onClick={onUpdateUser}
+                                                > Save
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <TextField
+                                                    fullWidth
+                                                    value={city}
+                                                    onChange={onChangeCity}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <div style={{"display": "flex"}}>
+                                                <p className={classes.userDataFont}>City:</p>
+                                                <Button
+                                                    className={classes.editNameButton}
+                                                    onClick={(e) => setEditCity(true)}
+                                                > Edit
+                                                </Button>
+                                            </div>
+                                            <p>{city}</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    {editUniversity ? (
+                                        <div>
+                                            <div style={{"display": "flex"}}>
+                                                <p className={classes.userDataFont}>University:</p>
+                                                <Button
+                                                    className={classes.cancelNameButton}
+                                                    onClick={onCancelUniversity}
+                                                > Cancel
+                                                </Button>
+                                                <Button
+                                                    className={classes.saveNameButton}
+                                                    onClick={onUpdateUser}
+                                                > Save
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <TextField
+                                                    fullWidth
+                                                    value={university}
+                                                    onChange={onChangeUniversity}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <div style={{"display": "flex"}}>
+                                                <p className={classes.userDataFont}>University:</p>
+                                                <Button
+                                                    className={classes.editNameButton}
+                                                    onClick={(e) => setEditUniversity(true)}
+                                                > Edit
+                                                </Button>
+                                            </div>
+                                            <p>{university}</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    {editOrganization ? (
+                                        <div>
+                                            <div style={{"display": "flex"}}>
+                                                <p className={classes.userDataFont}>Organization:</p>
+                                                {/*<Button*/}
+                                                {/*    className={classes.cancelNameButton}*/}
+                                                {/*    onClick={onCancelOrganization}*/}
+                                                {/*> Cancel*/}
+                                                {/*</Button>*/}
+                                                {/*<Button*/}
+                                                {/*    className={classes.saveNameButton}*/}
+                                                {/*    onClick={onUpdateUser}*/}
+                                                {/*> Save*/}
+                                                {/*</Button>*/}
+                                            </div>
+                                            <div>
+                                                <TextField
+                                                    fullWidth
+                                                    value={<span>You belong to the company: {organization} </span>}
+                                                    onChange={onChangeOrganization}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <div style={{"display": "flex"}}>
+                                                <p className={classes.userDataFont}>Organization:</p>
+                                                {/*<Button*/}
+                                                {/*    className={classes.editNameButton}*/}
+                                                {/*    onClick={(e) => setEditOrganization(true)}*/}
+                                                {/*> Edit*/}
+                                                {/*</Button>*/}
+                                            </div>
+                                            <div>
+                                                {!organization ? (<p>It seems like your e-mail does not belong to a corporate account...</p>)
+                                                    : (<p>You belong to the company: {organization} </p>)}
+
+
+                                            </div>
+
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        }
+                    />
+                </Grid>
+
+                {/* Corporate Accounts */}
+                <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
+                    <DetailsArea
+                        title="Corporate Account"
+                        content={
+                            <div>
+                                {!isCorporate ? (
+                                    <div className={classes.signUpRow}>
+                                        <p className={classes.userDataFont}>Sign up for a corporate Account!</p>
+                                        <div className={classes.signUpRow}>
+                                            <TextField
+                                                label="Company Name"
+                                                fullWidth
+                                                value={compname}
+                                                onChange={onChangeCompnameSignUp}
+                                                onBlur={onBlurCompname}
+                                                error={registerDomainsError !== ""}
+                                            />
+                                        </div>
+                                        <div className={classes.signUpRow}>
+                                            <TextField
+                                                label="Domains"
+                                                fullWidth
+                                                onChange={onChangeDomainsSignUp}
+                                                value={registerDomains}
+                                                onBlur={onBlurDomains}
+                                                error={registerDomainsError === "Type in a correct domain address."}
+                                            />
+                                        </div>
+                                        <div
+                                            className={classes.signUpRow + " " + classes.signUpButtons}
+                                        >
+                                            <Button
+                                                className={classes.signUpButton}
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={onRegisterSignUp}
+                                                disabled={registerDomainsError !== ""}
+                                            >
+                                                Register
+                                            </Button>
+                                            {registerDomainsError !== "" ? (
+                                                <div className={classes.signUpRow}>
+                                                    <Typography color="error">{registerDomainsError}</Typography>
+                                                </div>
+                                            ) : null}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className={classes.signUpRow}>
+                                        {editCompname ? (
+                                            <div>
+                                                <div style={{"display": "flex"}}>
+                                                    <p className={classes.userDataFont}>Company Name:</p>
+                                                    <Button
+                                                        className={classes.cancelNameButton}
+                                                        onClick={onCancelCompname}
+                                                    > Cancel
+                                                    </Button>
+                                                    <Button
+                                                        className={classes.saveNameButton}
+                                                        onClick={onUpdateUser}
+                                                    > Save
+                                                    </Button>
+                                                </div>
+                                                <div>
+                                                    <TextField
+                                                        fullWidth
+                                                        value={compname}
+                                                        onChange={onChangeCompname}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <div style={{"display": "flex"}}>
+                                                    <p className={classes.userDataFont}>Company Name:</p>
+                                                    <Button
+                                                        className={classes.editNameButton}
+                                                        onClick={(e) => setEditCompname(true)}
+                                                    > Edit
+                                                    </Button>
+                                                </div>
+                                                <p>{compname}</p>
+                                            </div>
+                                        )}
+                                        <div>
+                                            {editDomains ? (
+                                                <div style={{"display": "flex"}}>
+                                                    <p className={classes.userDataFont}>Domains:</p>
+                                                    <Button
+                                                        className={classes.cancelDomainsButton}
+                                                        onClick={onCancelDomains}
+                                                    > Cancel
+                                                    </Button>
+                                                    <Button
+                                                        className={classes.cancelDomains}
+                                                        onClick={changeAddDomains}
+                                                    > Add
+                                                    </Button>
+                                                    <Button
+                                                        className={classes.cancelNameButton}
+                                                        onClick={changeDeleteDomains}
+                                                    > Delete
+                                                    </Button>
+                                                </div>
+                                            ) : (
+                                                <div style={{"display": "flex"}}>
+                                                    <p className={classes.userDataFont}>Domains:</p>
+                                                    <Button
+                                                        className={classes.editNameButton}
+                                                        onClick={(e) => setEditDomains(true)}
+                                                    > Edit
+                                                    </Button>
+                                                </div>
+                                            )}
+                                            <div className="center">
+                                                {(() => {
+                                                    let domainsConfirmed = [];
+                                                    let domainsNotConfirmed = [];
+                                                    let domainsWithDelete = [];
+                                                    let i = 0;
+                                                    for (i; i < domains.length; i++) {
+                                                        let confirmed = " (confirmed)";
+                                                        if (!domains[i].confirmed) {
+                                                            confirmed = " (unconfirmed)"
+                                                        }
+                                                        domainsConfirmed.push(<button
+                                                            className={classes.interestsButton}>{domains[i].name + confirmed}</button>);
+                                                        domainsWithDelete.push(<button
+                                                            className={classes.deleteInterestsIcon}>{domains[i].name + confirmed}</button>);
+                                                        domainsWithDelete.push(<button
+                                                            className={classes.deleteInterestsCross} value={i}
+                                                            onClick={onDeleteOldDomain}>Delete</button>);
+                                                    }
+                                                    if (deleteDomains) {
+                                                        return domainsWithDelete;
+                                                    } else {
+                                                        return domainsConfirmed;
+                                                    }
+                                                })()}
+                                            </div>
+                                            <div>
+                                                {addDomains ? (
+                                                    <div>
+                                                        <div style={{"display": "flex", "marginTop": "15px"}}>
+                                                            <p className={classes.userDataFont}> Enter an email
+                                                                address for a new domain:</p>
+                                                            <Button
+                                                                className={classes.cancelNameButton}
+                                                                onClick={onAddNewDomain}
+                                                            > Add New Domain
+                                                            </Button>
+                                                        </div>
+                                                        <input type="text" placeholder=""
+                                                               onChange={e => setInputDomainName(e.target.value)}
+                                                               onBlur={onBlurAddDomains}
+                                                               error={addDomainsError !== ""}/>
+                                                        {addDomainsError !== "" ? (
+                                                            <div className={classes.signUpRow}>
+                                                                <Typography
+                                                                    color="error">{addDomainsError}</Typography>
+                                                            </div>
+                                                        ) : null}
                                                     </div>
                                                 ) : null}
                                             </div>
                                         </div>
-                                    ) : (
-                                        <div className={classes.signUpRow}>
-                                            {editCompname ? (
-                                                <div>
-                                                    <div style={{"display": "flex"}}>
-                                                        <p className={classes.userDataFont}>Company Name:</p>
-                                                        <Button
-                                                            className={classes.cancelNameButton}
-                                                            onClick={onCancelCompname}
-                                                        > Cancel
-                                                        </Button>
-                                                        <Button
-                                                            className={classes.saveNameButton}
-                                                            onClick={onUpdateUser}
-                                                        > Save
-                                                        </Button>
-                                                    </div>
-                                                    <div>
-                                                        <TextField
-                                                            fullWidth
-                                                            value={compname}
-                                                            onChange={onChangeCompname}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <div style={{"display": "flex"}}>
-                                                        <p className={classes.userDataFont}>Company Name:</p>
-                                                        <Button
-                                                            className={classes.editNameButton}
-                                                            onClick={(e) => setEditCompname(true)}
-                                                        > Edit
-                                                        </Button>
-                                                    </div>
-                                                    <p>{compname}</p>
-                                                </div>
-                                            )}
-                                            <div>
-                                                {editDomains ? (
-                                                    <div style={{"display": "flex"}}>
-                                                        <p className={classes.userDataFont}>Domains:</p>
-                                                        <Button
-                                                            className={classes.cancelDomainsButton}
-                                                            onClick={onCancelDomains}
-                                                        > Cancel
-                                                        </Button>
-                                                        <Button
-                                                            className={classes.cancelDomains}
-                                                            onClick={changeAddDomains}
-                                                        > Add
-                                                        </Button>
-                                                        <Button
-                                                            className={classes.cancelNameButton}
-                                                            onClick={changeDeleteDomains}
-                                                        > Delete
-                                                        </Button>
-                                                    </div>
-                                                ) : (
-                                                    <div style={{"display": "flex"}}>
-                                                        <p className={classes.userDataFont}>Domains:</p>
-                                                        <Button
-                                                            className={classes.editNameButton}
-                                                            onClick={(e) => setEditDomains(true)}
-                                                        > Edit
-                                                        </Button>
-                                                    </div>
-                                                )}
-                                                <div className="center">
-                                                    {(() => {
-                                                        let domainsConfirmed = [];
-                                                        let domainsNotConfirmed = [];
-                                                        let domainsWithDelete = [];
-                                                        let i = 0;
-                                                        for (i; i < domains.length; i++) {
-                                                            let confirmed = " (confirmed)";
-                                                            if (!domains[i].confirmed) {
-                                                                confirmed = " (unconfirmed)"
-                                                            }
-                                                            domainsConfirmed.push(<button
-                                                                className={classes.interestsButton}>{domains[i].name + confirmed}</button>);
-                                                            domainsWithDelete.push(<button
-                                                                className={classes.deleteInterestsIcon}>{domains[i].name + confirmed}</button>);
-                                                            domainsWithDelete.push(<button
-                                                                className={classes.deleteInterestsCross} value={i}
-                                                                onClick={onDeleteOldDomain}>Delete</button>);
-                                                        }
-                                                        if (deleteDomains) {
-                                                            return domainsWithDelete;
-                                                        } else {
-                                                            return domainsConfirmed;
-                                                        }
-                                                    })()}
-                                                </div>
-                                                <div>
-                                                    {addDomains ? (
-                                                        <div>
-                                                            <div style={{"display": "flex", "marginTop": "15px"}}>
-                                                                <p className={classes.userDataFont}> Enter an email
-                                                                    address for a new domain:</p>
-                                                                <Button
-                                                                    className={classes.cancelNameButton}
-                                                                    onClick={onAddNewDomain}
-                                                                > Add New Domain
-                                                                </Button>
-                                                            </div>
-                                                            <input type="text" placeholder=""
-                                                                   onChange={e => setInputDomainName(e.target.value)}
-                                                                   onBlur={onBlurAddDomains}
-                                                                   error={addDomainsError !== ""}/>
-                                                            {addDomainsError !== "" ? (
-                                                                <div className={classes.signUpRow}>
-                                                                    <Typography
-                                                                        color="error">{addDomainsError}</Typography>
-                                                                </div>
-                                                            ) : null}
-                                                        </div>
-                                                    ) : null}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            }
-                        />
-                    </Grid>
+                                    </div>
+                                )}
+                            </div>
+                        }
+                    />
+                </Grid>
 
-                    {/* Interests */}
-                    <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-                        <DetailsArea
-                            title="Interests"
-                            content={
-                                <div>
-                                    {editInterests ? (
+                {/* Interests */}
+                <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
+                    <DetailsArea
+                        title="Interests"
+                        content={
+                            <div>
+                                {editInterests ? (
+                                    <div style={{"display": "flex"}}>
+                                        <p className={classes.userDataFont}>Interests:</p>
+                                        <Button
+                                            className={classes.cancelNameButton}
+                                            onClick={onCancelInterests}
+                                        > Cancel
+                                        </Button>
+                                        <Button
+                                            className={classes.cancelNameButton}
+                                            onClick={changeAddInterests}
+                                        > Add
+                                        </Button>
+                                        <Button
+                                            className={classes.cancelNameButton}
+                                            onClick={changeDeleteInterests}
+                                        > Delete
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div>
                                         <div style={{"display": "flex"}}>
                                             <p className={classes.userDataFont}>Interests:</p>
                                             <Button
-                                                className={classes.cancelNameButton}
-                                                onClick={onCancelInterests}
-                                            > Cancel
-                                            </Button>
-                                            <Button
-                                                className={classes.cancelNameButton}
-                                                onClick={changeAddInterests}
-                                            > Add
-                                            </Button>
-                                            <Button
-                                                className={classes.cancelNameButton}
-                                                onClick={changeDeleteInterests}
-                                            > Delete
+                                                className={classes.editNameButton}
+                                                onClick={(e) => setEditInterests(true)}
+                                            > Edit
                                             </Button>
                                         </div>
+                                    </div>
+                                )}
+                                <div>
+                                    {interests.length == 0 ? (
+                                        <p>No interests</p>
                                     ) : (
-                                        <div>
-                                            <div style={{"display": "flex"}}>
-                                                <p className={classes.userDataFont}>Interests:</p>
-                                                <Button
-                                                    className={classes.editNameButton}
-                                                    onClick={(e) => setEditInterests(true)}
-                                                > Edit
-                                                </Button>
-                                            </div>
+                                        <div className="center">
+                                            {(() => {
+                                                let interestsWithDelete = [];
+                                                let interestsWithoutDelete = [];
+                                                let i = 0;
+                                                for (i; i < interests.length; i++) {
+                                                    interestsWithoutDelete.push(<button
+                                                        className={classes.interestsButton}>{interests[i]}</button>);
+                                                    interestsWithDelete.push(<button
+                                                        className={classes.deleteInterestsIcon}>{interests[i]}</button>);
+                                                    interestsWithDelete.push(<button
+                                                        className={classes.deleteInterestsCross} value={i}
+                                                        onClick={deleteOldInterest}>Delete</button>);
+                                                }
+                                                if (deleteInterests) {
+                                                    return interestsWithDelete;
+                                                } else {
+                                                    return interestsWithoutDelete;
+                                                }
+                                            })()}
                                         </div>
                                     )}
-                                    <div>
-                                        {interests.length == 0 ? (
-                                            <p>No interests</p>
-                                        ) : (
-                                            <div className="center">
+                                </div>
+                                <div>
+                                    {addInterests ? (
+                                        <div>
+                                            <div>
+                                                <p className={classes.userDataFont}> Search for your interest:</p>
+                                                <input type="text" placeholder="Search" onChange={setSearchInterest}
+                                                       error={addInterestsError !== ""}/>
+                                            </div>
+                                            <div>
                                                 {(() => {
-                                                    let interestsWithDelete = [];
-                                                    let interestsWithoutDelete = [];
-                                                    let i = 0;
-                                                    for (i; i < interests.length; i++) {
-                                                        interestsWithoutDelete.push(<button
-                                                            className={classes.interestsButton}>{interests[i]}</button>);
-                                                        interestsWithDelete.push(<button
-                                                            className={classes.deleteInterestsIcon}>{interests[i]}</button>);
-                                                        interestsWithDelete.push(<button
-                                                            className={classes.deleteInterestsCross} value={i}
-                                                            onClick={deleteOldInterest}>Delete</button>);
-                                                    }
-                                                    if (deleteInterests) {
-                                                        return interestsWithDelete;
-                                                    } else {
-                                                        return interestsWithoutDelete;
+                                                    if (search.length > 0) {
+                                                        let i = 0;
+                                                        let interestsWithAdd = [];
+                                                        for (i; i < allInterests.length; i++) {
+                                                            if (allInterests[i].toLowerCase().includes(search.toLowerCase())) {
+                                                                interestsWithAdd.push(<button
+                                                                    className={classes.deleteInterestsIcon}>{allInterests[i]}</button>);
+                                                                interestsWithAdd.push(<button
+                                                                    className={classes.addInterestsIcon}
+                                                                    value={allInterests[i]}
+                                                                    onClick={addNewInterest}>Add</button>);
+                                                            }
+                                                        }
+                                                        return interestsWithAdd;
                                                     }
                                                 })()}
+                                                {addInterestsError !== "" ? (
+                                                    <div className={classes.signUpRow}>
+                                                        <Typography color="error">{addInterestsError}</Typography>
+                                                    </div>
+                                                ) : null}
                                             </div>
-                                        )}
-                                    </div>
-                                    <div>
-                                        {addInterests ? (
-                                            <div>
-                                                <div>
-                                                    <p className={classes.userDataFont}> Search for your interest:</p>
-                                                    <input type="text" placeholder="Search" onChange={setSearchInterest}
-                                                           error={addInterestsError !== ""}/>
-                                                </div>
-                                                <div>
-                                                    {(() => {
-                                                        if (search.length > 0) {
-                                                            let i = 0;
-                                                            let interestsWithAdd = [];
-                                                            for (i; i < allInterests.length; i++) {
-                                                                if (allInterests[i].toLowerCase().includes(search.toLowerCase())) {
-                                                                    interestsWithAdd.push(<button
-                                                                        className={classes.deleteInterestsIcon}>{allInterests[i]}</button>);
-                                                                    interestsWithAdd.push(<button
-                                                                        className={classes.addInterestsIcon}
-                                                                        value={allInterests[i]}
-                                                                        onClick={addNewInterest}>Add</button>);
-                                                                }
-                                                            }
-                                                            return interestsWithAdd;
-                                                        }
-                                                    })()}
-                                                    {addInterestsError !== "" ? (
-                                                        <div className={classes.signUpRow}>
-                                                            <Typography color="error">{addInterestsError}</Typography>
-                                                        </div>
-                                                    ) : null}
-                                                </div>
-                                            </div>
-                                        ) : null}
-                                    </div>
+                                        </div>
+                                    ) : null}
                                 </div>
-                            }
-                        />
-                    </Grid>
+                            </div>
+                        }
+                    />
+                </Grid>
 
-                    <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
-
-                    </Grid>
-
-
-
+                <Grid xl={6} lg={6} md={6} ms={12} xs={12} {...girdItemProps}>
 
                 </Grid>
+
+
+            </Grid>
             <Box pt={5}>
-            <Typography variant="h4" align="center" style={{color: '#fff'}}> Your Appointments </Typography>
+                <Typography variant="h4" align="center" style={{color: '#fff'}}> Your Appointments </Typography>
             </Box>
             <Box pt={5}><MyCalendarComponent user={props.user}/></Box>
 
             <Box pt={5}>
-                <Typography variant="h4" align="center" style={{color: '#fff'}}> Our Recommended Talks for you </Typography>
+                <Typography variant="h4" align="center" style={{color: '#fff'}}> Our Recommended Talks for
+                    you </Typography>
             </Box>
             <Box pt={5}></Box>
-
 
 
         </div>
