@@ -18,6 +18,7 @@ import {useRef} from "react";
 import CorporatePaperComponent from "../components/CorporatePaperComponent";
 import * as Particles from "particles.js";
 import ParticleBackground from "../components/ParticleBackground";
+import {useSelector} from "react-redux";
 
 
 /**
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function LandingPageView(props) {
-    // const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user);
     const classes = useStyles();
     const theme = useTheme();
     const informationRef = useRef();
@@ -142,7 +143,7 @@ function LandingPageView(props) {
                 </div>
 
                 <div ref={informationRef}>
-                    <InformationComponent/>
+                    <InformationComponent user={user}/>
                 </div>
 
                 <CorporatePaperComponent/>

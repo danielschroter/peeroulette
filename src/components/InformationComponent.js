@@ -34,8 +34,8 @@ function InformationComponent(props) {
 
     return (
     <div id="informationSection" className={classes.root} >
-        <ImageCard information={informations[0]} image={{zoom_1}}></ImageCard>
-        <ImageCard information={informations[1]} image={{group_1}}></ImageCard>
+        <ImageCard user={props.user} information={informations[0]} image={{zoom_1}}></ImageCard>
+        <ImageCard user={props.user} information={informations[1]} image={{group_1}}></ImageCard>
     </div>
     )
 

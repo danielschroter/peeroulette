@@ -96,38 +96,38 @@ function EventView(props) {
         setSearchInterests(interests);
     }
 
-    const handleSearchRequest = async() => {
+    const handleSearchRequest = async () => {
         setRequestDone(true);
-        if(searchInterests.length >= 0 ){
-            try{
+        if (searchInterests.length >= 0) {
+            try {
                 let resp = await AppointmentService.getRecommendedAppointments("", searchInterests);
                 let a = resp.appointments;
                 setSearchResults(a);
                 setNoSearchResults(false);
                 setRequestSuccess(true);
 
-            }catch (e) {
+            } catch (e) {
                 setNoSearchResults(true);
                 setRequestSuccess(false);
             }
         }
     }
 
-    const extractAppointments = async() => {
-        try{
+    const extractAppointments = async () => {
+        try {
             let ret = await AppointmentService.getRecommendedAppointments(user._id);
             let apps = ret.appointments;
             let mapping = ret.mapping;
             setAppointments(apps);
             setNoRecommendations(false);
-        }catch(e){
+        } catch (e) {
             console.log(e);
-            if (e == "None Available"){
+            if (e == "None Available") {
                 setNoRecommendations(true);
             }
         }
     }
-    useEffect(()=>{
+    useEffect(() => {
         extractAppointments();
 
     }, [props.user]);
@@ -176,58 +176,69 @@ function EventView(props) {
 
                                     <Grid item xs={1}>
 
-                                        <Button variant="contained" color="primary" size="large" onClick={handleSearchRequest}>Search</Button>
+                                        <Button variant="contained" color="primary" size="large"
+                                                onClick={handleSearchRequest}>Search</Button>
 
                                     </Grid>
                                 </Grid>
                                 <p>
-                                    {(requestSuccess) ? <AppointmentListComponent appointments={searchResults} user={user} noRecommendations={noSearchResults}/>
-                                        : (<div>{(requestDone) ? <AppointmentListComponent appointments={searchResults} user={user} noRecommendations={noSearchResults}/> : null}  </div>)
+                                    {(requestSuccess) ?
+                                        <AppointmentListComponent appointments={searchResults} user={user}
+                                                                  noRecommendations={noSearchResults}/>
+                                        : (<div>{(requestDone) ?
+                                            <AppointmentListComponent appointments={searchResults} user={user}
+                                                                      noRecommendations={noSearchResults}/> : null}  </div>)
                                     }
                                 </p>
-
-
                             </div>
                         </Box>
 
                         <Box pt={10}>
-                            <Grid
-                                container
-                                direction="row"
-                                justifyContent="space-around"
-                                alignItems="baseline"
-                                spacing={5}
-                            >
+                            <div>
+                                {user ? (<div>
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            justifyContent="space-around"
+                                            alignItems="baseline"
+                                            spacing={5}
+                                        >
 
-                                <Grid item xs={6}>
-                                    <Typography variant="h5" align="center" gutterBottom>
-                                        Our Recommendations
-                                    </Typography>
-                                    <Typography>Our Recommendation based on your Interests</Typography>
-                                    <AppointmentListComponent user={user} appointments={appointments} noRecommendations={noRecommendations}/>
-                                </Grid>
+                                            <Grid item xs={6}>
+                                                <Typography variant="h5" align="center" gutterBottom>
+                                                    Our Recommendations
+                                                </Typography>
+                                                <Typography>Our Recommendation based on your Interests</Typography>
+                                                <AppointmentListComponent user={user} appointments={appointments}
+                                                                          noRecommendations={noRecommendations}/>
+                                            </Grid>
 
 
-                                <Grid item xs={6}>
-                                    <Typography variant="h5" align="center" gutterBottom>
-                                        Event Calendar
-                                    </Typography>
-                                    <Typography> You can simply adjust edit your appointments by
-                                        clicking...</Typography>
-                                    <Box pt={3}>
-                                        <MyCalendarComponent user={user}/>
-                                    </Box>
-                                </Grid>
+                                            <Grid item xs={6}>
+                                                <Typography variant="h5" align="center" gutterBottom>
+                                                    Event Calendar
+                                                </Typography>
+                                                <Typography> You can simply adjust edit your appointments by
+                                                    clicking...</Typography>
+                                                <Box pt={3}>
+                                                    <MyCalendarComponent user={user}/>
+                                                </Box>
+                                            </Grid>
 
-                            </Grid>
+                                        </Grid>
+
+                                    </div>)
+
+                                    : <Typography> The functionality of creating events, event recommendations and our
+                                        calendar component is only accessible to logged in users... &nbsp;
+                                        <Button variant="contained" color="primary" size="large" href="/login">
+                                            Login
+                                        </Button></Typography>}
+                            </div>
                         </Box>
-
-
                     </div>
                 </div>
             </div>
-
-
         </div>
 // if no movies are loaded, the above useEffect should be triggered
 

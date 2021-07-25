@@ -32,9 +32,10 @@ const useStyles = makeStyles({
 
 });
 
-function ImageCard({information, image}) {
+function ImageCard(props) {
     const classes = useStyles();
-
+    const information = props.information;
+    const image = props.image;
     useEffect(()=>{
         console.log(""+ information.imageURL);
     })
@@ -69,9 +70,17 @@ function ImageCard({information, image}) {
                     <Button size="small" color="primary" href="/events">
                         Check out Events
                     </Button> :
-                    <Button size="small" color="primary" href="/wait">
-                        Get a Match
-                    </Button>
+                    <div>
+                        {props.user.username ? (<Button size="small" color="primary" href="/wait">
+                            Get a Match
+                        </Button>):
+                            <Button size="small" color="primary" href="/login">
+                                You need to sign in first...
+                            </Button>
+                        }
+
+                    </div>
+
                 }
             </CardActions>
         </Card>
