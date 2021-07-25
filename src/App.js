@@ -20,6 +20,8 @@ import AppTheme from "./theming/themetypes";
 import AppThemeOptions from "./theming/themes";
 import Snackbar from "@material-ui/core/Snackbar";
 
+import { io } from "socket.io-client";
+
 const useStyles = makeStyles((theme) => ({
   appRoot: {
     height: "100vh",

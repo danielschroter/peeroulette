@@ -145,7 +145,17 @@ function GameComponent(props) {
             let myObj = {data: data, receiverId: props.peer};
             await sendMessage("initWheel", myObj);
         }
-
+        console.log("Send Invite");
+        console.log("props.user._id: "+props.user._id);
+        console.log("props.peer: " +props.peer);
+        let myObj = {
+            senderId: props.user._id,
+            receiverId: props.peer,
+            link: "localhost:3000/call/"+props.peer,
+        }
+        console.log(myObj);
+        await sendMessage("matchInvite", (myObj));
+        console.log("Sent Invite");
     };
 
     const setSpinVariables = async (price) => {

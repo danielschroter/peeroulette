@@ -69,7 +69,7 @@ function KebabMenu(props) {
         // close this menu
         props.onClose();
         // navigate to the edit profile page
-        props.history.push("/nc");
+        props.history.push("/wait");
     };
 
     return (

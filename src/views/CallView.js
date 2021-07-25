@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {withRouter} from "react-router-dom";
 import {connect, useSelector} from "react-redux";
 
 import {makeStyles} from "@material-ui/core/styles";
 import {AppBar, IconButton, Toolbar, Typography, Container, Grid, Button, Paper} from "@material-ui/core";
 import {Jutsu, useJitsi} from 'react-jutsu'
-import ParticleBackground from "../components/ParticleBackground";
+// import ParticleBackground from "../components/ParticleBackground";
 
 import {
     login,
@@ -21,6 +21,7 @@ import PeerInformation from "../components/PeerInformation";
 import GameComponent from "../components/GameComponent";
 
 import UserService from "../services/UserService";
+// import io from "socket.io-client";
 
 
 function CallView(props) {
@@ -35,10 +36,25 @@ function CallView(props) {
     const [name, setName] = useState('')
     const [call, setCall] = useState(false)
     const [password, setPassword] = useState('')
+    // const [currentCall, setCurrentCall] = useState('')
+    // const socket = useRef();
 
+    // Socket useEffects
+    // useEffect(() => {
+        // socket.current = io("/");
 
-    useEffect(() => {
-    }, [user, props.history]);
+        // setCurrentCall('localhost:3000/call/'+match.params.id);
+        // console.log(currentCall);
+        // socket.current.emit("sendMessage", {
+        //     senderId: user._id,
+        //     receiverId: match.params.id,
+        //     text: currentCall,
+        // });
+    // }, []);
+
+    // useEffect(() => {
+    //     socket.current.emit("addUser", user._id);
+    // }, [user]);
 
     const handleClick = event => {
         event.preventDefault()
@@ -109,7 +125,7 @@ function CallView(props) {
         //   spacing="2"
         //>
         <div>
-            <ParticleBackground></ParticleBackground>
+            {/*<ParticleBackground></ParticleBackground>*/}
             <div
                 style={{
                     position: "absolute",
@@ -128,7 +144,7 @@ function CallView(props) {
                         <Paper style={{height: "100%", padding: 20}}>
                             <div style={{height: "100%"}}>
                                 {/*{error && <p>{error}</p>}*/}
-                                <div style={{height: "100%"}} id={jitsiConfig.parentNode}/>
+                                {/*<div style={{height: "100%"}} id={jitsiConfig.parentNode}/>*/}
                                 {/*<Typography variant="h1">Jitsi</Typography>*/}
                             </div>
                         </Paper>
