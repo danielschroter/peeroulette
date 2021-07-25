@@ -20,6 +20,7 @@ import {useSelector} from "react-redux";
 import MyCalendarComponent from "./MyCalendarComponent";
 import ParticleBackground from "./ParticleBackground";
 import Box from "@material-ui/core/Box";
+import CorporateFilterEmployeeComponent from "./CorporateFilterEmployeeComponent";
 
 const useStyles = makeStyles((theme) => ({
     flexCol: {
@@ -962,7 +963,7 @@ function EditProfileComponent(props) {
                                             <div>
                                                 <TextField
                                                     fullWidth
-                                                    value={<span>You belong to the company: {organization} </span>}
+                                                    value={<span>You belong to the company: {organization} &nbsp; </span>}
                                                     onChange={onChangeOrganization}
                                                 />
                                             </div>
@@ -979,9 +980,7 @@ function EditProfileComponent(props) {
                                             </div>
                                             <div>
                                                 {!organization ? (<p>It seems like your e-mail does not belong to a corporate account...</p>)
-                                                    : (<p>You belong to the company: {organization} </p>)}
-
-
+                                                    : (<p>{organization}</p>)}
                                             </div>
 
                                         </div>
@@ -998,170 +997,310 @@ function EditProfileComponent(props) {
                         title="Corporate Account"
                         content={
                             <div>
-                                {!isCorporate ? (
-                                    <div className={classes.signUpRow}>
-                                        <p className={classes.userDataFont}>Sign up for a corporate Account!</p>
+                                {organization ?
+                                    ( <div>
+                                        <p className={classes.userDataFont}>You may want to decide whether you want to be matched with members of your company only</p>
+                                        <Grid style={{display:"flex"}} alignContent="center" alignItems="center">
+                                            <Grid xs={5}>
+                                                <Typography>{organization} &nbsp;</Typography>
+                                            </Grid>
+                                            <Grid>
+                                                <CorporateFilterEmployeeComponent user={props.user}/>
+                                            </Grid></Grid>
+                                        {/*<div className={classes.signUpRow}>*/}
+                                        {/*    */}
+                                        {/*    <p className={classes.userDataFont}>As Member of an organization you cannot open a Corporate Account</p>*/}
+                                        {/*</div>*/}
+                                        {!isCorporate ? (<div></div>
+                                    ) : (
                                         <div className={classes.signUpRow}>
-                                            <TextField
-                                                label="Company Name"
-                                                fullWidth
-                                                value={compname}
-                                                onChange={onChangeCompnameSignUp}
-                                                onBlur={onBlurCompname}
-                                                error={registerDomainsError !== ""}
-                                            />
-                                        </div>
-                                        <div className={classes.signUpRow}>
-                                            <TextField
-                                                label="Domains"
-                                                fullWidth
-                                                onChange={onChangeDomainsSignUp}
-                                                value={registerDomains}
-                                                onBlur={onBlurDomains}
-                                                error={registerDomainsError === "Type in a correct domain address."}
-                                            />
-                                        </div>
-                                        <div
-                                            className={classes.signUpRow + " " + classes.signUpButtons}
-                                        >
-                                            <Button
-                                                className={classes.signUpButton}
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={onRegisterSignUp}
-                                                disabled={registerDomainsError !== ""}
-                                            >
-                                                Register
-                                            </Button>
-                                            {registerDomainsError !== "" ? (
-                                                <div className={classes.signUpRow}>
-                                                    <Typography color="error">{registerDomainsError}</Typography>
-                                                </div>
-                                            ) : null}
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className={classes.signUpRow}>
-                                        {editCompname ? (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>Company Name:</p>
-                                                    <Button
-                                                        className={classes.cancelNameButton}
-                                                        onClick={onCancelCompname}
-                                                    > Cancel
-                                                    </Button>
-                                                    <Button
-                                                        className={classes.saveNameButton}
-                                                        onClick={onUpdateUser}
-                                                    > Save
-                                                    </Button>
-                                                </div>
+                                            {editCompname ? (
                                                 <div>
-                                                    <TextField
-                                                        fullWidth
-                                                        value={compname}
-                                                        onChange={onChangeCompname}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>Company Name:</p>
-                                                    <Button
-                                                        className={classes.editNameButton}
-                                                        onClick={(e) => setEditCompname(true)}
-                                                    > Edit
-                                                    </Button>
-                                                </div>
-                                                <p>{compname}</p>
-                                            </div>
-                                        )}
-                                        <div>
-                                            {editDomains ? (
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>Domains:</p>
-                                                    <Button
-                                                        className={classes.cancelDomainsButton}
-                                                        onClick={onCancelDomains}
-                                                    > Cancel
-                                                    </Button>
-                                                    <Button
-                                                        className={classes.cancelDomains}
-                                                        onClick={changeAddDomains}
-                                                    > Add
-                                                    </Button>
-                                                    <Button
-                                                        className={classes.cancelNameButton}
-                                                        onClick={changeDeleteDomains}
-                                                    > Delete
-                                                    </Button>
+                                                    <div style={{"display": "flex"}}>
+                                                        <p className={classes.userDataFont}>Company Name:</p>
+                                                        <Button
+                                                            className={classes.cancelNameButton}
+                                                            onClick={onCancelCompname}
+                                                        > Cancel
+                                                        </Button>
+                                                        <Button
+                                                            className={classes.saveNameButton}
+                                                            onClick={onUpdateUser}
+                                                        > Save
+                                                        </Button>
+                                                    </div>
+                                                    <div>
+                                                        <TextField
+                                                            fullWidth
+                                                            value={compname}
+                                                            onChange={onChangeCompname}
+                                                        />
+                                                    </div>
                                                 </div>
                                             ) : (
-                                                <div style={{"display": "flex"}}>
-                                                    <p className={classes.userDataFont}>Domains:</p>
-                                                    <Button
-                                                        className={classes.editNameButton}
-                                                        onClick={(e) => setEditDomains(true)}
-                                                    > Edit
-                                                    </Button>
+                                                <div>
+                                                    <div style={{"display": "flex"}}>
+                                                        <p className={classes.userDataFont}>Company Name:</p>
+                                                        <Button
+                                                            className={classes.editNameButton}
+                                                            onClick={(e) => setEditCompname(true)}
+                                                        > Edit
+                                                        </Button>
+                                                    </div>
+                                                    <p>{compname}</p>
                                                 </div>
                                             )}
-                                            <div className="center">
-                                                {(() => {
-                                                    let domainsConfirmed = [];
-                                                    let domainsNotConfirmed = [];
-                                                    let domainsWithDelete = [];
-                                                    let i = 0;
-                                                    for (i; i < domains.length; i++) {
-                                                        let confirmed = " (confirmed)";
-                                                        if (!domains[i].confirmed) {
-                                                            confirmed = " (unconfirmed)"
-                                                        }
-                                                        domainsConfirmed.push(<button
-                                                            className={classes.interestsButton}>{domains[i].name + confirmed}</button>);
-                                                        domainsWithDelete.push(<button
-                                                            className={classes.deleteInterestsIcon}>{domains[i].name + confirmed}</button>);
-                                                        domainsWithDelete.push(<button
-                                                            className={classes.deleteInterestsCross} value={i}
-                                                            onClick={onDeleteOldDomain}>Delete</button>);
-                                                    }
-                                                    if (deleteDomains) {
-                                                        return domainsWithDelete;
-                                                    } else {
-                                                        return domainsConfirmed;
-                                                    }
-                                                })()}
-                                            </div>
                                             <div>
-                                                {addDomains ? (
-                                                    <div>
-                                                        <div style={{"display": "flex", "marginTop": "15px"}}>
-                                                            <p className={classes.userDataFont}> Enter an email
-                                                                address for a new domain:</p>
-                                                            <Button
-                                                                className={classes.cancelNameButton}
-                                                                onClick={onAddNewDomain}
-                                                            > Add New Domain
-                                                            </Button>
-                                                        </div>
-                                                        <input type="text" placeholder=""
-                                                               onChange={e => setInputDomainName(e.target.value)}
-                                                               onBlur={onBlurAddDomains}
-                                                               error={addDomainsError !== ""}/>
-                                                        {addDomainsError !== "" ? (
-                                                            <div className={classes.signUpRow}>
-                                                                <Typography
-                                                                    color="error">{addDomainsError}</Typography>
+                                                {editDomains ? (
+                                                    <div style={{"display": "flex"}}>
+                                                        <p className={classes.userDataFont}>Domains:</p>
+                                                        <Button
+                                                            className={classes.cancelDomainsButton}
+                                                            onClick={onCancelDomains}
+                                                        > Cancel
+                                                        </Button>
+                                                        <Button
+                                                            className={classes.cancelDomains}
+                                                            onClick={changeAddDomains}
+                                                        > Add
+                                                        </Button>
+                                                        <Button
+                                                            className={classes.cancelNameButton}
+                                                            onClick={changeDeleteDomains}
+                                                        > Delete
+                                                        </Button>
+                                                    </div>
+                                                ) : (
+                                                    <div style={{"display": "flex"}}>
+                                                        <p className={classes.userDataFont}>Domains:</p>
+                                                        <Button
+                                                            className={classes.editNameButton}
+                                                            onClick={(e) => setEditDomains(true)}
+                                                        > Edit
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                                <div className="center">
+                                                    {(() => {
+                                                        let domainsConfirmed = [];
+                                                        let domainsNotConfirmed = [];
+                                                        let domainsWithDelete = [];
+                                                        let i = 0;
+                                                        for (i; i < domains.length; i++) {
+                                                            let confirmed = " (confirmed)";
+                                                            if (!domains[i].confirmed) {
+                                                                confirmed = " (unconfirmed)"
+                                                            }
+                                                            domainsConfirmed.push(<button
+                                                                className={classes.interestsButton}>{domains[i].name + confirmed}</button>);
+                                                            domainsWithDelete.push(<button
+                                                                className={classes.deleteInterestsIcon}>{domains[i].name + confirmed}</button>);
+                                                            domainsWithDelete.push(<button
+                                                                className={classes.deleteInterestsCross} value={i}
+                                                                onClick={onDeleteOldDomain}>Delete</button>);
+                                                        }
+                                                        if (deleteDomains) {
+                                                            return domainsWithDelete;
+                                                        } else {
+                                                            return domainsConfirmed;
+                                                        }
+                                                    })()}
+                                                </div>
+                                                <div>
+                                                    {addDomains ? (
+                                                        <div>
+                                                            <div style={{"display": "flex", "marginTop": "15px"}}>
+                                                                <p className={classes.userDataFont}> Enter an email
+                                                                    address for a new domain:</p>
+                                                                <Button
+                                                                    className={classes.cancelNameButton}
+                                                                    onClick={onAddNewDomain}
+                                                                > Add New Domain
+                                                                </Button>
                                                             </div>
-                                                        ) : null}
+                                                            <input type="text" placeholder=""
+                                                                   onChange={e => setInputDomainName(e.target.value)}
+                                                                   onBlur={onBlurAddDomains}
+                                                                   error={addDomainsError !== ""}/>
+                                                            {addDomainsError !== "" ? (
+                                                                <div className={classes.signUpRow}>
+                                                                    <Typography
+                                                                        color="error">{addDomainsError}</Typography>
+                                                                </div>
+                                                            ) : null}
+                                                        </div>
+                                                    ) : null}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}</div>)
+                                    : <div>{!isCorporate ? (
+                                        <div className={classes.signUpRow}>
+                                            <p className={classes.userDataFont}>Create a new Corporate Account!</p>
+                                            <Typography>Please ensure you have the authority to do so... <br/>
+                                            You will be responsible for maintaining the account for the company...</Typography>
+                                            <div className={classes.signUpRow}>
+                                                <TextField
+                                                    label="Company Name"
+                                                    fullWidth
+                                                    value={compname}
+                                                    onChange={onChangeCompnameSignUp}
+                                                    onBlur={onBlurCompname}
+                                                    error={registerDomainsError !== ""}
+                                                />
+                                            </div>
+                                            <div className={classes.signUpRow}>
+                                                <TextField
+                                                    label="Domains"
+                                                    fullWidth
+                                                    onChange={onChangeDomainsSignUp}
+                                                    value={registerDomains}
+                                                    onBlur={onBlurDomains}
+                                                    error={registerDomainsError === "Type in a correct domain address."}
+                                                />
+                                            </div>
+                                            <div
+                                                className={classes.signUpRow + " " + classes.signUpButtons}
+                                            >
+                                                <Button
+                                                    className={classes.signUpButton}
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={onRegisterSignUp}
+                                                    disabled={registerDomainsError !== ""}
+                                                >
+                                                    Register
+                                                </Button>
+                                                {registerDomainsError !== "" ? (
+                                                    <div className={classes.signUpRow}>
+                                                        <Typography color="error">{registerDomainsError}</Typography>
                                                     </div>
                                                 ) : null}
                                             </div>
                                         </div>
-                                    </div>
-                                )}
+                                    ) : (
+                                        <div className={classes.signUpRow}>
+                                            {editCompname ? (
+                                                <div>
+                                                    <div style={{"display": "flex"}}>
+                                                        <p className={classes.userDataFont}>Company Name:</p>
+                                                        <Button
+                                                            className={classes.cancelNameButton}
+                                                            onClick={onCancelCompname}
+                                                        > Cancel
+                                                        </Button>
+                                                        <Button
+                                                            className={classes.saveNameButton}
+                                                            onClick={onUpdateUser}
+                                                        > Save
+                                                        </Button>
+                                                    </div>
+                                                    <div>
+                                                        <TextField
+                                                            fullWidth
+                                                            value={compname}
+                                                            onChange={onChangeCompname}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <div style={{"display": "flex"}}>
+                                                        <p className={classes.userDataFont}>Company Name:</p>
+                                                        <Button
+                                                            className={classes.editNameButton}
+                                                            onClick={(e) => setEditCompname(true)}
+                                                        > Edit
+                                                        </Button>
+                                                    </div>
+                                                    <p>{compname}</p>
+                                                </div>
+                                            )}
+                                            <div>
+                                                {editDomains ? (
+                                                    <div style={{"display": "flex"}}>
+                                                        <p className={classes.userDataFont}>Domains:</p>
+                                                        <Button
+                                                            className={classes.cancelDomainsButton}
+                                                            onClick={onCancelDomains}
+                                                        > Cancel
+                                                        </Button>
+                                                        <Button
+                                                            className={classes.cancelDomains}
+                                                            onClick={changeAddDomains}
+                                                        > Add
+                                                        </Button>
+                                                        <Button
+                                                            className={classes.cancelNameButton}
+                                                            onClick={changeDeleteDomains}
+                                                        > Delete
+                                                        </Button>
+                                                    </div>
+                                                ) : (
+                                                    <div style={{"display": "flex"}}>
+                                                        <p className={classes.userDataFont}>Domains:</p>
+                                                        <Button
+                                                            className={classes.editNameButton}
+                                                            onClick={(e) => setEditDomains(true)}
+                                                        > Edit
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                                <div className="center">
+                                                    {(() => {
+                                                        let domainsConfirmed = [];
+                                                        let domainsNotConfirmed = [];
+                                                        let domainsWithDelete = [];
+                                                        let i = 0;
+                                                        for (i; i < domains.length; i++) {
+                                                            let confirmed = " (confirmed)";
+                                                            if (!domains[i].confirmed) {
+                                                                confirmed = " (unconfirmed)"
+                                                            }
+                                                            domainsConfirmed.push(<button
+                                                                className={classes.interestsButton}>{domains[i].name + confirmed}</button>);
+                                                            domainsWithDelete.push(<button
+                                                                className={classes.deleteInterestsIcon}>{domains[i].name + confirmed}</button>);
+                                                            domainsWithDelete.push(<button
+                                                                className={classes.deleteInterestsCross} value={i}
+                                                                onClick={onDeleteOldDomain}>Delete</button>);
+                                                        }
+                                                        if (deleteDomains) {
+                                                            return domainsWithDelete;
+                                                        } else {
+                                                            return domainsConfirmed;
+                                                        }
+                                                    })()}
+                                                </div>
+                                                <div>
+                                                    {addDomains ? (
+                                                        <div>
+                                                            <div style={{"display": "flex", "marginTop": "15px"}}>
+                                                                <p className={classes.userDataFont}> Enter an email
+                                                                    address for a new domain:</p>
+                                                                <Button
+                                                                    className={classes.cancelNameButton}
+                                                                    onClick={onAddNewDomain}
+                                                                > Add New Domain
+                                                                </Button>
+                                                            </div>
+                                                            <input type="text" placeholder=""
+                                                                   onChange={e => setInputDomainName(e.target.value)}
+                                                                   onBlur={onBlurAddDomains}
+                                                                   error={addDomainsError !== ""}/>
+                                                            {addDomainsError !== "" ? (
+                                                                <div className={classes.signUpRow}>
+                                                                    <Typography
+                                                                        color="error">{addDomainsError}</Typography>
+                                                                </div>
+                                                            ) : null}
+                                                        </div>
+                                                    ) : null}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}</div>}
+
                             </div>
                         }
                     />
@@ -1277,16 +1416,16 @@ function EditProfileComponent(props) {
 
 
             </Grid>
-            <Box pt={5}>
-                <Typography variant="h4" align="center" style={{color: '#fff'}}> Your Appointments </Typography>
-            </Box>
-            <Box pt={5}><MyCalendarComponent user={props.user}/></Box>
+            {/*<Box pt={5}>*/}
+            {/*    <Typography variant="h4" align="center" style={{color: '#fff'}}> Your Appointments </Typography>*/}
+            {/*</Box>*/}
+            {/*<Box pt={5}><MyCalendarComponent user={props.user}/></Box>*/}
 
-            <Box pt={5}>
-                <Typography variant="h4" align="center" style={{color: '#fff'}}> Our Recommended Talks for
-                    you </Typography>
-            </Box>
-            <Box pt={5}></Box>
+            {/*<Box pt={5}>*/}
+            {/*    <Typography variant="h4" align="center" style={{color: '#fff'}}> Our Recommended Talks for*/}
+            {/*        you </Typography>*/}
+            {/*</Box>*/}
+            {/*<Box pt={5}></Box>*/}
 
 
         </div>
