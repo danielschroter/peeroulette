@@ -13,6 +13,7 @@ import DetailsArea from "../components/DetailsArea";
 import PropTypes from "prop-types";
 import UserService from "../services/UserService";
 import MatchService from "../services/MatchService";
+import ParticleBackground from "../components/ParticleBackground";
 
 import { io } from "socket.io-client";
 
@@ -293,6 +294,7 @@ function MessengerView(props) {
 			<div className={classes.pageArea + " " + classes.title}>
 				<CustomTextField
 					value={"Messenger"}
+					style={{color: "#fff"}}
 					furtherProps={{
 						fullWidth: true,
 					}}
