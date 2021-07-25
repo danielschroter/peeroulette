@@ -17,6 +17,10 @@ export default class UserService {
         return "http://localhost:4000/interests";
     }
 
+    static baseURL_icebreakerQuestions() {
+        return "http://localhost:4000/ice_questions";
+    }
+
     static baseURL_domain() {
         return "http://localhost:4000/domain";
     }
@@ -306,6 +310,20 @@ export default class UserService {
         return new Promise(async (resolve, reject) => {
             HttpService.get(
                 this.baseURL_interests(),
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getIcebreakerQuestions() {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                this.baseURL_icebreakerQuestions(),
                 function (data) {
                     resolve(data);
                 },

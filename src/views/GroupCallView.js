@@ -19,7 +19,6 @@ import {
 } from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
 import GameComponent from "../components/GameComponent";
-import IcebreakerQuestionComponent from "../components/IcebreakerQuestionComponent";
 
 import UserService from "../services/UserService";
 
@@ -123,16 +122,7 @@ function CallView(props) {
 
                 <Grid container spacing={3} style={{height: "100%", padding: 20}}>
                     <Grid item xs>
-                        <PeerInformation
-                            user={user}
-                            onGetUser={onGetUser}
-                            peer={match.params.id}
-                        />
-                        <GameComponent
-                            user={user}
-                            onGetUser={onGetUser}
-                            peer={match.params.id}
-                        />
+                        {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
                     </Grid>
                     <Grid item xs={6} style={{height: "100%"}}>
                         <Paper style={{height: "100%", padding: 20}}>
@@ -144,19 +134,12 @@ function CallView(props) {
                         </Paper>
                     </Grid>
                     <Grid item xs>
-                        {/*}
-                        style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>*/}
-                        <IcebreakerQuestionComponent
-                            questionTitle={"Icebreaker Questions"}
-                            user={user}
-                            peer={match.params.id}
-                        />
+
                     </Grid>
+
+
                 </Grid>
+
             </div>
         </div>
     );

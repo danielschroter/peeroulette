@@ -9,6 +9,8 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import MessageIcon from "@material-ui/icons/Message";
+import Group from "@material-ui/icons/Group";
+import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 
 import KebabMenu from "./KebabMenu";
 
@@ -47,7 +49,7 @@ function Header(props) {
                 onClose={() => setMenuAnchor(null)}
             />
             <Toolbar className={classes.toolbar}>
-                <LocalMoviesIcon
+                <InsertEmoticonIcon
                     fontSize="large"
                     onClick={() => props.history.push("/")}
                 />
@@ -61,11 +63,8 @@ function Header(props) {
                 <IconButton href="/messenger" color="inherit">
                     <MessageIcon />
                 </IconButton>
-                <IconButton onClick={onClickGithub} color="inherit">
-                    <GitHubIcon />
-                </IconButton>
-                <IconButton onClick={props.toggletheme} color="inherit">
-                    {props.darkmode ? <WbSunnyIcon /> : <Brightness3Icon />}
+                <IconButton href="/events" color="inherit">
+                    <Group />
                 </IconButton>
                 <IconButton
                     onClick={(event) => setMenuAnchor(event.currentTarget)}
