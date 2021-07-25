@@ -19,6 +19,7 @@ import CustomTextField from "./CustomTextField";
 import DetailsArea from "./DetailsArea";
 import PropTypes from "prop-types";
 import UserService from "../services/UserService";
+import MatchDBService from "../services/MatchDBService";
 import CallView from "../components/JC";
 import {connect, useSelector} from "react-redux";
 
@@ -193,16 +194,30 @@ function NewCallComponent(props) {
           });
   };
 
-  // const addMatch = () => {
-  //   props.onMatch(_id);
-  // }
+  const addMatchDB = async () => {
+      if (!props.user) {
+          return;
+      }
+
+      // UserService.getUser(props.user._id).then(function(userBackend) {
+      let uID = await props.user._id;
+      let mID = await _id
+      if(mID != ""){
+          await MatchDBService.addMatchDB(uID, mID).then(function(userBackend) {
+            console.log("written match to db: "+uID+" & "+mID);
+          }).catch(function(error){
+                //400+ response codes
+                console.log("error in writing match to db");
+          });
+      }
+  };
 
   // const curPage = props.page;
 
   useEffect(() => {
       extractUser();
+      addMatchDB();
 
-      // addMatch();
       // extractInterests();
       // console.log(props);
   }, [props.user, page]);

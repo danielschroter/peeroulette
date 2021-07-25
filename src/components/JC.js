@@ -149,23 +149,31 @@ function CallView(props) {
       props.dispatch(getUser(id));
   };
 
+  const [test, setTest] = useState(0)
+  const [roomName, setRoomName] = useState('')
   const [room, setRoom] = useState('')
   const [name, setName] = useState('')
   const [call, setCall] = useState(false)
   const [password, setPassword] = useState('')
+  const [jitsiConfig, setJitsiConfig] = useState('')
+  var roomArray = [];
+  var rN = "";
 
   const handleClick = event => {
       event.preventDefault()
       if (room && name) setCall(true)
   }
 
+  const refreshCall = async () => {
+    let uID = await user._id;
+    let mID = await matchid;
+    roomArray = [user._id, matchid].sort();
+    rN = roomArray[0] + roomArray[1];
+    console.log(rN +": "+ roomArray.length + " mit " +  roomArray[0] + " und " + roomArray[1]);
+    setRoomName(rN)
+    console.log("Statename: "+roomName);
 
-  const roomArray = [user._id, matchid];
-  if(roomArray.length == 2){
-    roomArray.sort();
-    var roomName = roomArray[0] + roomArray[1];
-    console.log(roomName +": "+ roomArray.length + " mit " +  roomArray[0] + " und " + roomArray[1]);
-    var jitsiConfig = {
+    setJitsiConfig({
         roomName: roomName,
         subject: 'peeroulette',
         password: 'asamplepasswordforpeeroulette',
@@ -188,16 +196,14 @@ function CallView(props) {
             SHOW_JITSI_WATERMARK: false,
             GENERATE_ROOMNAMES_ON_WELCOME_PAGE: false,
         },
-    };
-    // var jiframe = "https://meet.jit.si/" + roomName + "#jitsi_meet_external_api_id=0&config.startWithAudioMuted=false&config.enableWelcomePage=false&interfaceConfig.DEFAULT_REMOTE_DISPLAY_NAME=%22Fellow%20Peer%22&interfaceConfig.DISPLAY_WELCOME_FOOTER=false&interfaceConfig.DISPLAY_WELCOME_PAGE_ADDITIONAL_CARD=false&interfaceConfig.DISPLAY_WELCOME_PAGE_CONTENT=false&interfaceConfig.DISPLAY_WELCOME_PAGE_TOOLBAR_ADDITIONAL_CONTENT=false&interfaceConfig.RECENT_LIST_ENABLED=false&interfaceConfig.SETTINGS_SECTIONS=%5B%5D&interfaceConfig.SHARING_FEATURES=%5B%5D&interfaceConfig.SHOW_JITSI_WATERMARK=false&interfaceConfig.GENERATE_ROOMNAMES_ON_WELCOME_PAGE=false&appData.localStorageContent=null";
-    // var jallow = "camera; microphone; display-capture; autoplay; clipboard-write"
-    // var jname = "jitsiConferenceFrame0"
-    // var jid = "jitsiConferenceFrame0"
-    // var jallowfullscreen = "false"
+    })
   }
 
   var { loading, error, jitsi } = useJitsi(jitsiConfig);
 
+  useEffect(() => {
+      refreshCall()
+  }, [props, roomName]);
 
   return (
     <div style={{height:"100%", width:"100%"}}>{jitsiConfig.roomName}
@@ -205,6 +211,14 @@ function CallView(props) {
         <iframe allow={jallow} src={jiframe} name={jname} id={jid} jallowfullscreen={jallowfullscreen} style={{height: '100%'},{width: '100%'},{border: "0px"}}></iframe>
       */}
       <div  style={{height:"100%"}} id={jitsiConfig.parentNode} />
+      <Button
+        variant = "contained"
+        color = "primary"
+        // onClick={() => { window.location.href = "/wait/"+(curPage+1); }}
+        onClick={() => setTest(test + 1)}
+      >
+        +1
+      </Button>
     </div>
   );
 }
