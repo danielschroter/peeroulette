@@ -1,25 +1,29 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Typography, Container } from "@material-ui/core";
+import { Button, Typography, Container, Avatar } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import MatchService from "../services/MatchService";
 import UserService from "../services/UserService";
+import { format } from "timeago.js";
 
 const useStyles = makeStyles((theme) => ({
-	loginButtons: {
-		display: "flex",
-		justifyContent: "space-between",
+	avatar: {
+		marginRight: theme.spacing(1),
 	},
-	loginButton: {
-		margin: "auto",
+	deleteMatchButton: {
+		marginRight: theme.spacing(1),
+		backgroundColor: "#cc0000",
+		marginTop: "12px",
+		color: "#ffffff",
 	},
 }));
 
-function LastMatches({ lastMatch, currentId, setCurrentChat }) {
+function LastMatches({ lastMatch, currentId, setCurrentChat, setLastMatches, setMatchesUpdated }) {
 	const classes = useStyles();
 
 	const [matchName, setMatchName] = React.useState("");
 	const [matchUserId, setMatchUserId] = React.useState("");
+	const [matchDeleted, setMatchDeleted] = React.useState(false);
 
 	// const extractMatches = async () => {
 	// 	try {
@@ -30,7 +34,7 @@ function LastMatches({ lastMatch, currentId, setCurrentChat }) {
 	// 	}
 	// };
 
-	const extractUsers = async () => {
+	const extractMatchingPartner = async () => {
 		if (lastMatch.usera === currentId) {
 			try {
 				const res = await UserService.getUser(lastMatch.userb);
@@ -55,10 +59,16 @@ function LastMatches({ lastMatch, currentId, setCurrentChat }) {
 	// }, [currentId]);
 
 	useEffect(() => {
-		extractUsers();
-	}, [currentId]);
+		extractMatchingPartner();
+	}, [currentId, matchDeleted]);
 
 	const handleClick = async (currentId, matchID) => {
+		try {
+			const res = await UserService.getConversation(matchID, currentId);
+			setCurrentChat(res);
+		} catch (err) {
+			console.log(err);
+		}
 		try {
 			const res = await UserService.addConversation(matchID, currentId);
 			setCurrentChat(res);
@@ -67,11 +77,42 @@ function LastMatches({ lastMatch, currentId, setCurrentChat }) {
 		}
 	};
 
+	const handleDelete = async (lastMatch) => {
+		try {
+			await MatchService.deleteMatch(lastMatch._id);
+		} catch (err) {
+			console.log(err);
+		}
+		try {
+			const res = await MatchService.getLastMatches(currentId);
+			setLastMatches(res);
+			setMatchesUpdated(true);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 	return (
 		<div>
 			<Container maxWidth="sm">
-				<Typography variant="h4" align="center" gutterBottom>
-					<div onClick={() => handleClick(currentId, matchUserId)}>{matchName}</div>
+				<Typography variant="h6" align="left" gutterBottom>
+					<div onClick={() => handleClick(currentId, matchUserId)}>
+						<Avatar className={classes.avatar}>
+							{matchName ? matchName[0] : ""}
+						</Avatar>
+						{matchName} {format(lastMatch.createdAt)}
+					</div>
+					<div>
+					<Button
+                            onClick={() => handleDelete(lastMatch)}
+                            variant="contained"
+                            color="primary"
+                            className={classes.deleteMatchButton}
+                        >
+                            Delete
+                    </Button>
+					</div>
+					
 				</Typography>
 			</Container>
 		</div>

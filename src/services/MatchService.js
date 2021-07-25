@@ -218,6 +218,24 @@ export default class UserService {
         });
     }
 
+    static deleteMatch(matchId) {
+      return new Promise((resolve, reject) => {
+        HttpService.remove(
+          `${UserService.baseURL_match()}/${matchId}`,
+          function (data) {
+            if (data.message !== undefined) {
+              resolve(data.message);
+            } else {
+              reject("Error while deleting match");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+        );
+      });
+    }
+
     // Get last matches of user for Messenger View
     static getLastMatches(userId) {
       return new Promise(async (resolve, reject) => {

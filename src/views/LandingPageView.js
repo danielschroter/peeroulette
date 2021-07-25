@@ -18,6 +18,7 @@ import {useRef} from "react";
 import CorporatePaperComponent from "../components/CorporatePaperComponent";
 import * as Particles from "particles.js";
 import ParticleBackground from "../components/ParticleBackground";
+import {useSelector} from "react-redux";
 
 
 /**
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function LandingPageView(props) {
-    // const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user);
     const classes = useStyles();
     const theme = useTheme();
     const informationRef = useRef();
@@ -119,14 +120,14 @@ function LandingPageView(props) {
                                 </Typography>
 
                                 <div style={{flex: 1}}>
-                                    {/*<Button size="large" variant="outlined" color="primary" href="/movies">
-                                        Look at some Movies
-                                    </Button>*/}
                                     <Button size="large" variant="outlined" color="primary" href="/tryout">
                                         Try it out!
                                     </Button>
-                                    <Button size="large" variant="outlined" color="primary" href="/corporate">
-                                        Corporates
+                                    <Button size="large" variant="outlined" color="primary" href="/register">
+                                        Register
+                                    </Button>
+                                    <Button size="large" variant="outlined" color="primary" href="/login">
+                                        Sign In
                                     </Button>
                                 </div>
 
@@ -145,7 +146,7 @@ function LandingPageView(props) {
                 </div>
 
                 <div ref={informationRef}>
-                    <InformationComponent/>
+                    <InformationComponent user={user}/>
                 </div>
 
                 <CorporatePaperComponent/>

@@ -22,9 +22,9 @@ const informations = [
         check: true,
     },
     {
-        title: "Group Talks",
+        title: "Group Events",
         imageUrl: zoom_1,
-        description:"Join Talks with about interesting topics and share your thoughts with like minded People. ",
+        description:"Join Talks about interesting topics and share your thoughts with like minded People... Visit our Event Section!",
         check: false,
     },
 ]
@@ -34,8 +34,8 @@ function InformationComponent(props) {
 
     return (
     <div id="informationSection" className={classes.root} >
-        <ImageCard information={informations[0]} image={{zoom_1}}></ImageCard>
-        <ImageCard information={informations[1]} image={{group_1}}></ImageCard>
+        <ImageCard user={props.user} information={informations[0]} image={{zoom_1}}></ImageCard>
+        <ImageCard user={props.user} information={informations[1]} image={{group_1}}></ImageCard>
     </div>
     )
 

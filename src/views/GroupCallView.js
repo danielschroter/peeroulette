@@ -19,10 +19,8 @@ import {
 } from "../redux/actions";
 import PeerInformation from "../components/PeerInformation";
 import GameComponent from "../components/GameComponent";
-import IcebreakerQuestionComponent from "../components/IcebreakerQuestionComponent";
 
 import UserService from "../services/UserService";
-import MatchDBService from "../services/MatchDBService";
 
 
 function CallView(props) {
@@ -40,8 +38,7 @@ function CallView(props) {
 
 
     useEffect(() => {
-        addMatchDB();
-    }, []);
+    }, [user, props.history]);
 
     const handleClick = event => {
         event.preventDefault()
@@ -50,7 +47,6 @@ function CallView(props) {
 
     let {match} = props;
     console.log(match);
-    console.log("match: "+match)
 
     let roomArray = [user._id, match.params.id];
     console.log(roomArray);
@@ -58,26 +54,6 @@ function CallView(props) {
     console.log(roomArray);
     let roomName = roomArray[0] + roomArray[1];
     console.log(roomName);
-
-    const addMatchDB = async () => {
-        console.log("writetodb");
-        if (!match.params.id) {
-            return;
-        }
-
-        // UserService.getUser(props.user._id).then(function(userBackend) {
-        let uID = await match.params.id;
-        let mID = await user._id;
-        console.log("writetodb: "+uID+" "+mID);
-        if(mID != ""){
-            await MatchDBService.addMatchDB(uID, mID).then(function(userBackend) {
-                console.log("written match to db: "+uID+" & "+mID);
-            }).catch(function(error){
-                //400+ response codes
-                console.log("error in writing match to db");
-            });
-        }
-    };
 
 
     const jitsiConfig = {
@@ -146,16 +122,7 @@ function CallView(props) {
 
                 <Grid container spacing={3} style={{height: "100%", padding: 20}}>
                     <Grid item xs>
-                        <PeerInformation
-                            user={user}
-                            onGetUser={onGetUser}
-                            peer={match.params.id}
-                        />
-                        <GameComponent
-                            user={user}
-                            onGetUser={onGetUser}
-                            peer={match.params.id}
-                        />
+                        {/*<Paper style={{ padding: 20 }}>xs</Paper>*/}
                     </Grid>
                     <Grid item xs={6} style={{height: "100%"}}>
                         <Paper style={{height: "100%", padding: 20}}>
@@ -167,19 +134,12 @@ function CallView(props) {
                         </Paper>
                     </Grid>
                     <Grid item xs>
-                        {/*}
-                        style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>*/}
-                        <IcebreakerQuestionComponent
-                            questionTitle={"Icebreaker Questions"}
-                            user={user}
-                            peer={match.params.id}
-                        />
+
                     </Grid>
+
+
                 </Grid>
+
             </div>
         </div>
     );
