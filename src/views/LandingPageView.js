@@ -119,11 +119,11 @@ function LandingPageView(props) {
                                 </Typography>
 
                                 <div style={{flex: 1}}>
-                                    <Button size="large" variant="outlined" color="primary" href="/movies">
-                                        Look at some Movies
+                                    <Button size="large" variant="outlined" color="primary" href="/register">
+                                        Register
                                     </Button>
-                                    <Button size="large" variant="outlined" color="primary" href="/corporate">
-                                        Corporates
+                                    <Button size="large" variant="outlined" color="primary" href="/login">
+                                        Sign In
                                     </Button>
                                 </div>
 

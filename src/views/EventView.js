@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
 );
 
 
-function CorporateSignUpView(props) {
+function EventView(props) {
     const user = useSelector((state) => state.user.user);
     const classes = useStyles();
     const onSwitchEmployeeFilter = (id) => {
@@ -234,4 +234,4 @@ function CorporateSignUpView(props) {
     );
 }
 
-export default connect()(withRouter(CorporateSignUpView));
+export default connect()(withRouter(EventView));

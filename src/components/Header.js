@@ -8,6 +8,8 @@ import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
+import Group from "@material-ui/icons/Group";
+import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 
 import KebabMenu from "./KebabMenu";
 
@@ -46,7 +48,7 @@ function Header(props) {
                 onClose={() => setMenuAnchor(null)}
             />
             <Toolbar className={classes.toolbar}>
-                <LocalMoviesIcon
+                <InsertEmoticonIcon
                     fontSize="large"
                     onClick={() => props.history.push("/")}
                 />
@@ -57,6 +59,9 @@ function Header(props) {
                 >
                     peeroulette
                 </Typography>
+                <IconButton href="/events" color="inherit">
+                    <Group />
+                </IconButton>
                 <IconButton onClick={onClickGithub} color="inherit">
                     <GitHubIcon />
                 </IconButton>

@@ -65,9 +65,14 @@ function ImageCard({information, image}) {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button size="small" color="primary">
-                    Match
-                </Button>
+                {!information.check ?
+                    <Button size="small" color="primary" href="/events">
+                        Check out Events
+                    </Button> :
+                    <Button size="small" color="primary" href="/wait">
+                        Get a Match
+                    </Button>
+                }
             </CardActions>
         </Card>
     );

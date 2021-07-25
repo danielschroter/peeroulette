@@ -3,7 +3,7 @@ import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
-import CorporateSignUpView from "./views/CorporateSignUpView";
+import EventView from "./views/EventView";
 import CallView from "./views/CallView";
 import WaitingView from "./views/WaitingView";
 import EditProfileView from "./views/EditProfileView";
@@ -20,8 +20,8 @@ const routes = [
     exact: true,
   },
   {
-    path: "/corporate",
-    component: CorporateSignUpView,
+    path: "/events",
+    component: EventView,
     exact: true,
   },
   {
