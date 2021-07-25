@@ -215,8 +215,7 @@ function GameComponent(props) {
             <div className="myContent">Example</div>
         </AutoScale>
     */}
-
-
+    
     return (
         <div>
             <Paper elevation={0} style={{
@@ -298,19 +297,10 @@ function GameComponent(props) {
     );
 }
 
-// gameValues is Array which stores messages that are sent between users
-// gameValues[ userBet, blockSpin, ... ]
-
 // attributes of props and their type
 GameComponent.propTypes = {
     user: PropTypes.object,
     onGetUser: PropTypes.func,
-    gameValues: PropTypes.array,
-    userBet: PropTypes.array,
-    peerBet: PropTypes.array,
-    commonInterests: PropTypes.array,
-    blockSpin: PropTypes.array,
-    allFaceboookInterests: PropTypes.array,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
