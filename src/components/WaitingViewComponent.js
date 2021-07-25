@@ -163,6 +163,8 @@ function PeerInformation(props) {
     const [university, setUniversity] = React.useState("");
     const [organization, setOrganization] = React.useState("");
 
+    const [refresh, setRefresh] = React.useState(0);
+
     //interests
     const [interests, setInterests] = React.useState([""]);
     const [allInterests, setAllInterests] = React.useState([]);
@@ -174,15 +176,13 @@ function PeerInformation(props) {
     // identify coperate accounts
     const [corporate_id, setCorporate_id] = React.useState("");
     const [isCorporate, setIsCorporate] = React.useState(false);
-
+    const [curPage, setCurPage] = React.useState(0);
     // corporate Data
     const [compname, setCompname] = React.useState("");
     const [editCompname, setEditCompname] = React.useState(false);
     const [domains, setDomains] = React.useState("");
     const [editDomains, setEditDomains] = React.useState(false);
     const bcrypt = require("bcryptjs");
-
-    const curPage = props.page;
 
     // extract all the user data from the backend
     const extractUser = () => {
@@ -220,12 +220,27 @@ function PeerInformation(props) {
             });
     };
 
-
+    const userIsOnline = async () => {
+        // console.log("isOnline");
+        if (!props.user) {
+            return;
+        }
+        let uID = await props.user._id;
+        // console.log("u Online: "+uID);
+        if(uID != ""){
+            await UserService.onlineUser(uID).then(function(userBackend) {
+                // console.log("written online to db: "+uID+" & "+uID);
+            }).catch(function(error){
+                //400+ response codes
+                // console.log("error in writing online to db");
+            });
+        }
+    };
 
     useEffect(() => {
         extractUser();
-
-    }, [props.user, curPage]);
+        userIsOnline();
+    }, [props.user, curPage, refresh]);
 
     console.log({_id});
     console.log(username);
@@ -236,6 +251,18 @@ function PeerInformation(props) {
         <Paper style={{ padding: 20 }}>
             <Typography variant="h4">No Match found</Typography>
             <Typography variant="h5">Sorry, we couldn't find a fitting match for you. Please try again later or try to add more Interests in your Profile!</Typography>
+            <Button
+                variant="contained"
+                color="primary"
+                className={classes.deleteProfileButton}
+                // onClick={() => { window.location.href = "/wait/"+(curPage+1); }}
+                onClick={() => {
+                    setRefresh(refresh+1);
+                    setCurPage(0)
+                }}
+            >
+                Retry
+            </Button>
         </Paper>
       );
     }else{
@@ -259,7 +286,7 @@ function PeerInformation(props) {
                 variant="contained"
                 color="primary"
                 className={classes.deleteProfileButton}
-                onClick={() => props.history.push("/call/"+_id)}
+                onClick={() => props.history.push("/lobby/"+_id)}
             >
               Start call
             </Button>
@@ -268,7 +295,8 @@ function PeerInformation(props) {
                 color="primary"
                 className={classes.deleteProfileButton}
                 // onClick={() => { window.location.href = "/wait/"+(curPage+1); }}
-                onClick={() => props.history.push("/wait/"+(curPage+1))}
+                // onClick={() => props.history.push("/wait/"+(curPage+1))}
+                onClick={() => setCurPage(curPage+1)}
             >
               Look for a new Match
             </Button>

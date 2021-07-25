@@ -233,6 +233,38 @@ export default class UserService {
         });
     }
 
+    static onlineUser(uID) {
+        console.log(`${UserService.baseURL_user()}/${uID}/online`)
+        return new Promise((resolve, reject) => {
+            HttpService.put(
+                `${UserService.baseURL_user()}/${uID}/online`,
+                {online_until: Date.now()},
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static offlineUser(uID) {
+        console.log(`${UserService.baseURL_user()}/${uID}/offline`)
+        return new Promise((resolve, reject) => {
+            HttpService.put(
+                `${UserService.baseURL_user()}/${uID}/offline`,
+                {online_until: Date.now()},
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static updateOrganization(organization) {
         return new Promise((resolve, reject) => {
             HttpService.put(

@@ -54,12 +54,28 @@ function PeerInformation(props) {
         });
     };
 
+    const userIsOffline = async () => {
+        console.log("isOnline");
+        if (!props.user) {
+            return;
+        }
+        let uID = await props.user._id;
+        console.log("u Online: "+uID);
+        if(uID != ""){
+            await UserService.offlineUser(uID).then(function(userBackend) {
+                console.log("written online to db: "+uID+" & "+uID);
+            }).catch(function(error){
+                //400+ response codes
+                console.log("error in writing online to db");
+            });
+        }
+    };
+
 
     useEffect(() => {
         extractUser();
-
+        userIsOffline();
     }, [props.user]);
-
 
     return (
         <div>

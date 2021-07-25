@@ -22,4 +22,24 @@ export default class MatchDBService {
       );
     });
   }
+
+  static getCurrent(id) {
+    console.log(`${MatchDBService.baseURL()}/current/${id}`);
+    return new Promise(async (resolve, reject) => {
+      HttpService.get(
+          `${MatchDBService.baseURL()}/current/${id}`,
+          function (data) {
+            if (data !== undefined || Object.keys(data).length !== 0) {
+              resolve(data);
+            } else {
+              reject("Error while retrieving current Match");
+            }
+          },
+          function (textStatus) {
+            reject(textStatus);
+          }
+      );
+    });
+  }
 }
+

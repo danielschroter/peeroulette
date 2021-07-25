@@ -6,8 +6,8 @@ import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import CorporateSignUpView from "./views/CorporateSignUpView";
 import CallView from "./views/CallView";
-import NewCallView from "./views/NewCallView";
 import WaitingView from "./views/WaitingView";
+import LobbyView from "./views/LobbyView";
 import EditProfileView from "./views/EditProfileView";
 import ConfirmView from "./views/ConfirmView";
 import MessengerView from "./views/MessengerView";
@@ -73,8 +73,8 @@ const routes = [
       component: WaitingView,
   },
   {
-      path: "/nc",
-      component: NewCallView,
+    path: "/lobby/:id",
+    component: LobbyView,
   },
   {
     path: "/messenger",
