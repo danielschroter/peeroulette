@@ -39,36 +39,14 @@ function AppointmentListComponent(props) {
 
     const [orderBy, setOrderBy] = React.useState();
     const [order, setOrder] = React.useState();
-    const [appointments, setAppointments] = React.useState([]);
-    const [noRecommendations, setNoRecommendations] = React.useState(false);
-
-    const extractAppointments = async() => {
-        try{
-            let ret = await AppointmentService.getRecommendedAppointments(props.user._id, []);
-            let apps = ret.appointments;
-            let mapping = ret.mapping;
-            setAppointments(apps);
-            setNoRecommendations(false);
-        }catch(e){
-            console.log(e);
-            if (e == "None Available"){
-                setNoRecommendations(true);
-            }
-        }
-    }
-    useEffect(()=>{
-
-        extractAppointments();
 
 
-
-    }, [props.user]);
 
 
     return (
         <div>
             <AppointmentListRowHeaderComponent/>
-            {noRecommendations ?
+            {props.noRecommendations ?
                 (<div><Box pt={3}>
                     <Paper style={{backgroundColor: "rgba(255,255,255,0.79)"}}>
                         <Box p={3}>
@@ -77,7 +55,7 @@ function AppointmentListComponent(props) {
                     </Paper>
                 </Box></div>)
                 :
-                <div>{appointments.map(elem => <AppointmentListRowComponent elem={elem}/>)}</div>}
+                <div>{props.appointments.map(elem => <AppointmentListRowComponent elem={elem}/>)}</div>}
 
         </div>
     );

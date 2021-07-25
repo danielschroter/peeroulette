@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {withRouter} from "react-router-dom";
 import {connect, useSelector} from "react-redux";
 
@@ -37,7 +37,7 @@ import AppointmentService from "../services/AppointmentService";
 
 const useStyles = makeStyles((theme) => ({
         root: {
-            minHeight: '100vh',
+            minHeight: '150vh',
             backgroundImage: `url(${background})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
             // left: 0,
             // right: 0,
             // opacity: 0.5,
-            height: '102%',
+            height: '160%',
             width: '100%',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
         },
@@ -85,17 +85,53 @@ function CorporateSignUpView(props) {
 
     const [searchInterests, setSearchInterests] = React.useState([]);
     const [searchResults, setSearchResults] = React.useState([]);
+    const [appointments, setAppointments] = React.useState([]);
+    const [noRecommendations, setNoRecommendations] = React.useState(false);
+    const [noSearchResults, setNoSearchResults] = React.useState(false);
+    const [requestSuccess, setRequestSuccess] = React.useState(false);
+    const [requestDone, setRequestDone] = React.useState(false);
+
 
     const onChangeSearchInterests = (interests) => {
         setSearchInterests(interests);
     }
 
     const handleSearchRequest = async() => {
+        setRequestDone(true);
         if(searchInterests.length >= 0 ){
-            let searchResults = await AppointmentService.getRecommendedAppointments("", searchInterests);
-            setSearchResults(searchResults);
+            try{
+                let resp = await AppointmentService.getRecommendedAppointments("", searchInterests);
+                let a = resp.appointments;
+                setSearchResults(a);
+                setNoSearchResults(false);
+                setRequestSuccess(true);
+
+            }catch (e) {
+                setNoSearchResults(true);
+                setRequestSuccess(false);
+            }
         }
     }
+
+    const extractAppointments = async() => {
+        try{
+            let ret = await AppointmentService.getRecommendedAppointments(user._id);
+            let apps = ret.appointments;
+            let mapping = ret.mapping;
+            setAppointments(apps);
+            setNoRecommendations(false);
+        }catch(e){
+            console.log(e);
+            if (e == "None Available"){
+                setNoRecommendations(true);
+            }
+        }
+    }
+    useEffect(()=>{
+        extractAppointments();
+
+    }, [props.user]);
+
 
     return (
 
@@ -145,8 +181,9 @@ function CorporateSignUpView(props) {
                                     </Grid>
                                 </Grid>
                                 <p>
-
-                                    {searchInterests.map(elem => <li>{elem}</li>)}
+                                    {(requestSuccess) ? <AppointmentListComponent appointments={searchResults} user={user} noRecommendations={noSearchResults}/>
+                                        : (<div>{(requestDone) ? <AppointmentListComponent appointments={searchResults} user={user} noRecommendations={noSearchResults}/> : null}  </div>)
+                                    }
                                 </p>
 
 
@@ -167,7 +204,7 @@ function CorporateSignUpView(props) {
                                         Our Recommendations
                                     </Typography>
                                     <Typography>Our Recommendation based on your Interests</Typography>
-                                    <AppointmentListComponent user={user}/>
+                                    <AppointmentListComponent user={user} appointments={appointments} noRecommendations={noRecommendations}/>
                                 </Grid>
 
 
