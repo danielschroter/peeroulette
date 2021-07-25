@@ -210,11 +210,6 @@ function GameComponent(props) {
             {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
     }
 
-    {/*
-        <AutoScale maxWidth={800} maxHeight={400} maxScale={3}>
-            <div className="myContent">Example</div>
-        </AutoScale>
-    */}
     
     return (
         <div>

@@ -25,6 +25,7 @@ function LobbyView(props) {
     const [sec, setSec] = React.useState(0);
     const [Partner, setPartner] = React.useState("");
     const [matched, setMatched] = React.useState(0);
+    const [matchAdded, setMatchAdded] = React.useState(false);
 
     const onGetUser = (id) => {
         props.dispatch(getUser(id));
@@ -68,12 +69,15 @@ function LobbyView(props) {
         let uID = await user._id;
         console.log("writetodb: "+uID+" "+mID);
         if(mID != ""){
+            if(!matchAdded){
             await MatchDBService.addMatchDB(uID, mID).then(function(userBackend) {
                 console.log("written match to db: "+uID+" & "+mID);
             }).catch(function(error){
                 //400+ response codes
                 console.log("error in writing match to db");
             });
+            setMatchAdded(true);
+            }
         }
     };
 
