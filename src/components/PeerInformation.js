@@ -50,7 +50,11 @@ function PeerInformation(props) {
             setUsername(userBackend.username);
             setCity(userBackend.city);
             setUniversity(userBackend.university);
-            setOrganization(userBackend.organization);
+            if (userBackend.organization !== undefined) {
+                UserService.getOrganization(userBackend.organization).then(function (organizationBackend) {
+                    setOrganization(organizationBackend.company_name)
+                })
+            }
         });
     };
 
@@ -85,12 +89,17 @@ function PeerInformation(props) {
                 <ul style={{"fontSize":"17px"}}>
                     <li>{city}</li>
                     <li>{university}</li>
-                    <li>{organization}</li>
+                    {(organization!=="") ? <li>{organization}</li> : null }
                 </ul>
-                <div style={{display:"flex"}}>
-                <Typography variant="h5">Your Settings:  &nbsp;</Typography>
-                    <Box pl={10}><CorporateFilterEmployeeComponent user={props.user}/></Box>
-                </div>
+                {(organization !== "") ?
+                    <div style={{display:"flex"}}>
+
+                        <Typography variant="h5">Your Settings:</Typography>
+                        <Box pl={10}><CorporateFilterEmployeeComponent user={props.user}/></Box>
+
+                    </div>
+                    : null }
+
             </Paper>
         </div>
     );

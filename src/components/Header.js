@@ -13,6 +13,8 @@ import Group from "@material-ui/icons/Group";
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 
 import KebabMenu from "./KebabMenu";
+import {useSelector} from "react-redux";
+import UserService from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -30,6 +32,19 @@ const useStyles = makeStyles((theme) => ({
  */
 function Header(props) {
     const classes = useStyles();
+
+    const user = useSelector((state) => {
+        // update new user data in case that userdata changed in the backend
+        // check that user is not undefined to avoid error
+
+        if (state.user.user != undefined && state.user.user._id != undefined) {
+            UserService.getUser(state.user.user._id).then(function(result) {
+                state.user.user.username = result.username;
+                //state.user.user = result;
+            } );
+        }
+        return state.user;
+    });
 
     const [menuAnchor, setMenuAnchor] = React.useState(null);
 
@@ -60,9 +75,10 @@ function Header(props) {
                 >
                     peeroulette
                 </Typography>
-                <IconButton href="/messenger" color="inherit">
+                {(user.user ? (<IconButton href="/messenger" color="inherit">
                     <MessageIcon />
-                </IconButton>
+                </IconButton>) : null)}
+
                 <IconButton href="/events" color="inherit">
                     <Group />
                 </IconButton>
