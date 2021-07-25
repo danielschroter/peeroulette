@@ -18,6 +18,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import MatchDBService from "../services/MatchDBService";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -179,7 +180,6 @@ function PeerInformation(props) {
     const [editCompname, setEditCompname] = React.useState(false);
     const [domains, setDomains] = React.useState("");
     const [editDomains, setEditDomains] = React.useState(false);
-
     const bcrypt = require("bcryptjs");
 
     const curPage = props.page;
@@ -220,11 +220,12 @@ function PeerInformation(props) {
             });
     };
 
+
+
     useEffect(() => {
         extractUser();
-        // extractInterests();
-        // console.log(props);
-    }, [props.user]);
+
+    }, [props.user, curPage]);
 
     console.log({_id});
     console.log(username);
@@ -234,7 +235,7 @@ function PeerInformation(props) {
       return (
         <Paper style={{ padding: 20 }}>
             <Typography variant="h4">No Match found</Typography>
-            <Typography variant="h5">Sorry, we couldn't find a fitting match for you. Please try again later!</Typography>
+            <Typography variant="h5">Sorry, we couldn't find a fitting match for you. Please try again later or try to add more Interests in your Profile!</Typography>
         </Paper>
       );
     }else{
