@@ -198,7 +198,13 @@ function PeerInformation(props) {
                 setCity(userBackend.city);
                 // setInterests(userBackend.interests);
                 setUniversity(userBackend.university);
-                setOrganization(userBackend.organization);
+
+                if (userBackend.organization !== undefined) {
+                    UserService.getOrganization(userBackend.organization).then(function (organizationBackend) {
+                        setOrganization(organizationBackend.company_name)
+                    })
+                }
+
 
                 console.log("BACKEND:");
                 console.log(userBackend);
@@ -274,7 +280,7 @@ function PeerInformation(props) {
             <ul>
                 <li>{city}</li>
                 <li>{university}</li>
-                <li>{organization}</li>
+                {(organization!=="") ? <li>{organization}</li> : null }
             </ul>
             {/*<Typography variant="h5">Interests</Typography>
             <ul>
