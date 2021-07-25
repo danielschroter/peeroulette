@@ -3,11 +3,12 @@ import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
-import CorporateSignUpView from "./views/CorporateSignUpView";
+import EventView from "./views/EventView";
 import CallView from "./views/CallView";
 import WaitingView from "./views/WaitingView";
 import EditProfileView from "./views/EditProfileView";
 import ConfirmView from "./views/ConfirmView";
+import GroupCallView from "./views/GroupCallView";
 
 // routes within the movie database example app
 // used for routing
@@ -19,8 +20,8 @@ const routes = [
     exact: true,
   },
   {
-    path: "/corporate",
-    component: CorporateSignUpView,
+    path: "/events",
+    component: EventView,
     exact: true,
   },
   {
@@ -56,6 +57,10 @@ const routes = [
   {
       path: "/call/:id",
       component: CallView,
+  },
+  {
+    path: "/group/:id",
+    component: GroupCallView,
   },
   {
       path: "/wait/:page",
