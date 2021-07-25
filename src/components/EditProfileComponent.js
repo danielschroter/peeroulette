@@ -683,8 +683,6 @@ function EditProfileComponent(props) {
             }
         >
 
-
-
                 {/* Admin Buttons */}
                 <div
                     className={
@@ -732,8 +730,6 @@ function EditProfileComponent(props) {
                         </Dialog>
                     </React.Fragment>
                 </div>
-
-
 
                 {/* User Title */}
                 <div className={classes.pageArea + " " + classes.title}
