@@ -741,7 +741,8 @@ function EditProfileComponent(props) {
 
 
             {/* User Title */}
-            <div className={classes.pageArea + " " + classes.title}>
+            <div className={classes.pageArea + " " + classes.title}
+                 style={{"color": "#fff" }}>
                 <CustomTextField
                     value={"Edit Your Profile"}
                     furtherProps={{
