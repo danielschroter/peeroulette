@@ -5,7 +5,6 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import './Stepper.css';
 import Box from "@material-ui/core/Box";
 import GavelIcon from '@material-ui/icons/Gavel';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';

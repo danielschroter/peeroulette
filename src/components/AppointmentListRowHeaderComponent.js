@@ -15,7 +15,6 @@ import {
     TablePagination,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import MovieListRow from "./MovieListRow";
 import {useEffect} from "react";
 import AppointmentService from "../services/AppointmentService";
 import Box from "@material-ui/core/Box";

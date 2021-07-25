@@ -1,8 +1,6 @@
-import MovieListView from "./views/MovieListView";
 import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
 import TryOutView from "./views/TryOutView";
-import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import EventView from "./views/EventView";
 import CallView from "./views/CallView";
@@ -28,11 +26,6 @@ const routes = [
     exact: true,
   },
   {
-    path: "/movies",
-    component: MovieListView,
-    exact: true,
-  },
-  {
     path: "/login",
     component: UserLoginView,
   },
@@ -53,14 +46,6 @@ const routes = [
     path: "/confirm/:id/:domain?",
     component: ConfirmView,
   },
-  {
-    path: "/movie/:id",
-    component: MovieDetailsView,
-  },
-  // {
-  //     path: "/call",
-  //     component: CallView,
-  // },
   {
       path: "/call/:id",
       component: CallView,
