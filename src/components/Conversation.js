@@ -4,7 +4,6 @@ import { Button, Typography, Container, Avatar } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import UserService from "../services/UserService";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
 	avatar: {
@@ -55,12 +54,10 @@ function Conversation({ conversation, currentUser, setConversations }) {
 	return (
 		<div>
 			<Container maxWidth="sm">
-				<div style={{display:"flex"}}>
-					{/*<Paper>*/}
+				<div style={{ display: "flex" }}>
 					<Grid
 						container
 						direction="row"
-						// justifyContent="space-evenly"
 						alignItems="center"
 						alignContent="space-around"
 						spacing={0}
@@ -70,10 +67,10 @@ function Conversation({ conversation, currentUser, setConversations }) {
 								{chatPartner ? chatPartner[0] : ""}
 							</Avatar>
 						</Grid>
-						<Grid xs={1}
-							  // alignItems="flex-start"
-						>
-							<Typography style={{fontSize:"1.1rem", fontWeight:"bold"}}>&nbsp;{chatPartner}</Typography>
+						<Grid xs={1}>
+							<Typography style={{ fontSize: "1.1rem", fontWeight: "bold" }}>
+								&nbsp;{chatPartner}
+							</Typography>
 						</Grid>
 						<Grid xs={4}>
 							<span></span>
@@ -90,10 +87,7 @@ function Conversation({ conversation, currentUser, setConversations }) {
 							</Button>
 						</Grid>
 					</Grid>
-					{/*</Paper>*/}
-
 				</div>
-
 			</Container>
 		</div>
 	);
