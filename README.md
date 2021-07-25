@@ -1,6 +1,6 @@
 # peeroulette frontend application
 
-peeroulette app based on React. Backend can be found [here](https://gitlab.lrz.de/seba-master-2021/team-50/backend)
+peeroulette app based on React. Backend can be found [here](https://gitlab.lrz.de/seba-master-2021/team-50/frontend)
 
 ## Prerequisites
 
@@ -23,8 +23,8 @@ We also use a number of node.js tools to initialize and test [peeroulette fronte
 Clone the [peeroulette frontend](https://gitlab.lrz.de/seba-master-2021/team-50/frontend) repository using [git](http://git-scm.com/):
 
 ```
-git clone https://github.com/sebischair/seba-master-movie-frontend.git
-cd seba-master-movie-frontend
+git clone https://gitlab.lrz.de/seba-master-2021/team-50/frontend
+cd frontend
 ```
 
 ### Install Dependencies
