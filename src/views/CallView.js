@@ -22,6 +22,7 @@ import GameComponent from "../components/GameComponent";
 import IcebreakerQuestionComponent from "../components/IcebreakerQuestionComponent";
 
 import UserService from "../services/UserService";
+import MatchDBService from "../services/MatchDBService";
 
 
 function CallView(props) {
@@ -39,7 +40,8 @@ function CallView(props) {
 
 
     useEffect(() => {
-    }, [user, props.history]);
+        addMatchDB();
+    }, []);
 
     const handleClick = event => {
         event.preventDefault()
@@ -48,6 +50,7 @@ function CallView(props) {
 
     let {match} = props;
     console.log(match);
+    console.log("match: "+match)
 
     let roomArray = [user._id, match.params.id];
     console.log(roomArray);
@@ -55,6 +58,26 @@ function CallView(props) {
     console.log(roomArray);
     let roomName = roomArray[0] + roomArray[1];
     console.log(roomName);
+
+    const addMatchDB = async () => {
+        console.log("writetodb");
+        if (!match.params.id) {
+            return;
+        }
+
+        // UserService.getUser(props.user._id).then(function(userBackend) {
+        let uID = await match.params.id;
+        let mID = await user._id;
+        console.log("writetodb: "+uID+" "+mID);
+        if(mID != ""){
+            await MatchDBService.addMatchDB(uID, mID).then(function(userBackend) {
+                console.log("written match to db: "+uID+" & "+mID);
+            }).catch(function(error){
+                //400+ response codes
+                console.log("error in writing match to db");
+            });
+        }
+    };
 
 
     const jitsiConfig = {

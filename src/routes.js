@@ -1,11 +1,13 @@
 import MovieListView from "./views/MovieListView";
 import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
+import TryOutView from "./views/TryOutView";
 import MovieDetailsView from "./views/MovieDetailsView";
 import LandingPageView from "./views/LandingPageView";
 import EventView from "./views/EventView";
 import CallView from "./views/CallView";
 import WaitingView from "./views/WaitingView";
+import LobbyView from "./views/LobbyView";
 import EditProfileView from "./views/EditProfileView";
 import ConfirmView from "./views/ConfirmView";
 import GroupCallView from "./views/GroupCallView";
@@ -39,6 +41,10 @@ const routes = [
     component: SignUpView,
   },
   {
+    path: "/tryout",
+    component: TryOutView,
+  },
+  {
     path: "/edit",
     component: EditProfileView,
     exact: true,
@@ -70,6 +76,10 @@ const routes = [
   {
       path: "/wait",
       component: WaitingView,
+  },
+  {
+    path: "/lobby/:id",
+    component: LobbyView,
   },
   {
     path: "/messenger",

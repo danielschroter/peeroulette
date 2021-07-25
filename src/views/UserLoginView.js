@@ -30,12 +30,17 @@ function UserLoginView(props) {
         props.history.push("/register");
     };
 
+    const onTryOut = () => {
+        props.history.push("/tryout");
+    };
+
     return (
         <LoginComponent
             user={user}
             onCancel={onCancel}
             onLogin={onLogin}
             onSignUp={onSignUp}
+            onTryOut={onTryOut}
         />
     );
 }

@@ -55,6 +55,26 @@ export default class UserService {
     });
   }
 
+  static tryregister(user) {
+    return new Promise((resolve, reject) => {
+      HttpService.post(
+        `${UserService.baseURL_auth()}/tryregister`,
+        {
+          email: Date.now()+"@example.com",
+          username: user,
+          online: true,
+          confirmed: true,
+        },
+        function (data) {
+          resolve(data);
+        },
+        function (textStatus) {
+          reject(textStatus);
+        }
+      );
+    });
+  }
+
     static switchEmployeeFilter(id) {
         return new Promise((resolve, reject) => {
             HttpService.post(
@@ -96,6 +116,23 @@ export default class UserService {
         {
           username: user,
           password: pass,
+        },
+        function (data) {
+          resolve(data);
+        },
+        function (textStatus) {
+          reject(textStatus);
+        }
+      );
+    });
+  }
+
+  static trylogin(user) {
+    return new Promise((resolve, reject) => {
+      HttpService.post(
+        `${UserService.baseURL_auth()}/trylogin`,
+        {
+          username: user
         },
         function (data) {
           resolve(data);
@@ -190,6 +227,38 @@ export default class UserService {
             HttpService.put(
                 `${UserService.baseURL_user()}/${user._id}`,
                 user,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static onlineUser(uID) {
+        console.log(`${UserService.baseURL_user()}/${uID}/online`)
+        return new Promise((resolve, reject) => {
+            HttpService.put(
+                `${UserService.baseURL_user()}/${uID}/online`,
+                {online_until: Date.now()},
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static offlineUser(uID) {
+        console.log(`${UserService.baseURL_user()}/${uID}/offline`)
+        return new Promise((resolve, reject) => {
+            HttpService.put(
+                `${UserService.baseURL_user()}/${uID}/offline`,
+                {online_until: Date.now()},
                 function (data) {
                     resolve(data);
                 },

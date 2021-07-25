@@ -95,6 +95,9 @@ function LoginComponent(props) {
                     <Button onClick={props.onSignUp}>
                         Not Registered yet?
                     </Button>
+                    <Button onClick={props.onTryOut}>
+                        Try it first
+                    </Button>
                     <div>
                         <Button
                             className={classes.loginButton}

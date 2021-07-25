@@ -226,8 +226,8 @@ function EditProfileComponent(props) {
                     setOrganization(organizationBackend.company_name)
                 })
             }
-            setOrganization(userBackend.organization);
-
+            // setOrganization(userBackend.organization);
+            //
             if (userBackend.account_owner_of_organization !== undefined) {
                 setCorporate_id(userBackend.account_owner_of_organization)
                 setIsCorporate(true);

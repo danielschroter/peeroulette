@@ -64,11 +64,8 @@ function KebabMenu(props) {
     };
 
     const onClickCall = () => {
-        // trigger redux logout action
-        // props.dispatch(logout());
-        // close this menu
         props.onClose();
-        // navigate to the edit profile page
+        // props.history.push("/nc");
         props.history.push("/wait");
     };
 
@@ -96,17 +93,13 @@ function KebabMenu(props) {
                         {user.user.username}
                     </MenuItem>,
                     <Divider key="divider" />,
-                    <MenuItem key="user"
+                    <MenuItem key="match"
                               className={classes.menuitem}
                               onClick={onClickCall}
                     >
-                        {/*<Avatar className={classes.avatar}>
-                            {user.user.username ? user.user.username[0] : ""}
-                        </Avatar>*/}
-                        {/* user.user.username */}
                         Get a new Match
                     </MenuItem>,
-                    <Divider key="divider" />,
+                    <Divider key="divider2" />,
                       <MenuItem
                           key="logout"
                           onClick={onClickLogout}
