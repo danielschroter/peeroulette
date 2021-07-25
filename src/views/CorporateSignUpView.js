@@ -27,6 +27,7 @@ import background from "../assets/bg_1.png";
 import {makeStyles} from "@material-ui/core";
 import ParticleBackground from "../components/ParticleBackground";
 import AppointmentListComponent from "../components/AppointmentListComponent";
+import AppointmentService from "../services/AppointmentService";
 
 
 /**
@@ -82,6 +83,19 @@ function CorporateSignUpView(props) {
         props.dispatch(switchEmployeeFilter(id));
     };
 
+    const [searchInterests, setSearchInterests] = React.useState([]);
+    const [searchResults, setSearchResults] = React.useState([]);
+
+    const onChangeSearchInterests = (interests) => {
+        setSearchInterests(interests);
+    }
+
+    const handleSearchRequest = async() => {
+        if(searchInterests.length >= 0 ){
+            let searchResults = await AppointmentService.getRecommendedAppointments("", searchInterests);
+            setSearchResults(searchResults);
+        }
+    }
 
     return (
 
@@ -111,22 +125,29 @@ function CorporateSignUpView(props) {
                             </Typography>
                             <div>
                                 <Grid
-                                container
-                                direction="row"
-                                // justifyContent="space-evenly"
-                                alignItems="center"
-                                alignContent="space-around"
-                                spacing={0}
+                                    container
+                                    direction="row"
+                                    // justifyContent="space-evenly"
+                                    alignItems="center"
+                                    alignContent="space-around"
+                                    spacing={0}
                                 >
                                     <Grid item xs={11}>
-                                        <AppointmentSearchComponent></AppointmentSearchComponent>
+                                        <AppointmentSearchComponent
+                                            onChangeSearchInterests={onChangeSearchInterests}></AppointmentSearchComponent>
                                     </Grid>
+
+
                                     <Grid item xs={1}>
 
-                                        <Button variant="contained" color="primary" size="large">Search</Button>
+                                        <Button variant="contained" color="primary" size="large" onClick={handleSearchRequest}>Search</Button>
 
                                     </Grid>
                                 </Grid>
+                                <p>
+
+                                    {searchInterests.map(elem => <li>{elem}</li>)}
+                                </p>
 
 
                             </div>

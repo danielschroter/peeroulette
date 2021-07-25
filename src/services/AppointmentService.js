@@ -19,12 +19,13 @@ export default class AppointmentService {
         });
     }
 
-    static getRecommendedAppointments(id) {
+    static getRecommendedAppointments(id, searchInterests = []) {
         return new Promise((resolve, reject) => {
             HttpService.post(
                 `${AppointmentService.baseURL()}/getRecommendations`,
                 {
                     id: id,
+                    searchInterests: searchInterests,
                 },
                 function (data) {
                     resolve(data);
@@ -35,6 +36,7 @@ export default class AppointmentService {
             );
         });
     }
+
 
     static getAppointment(id) {
         return new Promise((resolve, reject) => {

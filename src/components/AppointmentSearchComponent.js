@@ -37,8 +37,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function AppointmentSearchComponent() {
+export default function AppointmentSearchComponent(props) {
     const classes = useStyles();
+
+    const [searchTags, setSearchTags] = React.useState([]);
+
+
 
     return (
         <div className={classes.root}>
@@ -47,6 +51,7 @@ export default function AppointmentSearchComponent() {
                 classes={classes}
                 id="tags-outlined"
                 options={allInterests}
+                onChange={(event, value) => props.onChangeSearchInterests(value)}
                 getOptionLabel={(option) => option}
                 filterSelectedOptions
                 renderInput={(params) => (

@@ -44,7 +44,7 @@ function AppointmentListComponent(props) {
 
     const extractAppointments = async() => {
         try{
-            let ret = await AppointmentService.getRecommendedAppointments(props.user._id);
+            let ret = await AppointmentService.getRecommendedAppointments(props.user._id, []);
             let apps = ret.appointments;
             let mapping = ret.mapping;
             setAppointments(apps);
