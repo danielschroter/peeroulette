@@ -683,8 +683,6 @@ function EditProfileComponent(props) {
             }
         >
 
-
-
                 {/* Admin Buttons */}
                 <div
                     className={
@@ -733,10 +731,10 @@ function EditProfileComponent(props) {
                     </React.Fragment>
                 </div>
 
-
-
                 {/* User Title */}
-                <div className={classes.pageArea + " " + classes.title}>
+                <div className={classes.pageArea + " " + classes.title}
+                     style={{"color": "#ED7C31" }}
+                >
                     <CustomTextField
                         value={"Edit Your Profile"}
                         furtherProps={{

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, Component} from "react";
+import React, {useState, useEffect, useRef} from "react";
 // needed in tutorial
 import io from "socket.io-client";
 
@@ -11,21 +11,14 @@ import Table from 'react-bootstrap/Table'
 import {makeStyles} from "@material-ui/core/styles";
 import {
     Button,
-    TextField,
-    Grid,
     Typography,
     Paper,
 } from "@material-ui/core";
-import CustomTextField from "./CustomTextField";
-import DetailsArea from "./DetailsArea";
 import PropTypes from "prop-types";
 import UserService from "../services/UserService";
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+// needed to rescale the wheel
+import AutoScale from 'react-auto-scale';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -154,35 +147,44 @@ function GameComponent(props) {
         setMustspin(true);
     }
 
+    function senderReceiverUserPeerCheck (senderId, receiverId) {
+        return ((senderId == props.peer && receiverId == props.user._id) ||
+        (senderId == props.user._id && receiverId == props.peer));
+    }
+
     useEffect(() => {
         socket.current = io("/");
 
         socket.current.on("wheelInitialised", body => {
             console.log("received data for interestWheel" + body);
             setWheelInterests(body.body.data);
-            setOtherUserBet("");
-            setThisUserBet("");
+                setOtherUserBet("");
+                setThisUserBet("");
         })
+        
         socket.current.on("startedSpin", message => {
             console.log("Spinning was started" + message);
-            setSpinVariables(message.body.newPrizeNumber);
-
+            if (senderReceiverUserPeerCheck(message.id, message.body.receiverId)) {
+                setSpinVariables(message.body.newPrizeNumber);
+            }
         })
 
         socket.current.on("betWasSet", message => {
             console.log("Bet has been Set" + message);
-            setOtherUserBet(message.body.bet);
-        })
+            console.warn(message.body);
+            console.warn(message);
 
+            if (senderReceiverUserPeerCheck(message.id, message.body.receiverId)) {
+                setOtherUserBet(message.body.bet);
+            }
+        })
 
     }, []);
 
 
     useEffect(() => {
         extractData();
-
         socket.current.emit("addUser", props.user._id);
-
         console.log("Data is Extracted and Variables are Set");
 
     }, [props.user])
@@ -197,17 +199,23 @@ function GameComponent(props) {
     const sendClickToSpin = async () => {
         let newPrice = await calculateNewPrice();
         setSpinVariables(newPrice);
-        sendMessage("startSpinning", {newPrizeNumber: newPrice, senderId: props.user._id, receiverId: props.peer})
+        sendMessage("startSpinning",
+            {newPrizeNumber: newPrice, receiverId: props.peer})
     }
 
     const onTableClick = async (e) => {
         console.log(wheelInterests[e.target.value].option);
         setThisUserBet(wheelInterests[e.target.value].option);
-
-        sendMessage("setBet", {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
+        sendMessage("setBet",
+            {bet: wheelInterests[e.target.value].option, receiverId: props.peer});
     }
 
-
+    {/*
+        <AutoScale maxWidth={800} maxHeight={400} maxScale={3}>
+            <div className="myContent">Example</div>
+        </AutoScale>
+    */}
+    
     return (
         <div>
             <Paper elevation={0} style={{
@@ -226,89 +234,73 @@ function GameComponent(props) {
                     }}
                 />
             </Paper>
-
             <div>
                 <Paper elevation={0} style={{padding: 20, "backgroundColor": "rgba(0,0,0,0)"}}>
-                    <Button
-                        onClick={sendClickToSpin}
-                        variant="contained"
-                        color="primary"
-                        className={classes.deleteProfileButton}
-                        style={{"backgroundColor": "#ED7C31"}}
-                    >
-                        Spin Wheel
-                    </Button>
-                    {commonInterests.length === 1 ? (
-                        <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
-                            have {commonInterests.length} common interest.</Typography>
-                    ) : (
-                        <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
-                            have {commonInterests.length} common interests!</Typography>
-                    )}
+                        <Button
+                            onClick={sendClickToSpin}
+                            variant="contained"
+                            color="primary"
+                            className={classes.deleteProfileButton}
+                            style={{"backgroundColor": "#ED7C31"}}
+                        >
+                            Spin Wheel
+                        </Button>
+                        {commonInterests.length == 1 ? (
+                            <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
+                                have {commonInterests.length} common interest.</Typography>
+                        ) : (
+                            <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>You
+                                have {commonInterests.length} common interests!</Typography>
+                        )}
 
-                    <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>Spin the wheel to find out
-                        which one!</Typography>
-                    {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && thisUserBet == wheelInterests[newPrizeNumber].option == otherUserBet && endSpin ? (
-                        <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>It's a draw! You both
-                            win!</Typography>
-                    ) : null}
-                    {wheelInterests && thisUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
-                        <Typography variant="h5" style={{
-                            "marginTop": "15px",
-                            "color": "white"
-                        }}>Winner: {props.user.username}</Typography>
-                    ) : null}
-                    {wheelInterests && otherUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
-                        <Typography variant="h5"
-                                    style={{"marginTop": "15px", "color": "white"}}>Winner: {otherUsername}</Typography>
-                    ) : null}
-                </Paper>
-                <Paper style={{padding: 20, "backgroundColor": "#ED7C31"}}>
-                    <Typography style={{
-                        "color": "black",
-                        fontSize: "1.1rem"
-                    }}>Bet {props.user.username}: {thisUserBet} </Typography>
-                    <Typography
-                        style={{"color": "black", fontSize: "1.1rem"}}>Bet {otherUsername}: {otherUserBet} </Typography>
-                    <Table striped bordered hover size="sm">
-                        <tbody>
-                        <tr>
-                            {(() => {
-                                let i = 0;
-                                let dataTable = [];
-                                for (i; i < wheelInterests.length; i++) {
-                                    dataTable.push(<button className={classes.roundButton} value={i}
-                                                           onClick={
-                                                               (e) => onTableClick(e)}
-                                    >{wheelInterests[i].option}</button>);
-                                }
-                                return dataTable;
-                            })()}
-                        </tr>
-                        </tbody>
-                    </Table>
-                </Paper>
-
+                        <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>Spin the wheel to find out
+                            which one!</Typography>
+                        {thisUserBet == wheelInterests[newPrizeNumber].option && otherUserBet == wheelInterests[newPrizeNumber].option && endSpin ? (
+                            <Typography variant="h5" style={{"marginTop": "15px", "color": "white"}}>Winner: It's a draw! You both
+                                win!</Typography>
+                        ) : null}
+                        {thisUserBet == wheelInterests[newPrizeNumber].option && otherUserBet !== wheelInterests[newPrizeNumber].option && endSpin ? (
+                            <Typography variant="h5" style={{
+                                "marginTop": "15px",
+                                "color": "white"
+                            }}>Winner: {props.user.username}</Typography>
+                        ) : null}
+                        {otherUserBet == wheelInterests[newPrizeNumber].option && thisUserBet !== wheelInterests[newPrizeNumber].option && endSpin ? (
+                            <Typography variant="h5"
+                                        style={{"marginTop": "15px", "color": "white"}}>Winner: {otherUsername}</Typography>
+                        ) : null}
+                    </Paper>
+                    <Paper style={{padding: 20, "backgroundColor": "#ED7C31"}}>
+                        <Typography style={{"color": "black", "fontSize": "20px"}}>Bet {props.user.username}: {thisUserBet} </Typography>
+                        <Typography style={{"color": "black", "fontSize": "20px"}}>Bet {otherUsername}: {otherUserBet} </Typography>
+                        <Table striped bordered hover size="sm">
+                            <tbody>
+                            <tr>
+                                {(() => {
+                                    let i = 0;
+                                    let dataTable = [];
+                                    for (i; i < wheelInterests.length; i++) {
+                                        dataTable.push(<button
+                                            className={classes.roundButton} value={i}
+                                            style={{"fontSize":"17px"}}
+                                            onClick={(e) => onTableClick(e)}
+                                        >{wheelInterests[i].option}</button>);
+                                    }
+                                    return dataTable;
+                                })()}
+                            </tr>
+                            </tbody>
+                        </Table>
+                    </Paper>
             </div>
-
-
-        </div>
+</div>
     );
 }
-
-// gameValues is Array which stores messages that are sent between users
-// gameValues[ userBet, blockSpin, ... ]
 
 // attributes of props and their type
 GameComponent.propTypes = {
     user: PropTypes.object,
     onGetUser: PropTypes.func,
-    gameValues: PropTypes.array,
-    userBet: PropTypes.array,
-    peerBet: PropTypes.array,
-    commonInterests: PropTypes.array,
-    blockSpin: PropTypes.array,
-    allFaceboookInterests: PropTypes.array,
 };
 
 // withRouter() allows accsing the necessary functionality to navigate from this component
