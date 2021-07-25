@@ -62,9 +62,9 @@ function Header(props) {
                 <IconButton href="/events" color="inherit">
                     <Group />
                 </IconButton>
-                <IconButton onClick={onClickGithub} color="inherit">
-                    <GitHubIcon />
-                </IconButton>
+                {/*<IconButton onClick={onClickGithub} color="inherit">*/}
+                {/*    <GitHubIcon />*/}
+                {/*</IconButton>*/}
                 {/*<IconButton onClick={props.toggletheme} color="inherit">*/}
                 {/*    {props.darkmode ? <WbSunnyIcon /> : <Brightness3Icon />}*/}
                 {/*</IconButton>*/}
