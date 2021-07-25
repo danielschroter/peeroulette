@@ -18,7 +18,7 @@ You need git to clone the [peeroulette frontend](https://gitlab.lrz.de/seba-mast
 
 We also use a number of node.js tools to initialize and test [peeroulette frontend](https://gitlab.lrz.de/seba-master-2021/team-50/frontend) . You must have node.js and its package manager (npm) installed. You can get them from [http://nodejs.org/](http://nodejs.org/).
 
-### Clone Movie Project
+### Clone Peeroulette Project
 
 Clone the [peeroulette frontend](https://gitlab.lrz.de/seba-master-2021/team-50/frontend) repository using [git](http://git-scm.com/):
 
